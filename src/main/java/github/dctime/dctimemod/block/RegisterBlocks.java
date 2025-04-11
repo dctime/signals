@@ -16,9 +16,15 @@ public class RegisterBlocks {
       "build_helper_block",
             (registryName) -> new BuildHelperBlock(BlockBehaviour.Properties.of()
                     .setId(ResourceKey.create(Registries.BLOCK, registryName))
-                    .explosionResistance(10.0f)
+                    .explosionResistance(100.0f)
                     .sound(SoundType.METAL)
-                    .lightLevel((blockState) -> 0)
+                    .lightLevel((blockState) -> {
+                        if (blockState.getValue(BuildHelperBlock.DESTROY_MODE)) {
+                            return 0;
+                        } else {
+                            return 15;
+                        }
+                    })
                     .instabreak()
             )
     );
