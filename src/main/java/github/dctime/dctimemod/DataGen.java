@@ -2,6 +2,7 @@ package github.dctime.dctimemod;
 
 import com.nimbusds.jose.util.Resource;
 import github.dctime.dctimemod.block.BlockLootSubProvider;
+import github.dctime.dctimemod.block.BlockModelProvider;
 import github.dctime.dctimemod.block.RegisterBlocks;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySetBuilder;
@@ -24,6 +25,7 @@ import java.util.Set;
 public class DataGen {
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent.Client event) {
+        // block loot tables
         event.createProvider(((packOutput, completableFuture) -> new LootTableProvider(
                 packOutput,
                 Set.of(),
@@ -33,5 +35,8 @@ public class DataGen {
                 )),
                 completableFuture
         )));
+
+        // block models
+        event.createProvider(BlockModelProvider::new);
     }
 }
