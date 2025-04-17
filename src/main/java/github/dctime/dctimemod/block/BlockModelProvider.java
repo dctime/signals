@@ -10,9 +10,11 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.blockstates.Variant;
 import net.minecraft.client.data.models.blockstates.VariantProperties;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 
 import java.util.function.BiConsumer;
 
@@ -24,13 +26,15 @@ public class BlockModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+        final ExtendedModelTemplate CUTOUT_CUBE_ALL = ModelTemplates.CUBE_ALL.extend().renderType("minecraft:cutout").build();
         Block buildHelperBlock = RegisterBlocks.BUILD_HELPER_BLOCK.get();
-        ResourceLocation buildHelperBlockDestroyModeModelLoc = ModelTemplates.CUBE_ALL.createWithSuffix(
+        ResourceLocation buildHelperBlockDestroyModeModelLoc = CUTOUT_CUBE_ALL.createWithSuffix(
             RegisterBlocks.BUILD_HELPER_BLOCK.get(),
                 "_destroy_mode",
                 new TextureMapping()
                         .put(TextureSlot.ALL, TextureMapping.getBlockTexture(buildHelperBlock, "_destroy_mode")),
                 blockModels.modelOutput);
+
         ResourceLocation buildHelperBlockNonDestroyModeModelLoc = ModelTemplates.CUBE_ALL.createWithSuffix(
                 RegisterBlocks.BUILD_HELPER_BLOCK.get(),
                 "_non_destroy_mode",
