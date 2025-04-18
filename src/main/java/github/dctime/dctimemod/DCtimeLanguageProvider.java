@@ -13,6 +13,6 @@ public class DCtimeLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         this.addBlock(RegisterBlocks.BUILD_HELPER_BLOCK, "Build Helper Block");
-        // this.addItem(RegisterBlockItems.BUILD_HELPER_BLOCK_ITEM, "Build Helper Block");
+        this.add("itemGroup." + DCtimeMod.MODID + ".dctimemodtab", "DCtime Mod");
     }
 }

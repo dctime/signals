@@ -13,5 +13,6 @@ public class DCtimeMod {
         System.out.println("This is a mod made by DCtime");
         RegisterBlocks.BLOCKS.register(modBus);
         RegisterBlockItems.ITEMS.register(modBus);
+        RegisterCreativeModeTab.CREATIVE_MODE_TABS.register(modBus);
     }
 }
