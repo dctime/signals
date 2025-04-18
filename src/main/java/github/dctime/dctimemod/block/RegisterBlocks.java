@@ -19,13 +19,6 @@ public class RegisterBlocks {
                     .explosionResistance(100.0f)
                     .sound(SoundType.METAL)
                     .noOcclusion()
-                    .lightLevel((blockState) -> {
-                        if (blockState.getValue(BuildHelperBlock.DESTROY_MODE)) {
-                            return 0;
-                        } else {
-                            return 15;
-                        }
-                    })
                     .instabreak()
             )
     );

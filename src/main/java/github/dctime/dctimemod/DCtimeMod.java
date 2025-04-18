@@ -1,5 +1,6 @@
 package github.dctime.dctimemod;
 
+import github.dctime.dctimemod.block.RegisterBlockItems;
 import github.dctime.dctimemod.block.RegisterBlocks;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -11,5 +12,6 @@ public class DCtimeMod {
     public DCtimeMod(IEventBus modBus) {
         System.out.println("This is a mod made by DCtime");
         RegisterBlocks.BLOCKS.register(modBus);
+        RegisterBlockItems.ITEMS.register(modBus);
     }
 }
