@@ -21,7 +21,7 @@ public class BlockLootSubProvider extends net.minecraft.data.loot.BlockLootSubPr
 
     @Override
     protected void generate() {
-        this.add(RegisterBlocks.BUILD_HELPER_BLOCK.get(), this.createSingleItemTable(Items.COBBLESTONE));
+        this.add(RegisterBlocks.BUILD_HELPER_BLOCK.get(), this.createSingleItemTable(RegisterBlockItems.BUILD_HELPER_BLOCK_ITEM));
 
     }
 }

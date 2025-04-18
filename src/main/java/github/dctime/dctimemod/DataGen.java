@@ -28,5 +28,7 @@ public class DataGen {
 
         // block models
         event.createProvider(BuildHelperBlockModelProvider::new);
+        // language provider
+        event.createProvider(DCtimeLanguageProvider::new);
     }
 }
