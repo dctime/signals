@@ -1,8 +1,10 @@
 package github.dctime.dctimemod.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -34,14 +36,18 @@ public class BuildHelperBlock extends Block {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (level.isClientSide()) {
-            System.out.println("USE in client");
-        } else {
-            System.out.println("USE on server");
-            BlockState newState = state.setValue(DESTROY_MODE, !state.getValue(DESTROY_MODE));
-            level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
+        if (!level.isClientSide()) {
+            // server
+            changeModeByRightClick(state, level, pos, player);
         }
         return super.useWithoutItem(state, level, pos, player, hitResult);
+    }
+
+    private void changeModeByRightClick(BlockState state, Level level, BlockPos pos, Player player) {
+        if (player.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) return;
+        if (player.getItemInHand(InteractionHand.OFF_HAND) != ItemStack.EMPTY) return;
+        BlockState newState = state.setValue(DESTROY_MODE, !state.getValue(DESTROY_MODE));
+        level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
     }
 
     @Override
