@@ -1,5 +1,6 @@
 package github.dctime.dctimemod;
 
+import github.dctime.dctimemod.block.RegisterBlockEntities;
 import github.dctime.dctimemod.block.RegisterBlockItems;
 import github.dctime.dctimemod.block.RegisterBlocks;
 import net.neoforged.bus.api.IEventBus;
@@ -14,5 +15,6 @@ public class DCtimeMod {
         RegisterBlocks.BLOCKS.register(modBus);
         RegisterBlockItems.ITEMS.register(modBus);
         RegisterCreativeModeTab.CREATIVE_MODE_TABS.register(modBus);
+        RegisterBlockEntities.BLOCK_ENTITY_TYPES.register(modBus);
     }
 }

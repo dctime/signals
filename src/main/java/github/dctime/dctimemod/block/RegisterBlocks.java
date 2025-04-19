@@ -22,4 +22,14 @@ public class RegisterBlocks {
                     .instabreak()
             )
     );
+
+    public static final DeferredBlock<Block> FLAWLESS_EXCHANGER = BLOCKS.register(
+            "flawless_exchanger",
+            (registryName) -> new FlawlessExchangerBlock(BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, registryName))
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+                    .destroyTime(3.0f)
+            )
+    );
 }
