@@ -78,7 +78,7 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity {
             flawlessExchangerBlockEntity.handler.getStackInSlot(0).getCount() != Items.DIRT.getDefaultMaxStackSize())
                     || flawlessExchangerBlockEntity.handler.getStackInSlot(0).isEmpty()) {
                 ((ItemStackHandler) flawlessExchangerBlockEntity.handler).setStackInSlot(0,
-                        new ItemStack(Items.DIRT, 10));
+                        new ItemStack(Items.DIRT, flawlessExchangerBlockEntity.handler.getStackInSlot(0).getCount()+1));
                 System.out.println("Given A dirt!");
             } else {
                 System.out.println("Failed To give a dirt");
