@@ -1,5 +1,6 @@
 package github.dctime.dctimemod.block;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,11 +18,11 @@ public class FlawlessExchangerMenu extends AbstractContainerMenu {
     ContainerLevelAccess access;
     //client
     public FlawlessExchangerMenu(int containerId, Inventory inventory) {
-        this(containerId, inventory, ContainerLevelAccess.NULL, new ItemStackHandler(1), DataSlot.standalone());
+        this(containerId, inventory, ContainerLevelAccess.NULL);
     }
     // server
-    public FlawlessExchangerMenu(int containerId, Inventory inventory, Player player) {
-        this(containerId, inventory, ContainerLevelAccess.create(player.level(), player.getOnPos()), new ItemStackHandler(1), DataSlot.standalone());
+    public FlawlessExchangerMenu(int containerId, Inventory inventory, ContainerLevelAccess access) {
+        this(containerId, inventory, access, new ItemStackHandler(1), DataSlot.standalone());
     }
 
     // server
