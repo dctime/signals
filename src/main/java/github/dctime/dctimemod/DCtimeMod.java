@@ -3,6 +3,7 @@ package github.dctime.dctimemod;
 import github.dctime.dctimemod.block.RegisterBlockEntities;
 import github.dctime.dctimemod.block.RegisterBlockItems;
 import github.dctime.dctimemod.block.RegisterBlocks;
+import github.dctime.dctimemod.block.RegisterMenuTypes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 
@@ -16,5 +17,6 @@ public class DCtimeMod {
         RegisterBlockItems.ITEMS.register(modBus);
         RegisterCreativeModeTab.CREATIVE_MODE_TABS.register(modBus);
         RegisterBlockEntities.BLOCK_ENTITY_TYPES.register(modBus);
+        RegisterMenuTypes.MENUS.register(modBus);
     }
 }

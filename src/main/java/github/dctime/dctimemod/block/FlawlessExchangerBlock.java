@@ -1,8 +1,12 @@
 package github.dctime.dctimemod.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -47,14 +51,29 @@ public class FlawlessExchangerBlock extends Block implements EntityBlock {
                 return InteractionResult.FAIL;
             System.out.println("Client ProcessTime: " + flawlessExchangerBlockEntity.getProcessTime());
             return InteractionResult.SUCCESS;
-        } else {
+        }
+
+        if (!level.isClientSide()) {
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity instanceof Container container) {
                 ItemStack stack = container.getItem(0);
                 container.setItem(0, player.getMainHandItem());
                 player.setItemSlot(EquipmentSlot.MAINHAND, stack);
             }
+        }
+
+        if (!level.isClientSide() && player.isCrouching()) {
+            System.out.println("Opening Menu");
+            player.openMenu(state.getMenuProvider(level, pos));
+
             return InteractionResult.SUCCESS;
         }
+
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        return new SimpleMenuProvider(FlawlessExchangerMenu::new, Component.translatable("menu.title.dctimemod.flawless_exchanger_menu"));
     }
 }
