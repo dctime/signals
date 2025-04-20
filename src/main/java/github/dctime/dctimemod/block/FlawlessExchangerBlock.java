@@ -39,41 +39,20 @@ public class FlawlessExchangerBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-//        if (!level.isClientSide()) {
-//            //server send packet to client
-//            BlockEntity entity = level.getBlockEntity(pos);
-//            level.sendBlockUpdated(entity.getBlockPos(), entity.getBlockState(), entity.getBlockState(), Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS);
-//        }
-//
-//        if (level.isClientSide()) {
-//            // client side
-//            BlockEntity entity = level.getBlockEntity(pos);
-//            if (!(entity instanceof FlawlessExchangerBlockEntity flawlessExchangerBlockEntity))
-//                return InteractionResult.FAIL;
-//            System.out.println("Client ProcessTime: " + flawlessExchangerBlockEntity.getProcessTime());
-//            return InteractionResult.SUCCESS;
-//        }
-//
-//        if (!level.isClientSide()) {
-//            BlockEntity entity = level.getBlockEntity(pos);
-//            if (entity instanceof Container container) {
-//                ItemStack stack = container.getItem(0);
-//                container.setItem(0, player.getMainHandItem());
-//                player.setItemSlot(EquipmentSlot.MAINHAND, stack);
-//            }
-//        }
 
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             System.out.println("Opening Menu");
+            // server menu
             serverPlayer.openMenu(state.getMenuProvider(level, pos));
-            return InteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS_SERVER;
         }
 
-        return InteractionResult.PASS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
     protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
-        return new SimpleMenuProvider((containerId, playerInventory, player)->new FlawlessExchangerMenu(containerId, playerInventory, ContainerLevelAccess.create(level, pos)), Component.translatable("menu.title.dctimemod.flawless_exchanger_menu"));
+        return new SimpleMenuProvider((containerId, playerInventory, player)->new FlawlessExchangerMenu(containerId, playerInventory, ContainerLevelAccess.create(level, pos),
+                ((FlawlessExchangerBlockEntity) level.getBlockEntity(pos)).getItemsHandler()), Component.translatable("menu.title.dctimemod.flawless_exchanger_menu"));
     }
 }

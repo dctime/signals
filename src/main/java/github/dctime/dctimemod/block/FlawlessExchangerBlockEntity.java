@@ -11,16 +11,24 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity {
     public final int SIZE = 1;
     private NonNullList<ItemStack> items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
+    IItemHandler handler = new ItemStackHandler(items);
+
+    public IItemHandler getItemsHandler() {
+        return handler;
+    }
 
     public FlawlessExchangerBlockEntity(BlockPos pos, BlockState blockState) {
         super(RegisterBlockEntities.FLAWLESS_EXCHANGER_BLOCK_ENTITY.get(), pos, blockState);
@@ -61,10 +69,20 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity {
     //ticker
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
         if (level.isClientSide()) return;
+        // server
         if (!(blockEntity instanceof FlawlessExchangerBlockEntity)) return;
         FlawlessExchangerBlockEntity flawlessExchangerBlockEntity = (FlawlessExchangerBlockEntity) blockEntity;
         if (flawlessExchangerBlockEntity.getProcessTime() == 200) {
             flawlessExchangerBlockEntity.resetProcessTime();
+            if ((flawlessExchangerBlockEntity.handler.getStackInSlot(0).getItem() == Items.DIRT &&
+            flawlessExchangerBlockEntity.handler.getStackInSlot(0).getCount() != Items.DIRT.getDefaultMaxStackSize())
+                    || flawlessExchangerBlockEntity.handler.getStackInSlot(0).isEmpty()) {
+                ((ItemStackHandler) flawlessExchangerBlockEntity.handler).setStackInSlot(0,
+                        new ItemStack(Items.DIRT, 10));
+                System.out.println("Given A dirt!");
+            } else {
+                System.out.println("Failed To give a dirt");
+            }
         }
         flawlessExchangerBlockEntity.incProcessTime();
     }
@@ -102,7 +120,7 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
-        return null;
+        return new FlawlessExchangerMenu(i, inventory);
     }
 
     @Override
