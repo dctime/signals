@@ -1,8 +1,11 @@
 package github.dctime.dctimemod.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -44,8 +47,14 @@ public class FlawlessExchangerBlock extends Block implements EntityBlock {
                 return InteractionResult.FAIL;
             System.out.println("Client ProcessTime: " + flawlessExchangerBlockEntity.getProcessTime());
             return InteractionResult.SUCCESS;
+        } else {
+            BlockEntity entity = level.getBlockEntity(pos);
+            if (entity instanceof Container container) {
+                ItemStack stack = container.getItem(0);
+                container.setItem(0, player.getMainHandItem());
+                player.setItemSlot(EquipmentSlot.MAINHAND, stack);
+            }
+            return InteractionResult.SUCCESS;
         }
-
-        return InteractionResult.PASS;
     }
 }
