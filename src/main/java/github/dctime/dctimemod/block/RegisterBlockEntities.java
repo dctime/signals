@@ -14,9 +14,14 @@ public class RegisterBlockEntities {
 
     public static final Supplier<BlockEntityType<FlawlessExchangerBlockEntity>> FLAWLESS_EXCHANGER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
             "flawless_exchanger_block_entity",
-            () -> new BlockEntityType<>(
+            ()->BlockEntityType.Builder.of(
                     FlawlessExchangerBlockEntity::new,
-                    Set.of(RegisterBlocks.FLAWLESS_EXCHANGER.get())
-            )
+                    RegisterBlocks.FLAWLESS_EXCHANGER.get()
+            ).build(null)
+
+//            () -> new BlockEntityType<>(
+//                    FlawlessExchangerBlockEntity::new,
+//                    Set.of(RegisterBlocks.FLAWLESS_EXCHANGER.get())
+//            )
     );
 }

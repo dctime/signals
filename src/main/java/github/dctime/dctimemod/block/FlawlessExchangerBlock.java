@@ -44,7 +44,7 @@ public class FlawlessExchangerBlock extends Block implements EntityBlock {
             System.out.println("Opening Menu");
             // server menu
             serverPlayer.openMenu(state.getMenuProvider(level, pos));
-            return InteractionResult.SUCCESS_SERVER;
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.SUCCESS;
