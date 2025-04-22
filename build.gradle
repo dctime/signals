@@ -19,6 +19,27 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
+
+
+    // JEI
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    // EMI
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+
+    // Jade
+    maven { url = "https://api.modrinth.com/maven" }
 }
 
 base {
@@ -133,6 +154,21 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    // JEI
+    // compile against the JEI API but do not include it at runtime
+    compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
+    // at runtime, use the full JEI jar for NeoForge
+    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+
+    // EMI
+    // NeoForge
+    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+
+    // jade_version example: 15.10.0+neoforge
+    // Visit https://modrinth.com/mod/jade/versions?l=neoforge to get the latest version
+    implementation "maven.modrinth:jade:${project.jade_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
