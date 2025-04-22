@@ -1,6 +1,5 @@
 package github.dctime.dctimemod.block;
 
-import github.dctime.dctimemod.DCtimeMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -10,83 +9,86 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
 
 public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
-    public final int SIZE = 1;
-    private NonNullList<ItemStack> items = NonNullList.withSize(SIZE, ItemStack.EMPTY);
-    IItemHandler handler = new ItemStackHandler(items);
+    public final int ITEM_SIZE = 1;
+    public static final int DATA_SIZE = 1;
 
+    private NonNullList<ItemStack> items = NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY);
+    IItemHandler handler = new ItemStackHandler(items);
+    EnergyStorage energyCap = new EnergyStorage(1000);
+    ContainerData data = new SimpleContainerData(DATA_SIZE);
+    public final int PROCESSING_TIME = 0;
+
+    public FlawlessExchangerBlockEntity(BlockPos pos, BlockState blockState) {
+        super(RegisterBlockEntities.FLAWLESS_EXCHANGER_BLOCK_ENTITY.get(), pos, blockState);
+        data.set(PROCESSING_TIME, 0);
+    }
+
+    public EnergyStorage getEnergyCap() {
+        return energyCap;
+    }
 
 
     public IItemHandler getItemsHandler() {
         return handler;
     }
 
-    public FlawlessExchangerBlockEntity(BlockPos pos, BlockState blockState) {
-        super(RegisterBlockEntities.FLAWLESS_EXCHANGER_BLOCK_ENTITY.get(), pos, blockState);
-    }
-
-    private int processTime = 0;
+//
+//
+//    private int processTime = 0;
     public int getProcessTime() {
-        return processTime;
+        return data.get(PROCESSING_TIME);
     }
 
     public void resetProcessTime() {
-        processTime = 0;
+        data.set(PROCESSING_TIME, 0);
     }
 
     public void incProcessTime() {
-        processTime++;
+        data.set(PROCESSING_TIME, getProcessTime() + 1);
     }
 
     // nbts storing data
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        IEnergyStorage energy = getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, getBlockPos(), Direction.UP);
-        if (energy instanceof EnergyStorage energyStorage) {
-            energyStorage.deserializeNBT(registries, tag);
-        }
-        ((ItemStackHandler) handler).deserializeNBT(registries, tag.getCompound("processing_item"));
-        processTime = tag.getInt("processTime");
-        System.out.println("processTime loaded" + processTime);
+        data.set(PROCESSING_TIME, tag.getInt("processTime"));
+        ((ItemStackHandler) handler).deserializeNBT(registries, tag.getCompound("items"));
+        energyCap.deserializeNBT(registries, tag.get("energystored"));
+        System.out.println("Loaded energy: " + energyCap.getEnergyStored());
+        System.out.println("processTime loaded" + data.get(PROCESSING_TIME));
 
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        IEnergyStorage energy = getLevel().getCapability(Capabilities.EnergyStorage.BLOCK, getBlockPos(), Direction.UP);
-        if (energy instanceof EnergyStorage energyStorage) {
-            tag.put("energy", energyStorage.serializeNBT(registries));
-            setChanged();
-        }
-        tag.put("processing_item", ((ItemStackHandler) handler).serializeNBT(registries));
+
+        tag.putInt("processTime", data.get(PROCESSING_TIME));
+        tag.put("items", ((ItemStackHandler) handler).serializeNBT(registries));
+        tag.put("energystored", energyCap.serializeNBT(registries));
+
         setChanged();
-        tag.putInt("processTime", processTime);
-        setChanged();
-        System.out.println("ProcessTime saved" + processTime);
+        System.out.println("Stored energy" + energyCap.getEnergyStored() + " FE ");
+        System.out.println("ProcessTime saved" + data.get(PROCESSING_TIME) + " ticks");
         // important setChanged();
     }
 
@@ -109,10 +111,8 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
             } else {
                 System.out.println("Failed To give a dirt");
 
-                if (energy != null) {
+                if (energy != null && energy.canReceive()) {
                     System.out.println("Receive energy from flawless generated energy capability");
-
-                    level.invalidateCapabilities(blockPos);
                     energy.receiveEnergy(100, false);
 
 
@@ -165,7 +165,7 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
 
     @Override
     public int getContainerSize() {
-        return SIZE;
+        return ITEM_SIZE;
     }
 
     private BlockCapabilityCache<IEnergyStorage, Direction> energyCache;

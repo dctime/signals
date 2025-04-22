@@ -10,6 +10,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -51,8 +52,33 @@ public class FlawlessExchangerBlock extends Block implements EntityBlock {
     }
 
     @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (!oldState.is(this)) {
+            level.invalidateCapabilities(pos);
+        }
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, movedByPiston);
+        if (!state.is(newState.getBlock())) {
+            level.invalidateCapabilities(pos);
+        }
+    }
+
+    @Override
     protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
-        return new SimpleMenuProvider((containerId, playerInventory, player)->new FlawlessExchangerMenu(containerId, playerInventory, ContainerLevelAccess.create(level, pos),
-                ((FlawlessExchangerBlockEntity) level.getBlockEntity(pos)).getItemsHandler()), Component.translatable("menu.title.dctimemod.flawless_exchanger_menu"));
+        return new SimpleMenuProvider((containerId, playerInventory, player)-> {
+            FlawlessExchangerBlockEntity entity = ((FlawlessExchangerBlockEntity) level.getBlockEntity(pos));
+            return new FlawlessExchangerMenu(
+                    containerId,
+                    playerInventory,
+                    ContainerLevelAccess.create(level, pos),
+                    entity.getItemsHandler(),
+                    entity.data);
+            },
+            Component.translatable("menu.title.dctimemod.flawless_exchanger_menu"));
+
     }
 }

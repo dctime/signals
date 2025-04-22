@@ -8,6 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
@@ -17,14 +19,17 @@ public class FlawlessExchangerMenu extends AbstractContainerMenu {
 
 //    FlawlessExchangerBlockEntity entity;
     ContainerLevelAccess access;
+    ContainerData data;
     //client
     public FlawlessExchangerMenu(int containerId, Inventory inventory) {
-        this(containerId, inventory, ContainerLevelAccess.NULL, new ItemStackHandler(1));
+        this(containerId, inventory, ContainerLevelAccess.NULL, new ItemStackHandler(1), new SimpleContainerData(FlawlessExchangerBlockEntity.DATA_SIZE));
     }
 
     // server
-    public FlawlessExchangerMenu(int containerId, Inventory inventory, ContainerLevelAccess access, IItemHandler dataInventory) {
+    public FlawlessExchangerMenu(int containerId, Inventory inventory, ContainerLevelAccess access, IItemHandler dataInventory, ContainerData data) {
         super(RegisterMenuTypes.FLAWLESS_EXCHANGER_MENU.get(), containerId);
+
+        checkContainerDataCount(data, FlawlessExchangerBlockEntity.DATA_SIZE);
         this.access = access;
 
         int rows = 3;
@@ -40,6 +45,9 @@ public class FlawlessExchangerMenu extends AbstractContainerMenu {
         for(int i1 = 0; i1 < 9; ++i1) {
             this.addSlot(new Slot(inventory, i1, 8 + i1 * 18, 161 + i));
         }
+
+        this.data = data;
+        this.addDataSlots(this.data);
     }
 
     @Override
@@ -50,5 +58,11 @@ public class FlawlessExchangerMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         return AbstractContainerMenu.stillValid(access, player, RegisterBlocks.FLAWLESS_EXCHANGER.get());
+    }
+
+    // for screen
+    @OnlyIn(Dist.CLIENT)
+    public int getProcessTime() {
+        return this.data.get(0);
     }
 }

@@ -1,6 +1,7 @@
 package github.dctime.dctimemod.block;
 
 import github.dctime.dctimemod.DCtimeMod;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -15,10 +16,13 @@ public class RegisterCapabilities {
 
     @SubscribeEvent
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlock(
+        event.registerBlockEntity(
                 Capabilities.EnergyStorage.BLOCK,
-                ((level, blockPos, blockState, blockEntity, direction) -> new EnergyStorage(1000, 100)),
-                RegisterBlocks.FLAWLESS_EXCHANGER.get()
+                RegisterBlockEntities.FLAWLESS_EXCHANGER_BLOCK_ENTITY.get(),
+                (entity, side)-> {
+                    if (side == Direction.DOWN || side == Direction.UP || side == null) return entity.getEnergyCap();
+                    else return null;
+                }
         );
     }
 }

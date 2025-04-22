@@ -23,6 +23,7 @@ public class FlawlessExchangerScreen extends AbstractContainerScreen<FlawlessExc
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
+        graphics.drawString(getMinecraft().font, menu.getProcessTime() + "", leftPos+(int)(imageWidth*0.1), topPos, 0xFFFFFF);
     }
 
     @Override
