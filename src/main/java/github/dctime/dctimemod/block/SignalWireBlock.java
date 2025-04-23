@@ -12,9 +12,9 @@ public class SignalWireBlock extends Block {
     public SignalWireBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
-                .setValue(NORTH, false)
+                .setValue(NORTH, true)
                 .setValue(SOUTH, false)
-                .setValue(EAST, false)
+                .setValue(EAST, true)
                 .setValue(WEST, false)
                 .setValue(UP, true)
                 .setValue(DOWN, true)

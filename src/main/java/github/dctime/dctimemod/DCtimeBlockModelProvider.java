@@ -6,6 +6,7 @@ import github.dctime.dctimemod.block.SignalWireBlock;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -31,16 +32,52 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
            }
         });
 
+        MultiPartBlockStateBuilder multiPartBuilderSignal = getMultipartBuilder(RegisterBlocks.SINGAL_WIRE.get());
+        multiPartBuilderSignal.part()
+                .modelFile(models().getExistingFile(modLoc("block/signal_wire_none")))
+                .addModel()
+                .end();
+        // north
+        multiPartBuilderSignal.part()
+                .modelFile(models().getExistingFile(modLoc("block/signal_wire_side_north")))
+                .addModel()
+                .condition(SignalWireBlock.NORTH, true)
+                .end();
+        //south
+        multiPartBuilderSignal.part()
+                .modelFile(models().getExistingFile(modLoc("block/signal_wire_side_north")))
+                .rotationY(180)
+                .addModel()
+                .condition(SignalWireBlock.SOUTH, true)
+                .end();
+        // EAST
+        multiPartBuilderSignal.part()
+                .modelFile(models().getExistingFile(modLoc("block/signal_wire_side_north")))
+                .rotationY(270)
+                .addModel()
+                .condition(SignalWireBlock.EAST, true)
+                .end();
+        // WEST
+        multiPartBuilderSignal.part()
+                .modelFile(models().getExistingFile(modLoc("block/signal_wire_side_north")))
+                .rotationY(90)
+                .addModel()
+                .condition(SignalWireBlock.WEST, true)
+                .end();
+        // UP
+        multiPartBuilderSignal.part()
+                .modelFile(models().getExistingFile(modLoc("block/signal_wire_side_north")))
+                .rotationX(270)
+                .addModel()
+                .condition(SignalWireBlock.UP, true)
+                .end();
+        // DOWN
+        multiPartBuilderSignal.part()
+                .modelFile(models().getExistingFile(modLoc("block/signal_wire_side_north")))
+                .rotationX(90)
+                .addModel()
+                .condition(SignalWireBlock.DOWN, true)
+                .end();
 
-        VariantBlockStateBuilder variantBuilderSignalWire = getVariantBuilder(RegisterBlocks.SINGAL_WIRE.get());
-
-        variantBuilderSignalWire.forAllStates((state)-> {
-            if (state.getValue(SignalWireBlock.EAST) && state.getValue(SignalWireBlock.WEST))
-                return ConfiguredModel.builder().modelFile(models().getExistingFile(modLoc("signal_wire_north_south"))).rotationY(90).build();
-            else if (state.getValue(SignalWireBlock.NORTH) && state.getValue(SignalWireBlock.SOUTH))
-                return ConfiguredModel.builder().modelFile(models().getExistingFile(modLoc("signal_wire_north_south"))).build();
-            else
-                return ConfiguredModel.builder().modelFile(models().getExistingFile(modLoc("signal_wire_north_south"))).rotationX(90).build();
-        });
     }
 }
