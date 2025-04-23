@@ -31,10 +31,15 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
     public final int ITEM_SIZE = 1;
     public static final int DATA_SIZE = 1;
 
-    private NonNullList<ItemStack> items = NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY);
-    IItemHandler handler = new ItemStackHandler(items);
-    EnergyStorage energyCap = new EnergyStorage(1000);
+    boolean PROCESSING = false;
+
+    IItemHandler handler = new ItemStackHandler(NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY));
+    EnergyStorage energyCap = new EnergyStorage(100000);
     ContainerData data = new SimpleContainerData(DATA_SIZE);
+
+    // item id
+    public final int ITEM_INPUT = 0;
+    // data id
     public final int PROCESSING_TIME = 0;
 
     public FlawlessExchangerBlockEntity(BlockPos pos, BlockState blockState) {
@@ -46,14 +51,10 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
         return energyCap;
     }
 
-
     public IItemHandler getItemsHandler() {
         return handler;
     }
 
-//
-//
-//    private int processTime = 0;
     public int getProcessTime() {
         return data.get(PROCESSING_TIME);
     }
@@ -73,6 +74,8 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
         data.set(PROCESSING_TIME, tag.getInt("processTime"));
         ((ItemStackHandler) handler).deserializeNBT(registries, tag.getCompound("items"));
         energyCap.deserializeNBT(registries, tag.get("energystored"));
+        PROCESSING = tag.getBoolean("processing");
+
         System.out.println("Loaded energy: " + energyCap.getEnergyStored());
         System.out.println("processTime loaded" + data.get(PROCESSING_TIME));
 
@@ -85,6 +88,7 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
         tag.putInt("processTime", data.get(PROCESSING_TIME));
         tag.put("items", ((ItemStackHandler) handler).serializeNBT(registries));
         tag.put("energystored", energyCap.serializeNBT(registries));
+        tag.putBoolean("processing", PROCESSING);
 
         setChanged();
         System.out.println("Stored energy" + energyCap.getEnergyStored() + " FE ");
@@ -96,35 +100,54 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
     //ticker
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
         if (level.isClientSide()) return;
+
         // server
         IEnergyStorage energy = level.getCapability(Capabilities.EnergyStorage.BLOCK, blockPos, blockState, blockEntity, Direction.UP);
         if (!(blockEntity instanceof FlawlessExchangerBlockEntity)) return;
-        FlawlessExchangerBlockEntity flawlessExchangerBlockEntity = (FlawlessExchangerBlockEntity) blockEntity;
-        if (flawlessExchangerBlockEntity.getProcessTime() == 200) {
-            flawlessExchangerBlockEntity.resetProcessTime();
-            if ((flawlessExchangerBlockEntity.handler.getStackInSlot(0).getItem() == Items.DIRT &&
-                    flawlessExchangerBlockEntity.handler.getStackInSlot(0).getCount() != Items.DIRT.getDefaultMaxStackSize())
-                    || flawlessExchangerBlockEntity.handler.getStackInSlot(0).isEmpty()) {
-                ((ItemStackHandler) flawlessExchangerBlockEntity.handler).setStackInSlot(0,
-                        new ItemStack(Items.DIRT, flawlessExchangerBlockEntity.handler.getStackInSlot(0).getCount() + 1));
-                System.out.println("Given A dirt!");
-            } else {
-                System.out.println("Failed To give a dirt");
+        FlawlessExchangerBlockEntity flawlessEntity = (FlawlessExchangerBlockEntity) blockEntity;
 
-                if (energy != null && energy.canReceive()) {
-                    System.out.println("Receive energy from flawless generated energy capability");
-                    energy.receiveEnergy(100, false);
+        System.out.println("Processing: " + flawlessEntity.PROCESSING);
+        if (!flawlessEntity.PROCESSING) {
 
-
-                    System.out.println("Energy Stored: " + energy.getEnergyStored() +
-                            " Max Energy Stored: " + energy.getMaxEnergyStored());
-                }
+            // not processing
+            if (flawlessEntity.getItem(flawlessEntity.ITEM_INPUT).is(Items.REDSTONE)) {
+                flawlessEntity.PROCESSING = true;
+                flawlessEntity.removeItem(flawlessEntity.ITEM_INPUT, 1);
             }
-            System.out.println("Energy Stored: " + energy.getEnergyStored() +
-                    " Max Energy Stored: " + energy.getMaxEnergyStored());
+        } else {
+            flawlessEntity.incProcessTime();
+            energy.receiveEnergy(10, false);
+            if (flawlessEntity.getProcessTime() == 200) {
+                flawlessEntity.resetProcessTime();
+                flawlessEntity.PROCESSING = false;
+            }
         }
 
-        flawlessExchangerBlockEntity.incProcessTime();
+//        if (flawlessExchangerBlockEntity.getProcessTime() == 200) {
+//            flawlessExchangerBlockEntity.resetProcessTime();
+//            if ((flawlessExchangerBlockEntity.handler.getStackInSlot(0).getItem() == Items.DIRT &&
+//                    flawlessExchangerBlockEntity.handler.getStackInSlot(0).getCount() != Items.DIRT.getDefaultMaxStackSize())
+//                    || flawlessExchangerBlockEntity.handler.getStackInSlot(0).isEmpty()) {
+//                ((ItemStackHandler) flawlessExchangerBlockEntity.handler).setStackInSlot(0,
+//                        new ItemStack(Items.DIRT, flawlessExchangerBlockEntity.handler.getStackInSlot(0).getCount() + 1));
+//                System.out.println("Given A dirt!");
+//            } else {
+//                System.out.println("Failed To give a dirt");
+//
+//                if (energy != null && energy.canReceive()) {
+//                    System.out.println("Receive energy from flawless generated energy capability");
+//                    energy.receiveEnergy(100, false);
+//
+//
+//                    System.out.println("Energy Stored: " + energy.getEnergyStored() +
+//                            " Max Energy Stored: " + energy.getMaxEnergyStored());
+//                }
+//            }
+//            System.out.println("Energy Stored: " + energy.getEnergyStored() +
+//                    " Max Energy Stored: " + energy.getMaxEnergyStored());
+//        }
+//
+//        flawlessExchangerBlockEntity.incProcessTime();
     }
 
     // sync
@@ -150,12 +173,21 @@ public class FlawlessExchangerBlockEntity extends BaseContainerBlockEntity{
 
     @Override
     protected NonNullList<ItemStack> getItems() {
-        return items;
+        NonNullList<ItemStack> nonNullList = NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY);
+        for (int i = 0; i < ITEM_SIZE; i++) {
+            nonNullList.set(i, handler.getStackInSlot(i));
+        }
+        return nonNullList;
     }
 
     @Override
     protected void setItems(NonNullList<ItemStack> nonNullList) {
-        items = nonNullList;
+        if (nonNullList.size() != ITEM_SIZE) return;
+        if (handler instanceof ItemStackHandler itemStackHandler) {
+            for (int i = 0; i < ITEM_SIZE; i++) {
+                itemStackHandler.setStackInSlot(i, nonNullList.get(i));
+            }
+        }
     }
 
     @Override

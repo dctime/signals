@@ -24,6 +24,7 @@ public class FlawlessExchangerScreen extends AbstractContainerScreen<FlawlessExc
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
         graphics.drawString(getMinecraft().font, menu.getProcessTime() + "", leftPos+(int)(imageWidth*0.1), topPos, 0xFFFFFF);
+        graphics.fill((int) (leftPos+titleLabelX+imageWidth*0.9), (int)(topPos+titleLabelY+imageHeight*0.1), (int)(leftPos+titleLabelX+imageWidth*0.95), (int)(topPos+inventoryLabelY-imageWidth*0.01), 0xFFFF0000);
     }
 
     @Override
