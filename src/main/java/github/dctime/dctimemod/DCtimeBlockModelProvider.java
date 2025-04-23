@@ -2,6 +2,7 @@ package github.dctime.dctimemod;
 
 import github.dctime.dctimemod.block.BuildHelperBlock;
 import github.dctime.dctimemod.block.RegisterBlocks;
+import github.dctime.dctimemod.block.SignalWireBlock;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
@@ -30,10 +31,16 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
            }
         });
 
+
         VariantBlockStateBuilder variantBuilderSignalWire = getVariantBuilder(RegisterBlocks.SINGAL_WIRE.get());
 
         variantBuilderSignalWire.forAllStates((state)-> {
-            return ConfiguredModel.builder().modelFile(models().getExistingFile(modLoc("signal_wire_east_west"))).build();
+            if (state.getValue(SignalWireBlock.EAST) && state.getValue(SignalWireBlock.WEST))
+                return ConfiguredModel.builder().modelFile(models().getExistingFile(modLoc("signal_wire_north_south"))).rotationY(90).build();
+            else if (state.getValue(SignalWireBlock.NORTH) && state.getValue(SignalWireBlock.SOUTH))
+                return ConfiguredModel.builder().modelFile(models().getExistingFile(modLoc("signal_wire_north_south"))).build();
+            else
+                return ConfiguredModel.builder().modelFile(models().getExistingFile(modLoc("signal_wire_north_south"))).rotationX(90).build();
         });
     }
 }

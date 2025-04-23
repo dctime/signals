@@ -16,8 +16,8 @@ public class SignalWireBlock extends Block {
                 .setValue(SOUTH, false)
                 .setValue(EAST, false)
                 .setValue(WEST, false)
-                .setValue(UP, false)
-                .setValue(DOWN, false)
+                .setValue(UP, true)
+                .setValue(DOWN, true)
         );
     }
 
