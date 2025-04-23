@@ -12,4 +12,9 @@ public class RegisterBlockItems {
         ITEMS.registerSimpleBlockItem(
             RegisterBlocks.BUILD_HELPER_BLOCK
         );
+
+    public static final DeferredItem<BlockItem> SIGNAL_WIRE =
+            ITEMS.registerSimpleBlockItem(
+                    RegisterBlocks.SINGAL_WIRE
+            );
 }

@@ -18,6 +18,7 @@ public class RegisterCreativeModeTab {
             .withSearchBar()
             .displayItems((params, output)->{
                 output.accept(RegisterBlockItems.BUILD_HELPER_BLOCK_ITEM);
+                output.accept(RegisterBlockItems.SIGNAL_WIRE);
             })
             .build()
     );

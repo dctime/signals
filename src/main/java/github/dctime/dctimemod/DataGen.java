@@ -1,8 +1,8 @@
 package github.dctime.dctimemod;
 
 import github.dctime.dctimemod.block.BlockLootSubProvider;
-import github.dctime.dctimemod.block.BuildHelperBlockModelProvider;
 import github.dctime.dctimemod.block.BuildHelperItemModelProvider;
+import github.dctime.dctimemod.block.SignalWireBlockModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
@@ -37,8 +37,13 @@ public class DataGen {
         // block models
         generator.addProvider(
                 event.includeClient(),
-                new BuildHelperBlockModelProvider(output, existingFileHelper)
+                new DCtimeBlockModelProvider(output, existingFileHelper)
         );
+//        generator.addProvider(
+//                event.includeClient(),
+//                new SignalWireBlockModelProvider(output, existingFileHelper)
+//        );
+
         //item models
         generator.addProvider(
                 event.includeClient(),
