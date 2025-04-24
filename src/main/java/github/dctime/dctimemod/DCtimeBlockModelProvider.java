@@ -53,14 +53,14 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         // EAST
         multiPartBuilderSignal.part()
                 .modelFile(models().getExistingFile(modLoc("block/signal_wire_side_north")))
-                .rotationY(270)
+                .rotationY(90)
                 .addModel()
                 .condition(SignalWireBlock.EAST, true)
                 .end();
         // WEST
         multiPartBuilderSignal.part()
                 .modelFile(models().getExistingFile(modLoc("block/signal_wire_side_north")))
-                .rotationY(90)
+                .rotationY(270)
                 .addModel()
                 .condition(SignalWireBlock.WEST, true)
                 .end();

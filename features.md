@@ -16,3 +16,7 @@ Signal Wire Block Init
 Signal Wire Block Using Multipart Builder Controller by NORTH SOUTH EAST WEST UP DOWN blockstates
 (Not Tested)
 
+### 2025.4.24
+Fix Issue 2025.4.23 (2) Now the collision box is the unconnected wire
+
+

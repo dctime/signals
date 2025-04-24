@@ -9,4 +9,8 @@ Energy and item disappear when reopen the world (1)
 
 Flawless Exchanger needs GUI and a new name
 
-Signal Wire needs collision block and needs a way to detect which multipart it clicked on
+Signal Wire needs collision block and needs a way to detect which multipart it clicked on (2)
+
+### 2025.4.24
+
+Signal Wire break box isnt the same as the model
