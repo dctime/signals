@@ -13,4 +13,7 @@ Signal Wire needs collision block and needs a way to detect which multipart it c
 
 ### 2025.4.24
 
-Signal Wire break box isnt the same as the model
+Signal Wire break box isnt the same as the model (make the break box bigger than the unconnected one to make it)
+
+
+

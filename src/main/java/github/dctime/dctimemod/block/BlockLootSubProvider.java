@@ -1,9 +1,8 @@
 package github.dctime.dctimemod.block;
 
+import github.dctime.dctimemod.RegisterBlocks;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 

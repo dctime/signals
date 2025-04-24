@@ -1,8 +1,8 @@
-package github.dctime.dctimemod.block;
+package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.DCtimeMod;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
+import github.dctime.dctimemod.block.BuildHelperBlock;
+import github.dctime.dctimemod.block.FlawlessExchangerBlock;
+import github.dctime.dctimemod.block.SignalWireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;

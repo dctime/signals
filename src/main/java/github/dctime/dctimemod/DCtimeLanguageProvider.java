@@ -1,7 +1,5 @@
 package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.block.RegisterBlockItems;
-import github.dctime.dctimemod.block.RegisterBlocks;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 

@@ -1,11 +1,13 @@
-package github.dctime.dctimemod.block;
+package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.DCtimeMod;
+import github.dctime.dctimemod.block.FlawlessExchangerBlockEntity;
+import github.dctime.dctimemod.block.SignalWireBlockEntity;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class RegisterBlockEntities {
@@ -18,10 +20,13 @@ public class RegisterBlockEntities {
                     FlawlessExchangerBlockEntity::new,
                     RegisterBlocks.FLAWLESS_EXCHANGER.get()
             ).build(null)
+    );
 
-//            () -> new BlockEntityType<>(
-//                    FlawlessExchangerBlockEntity::new,
-//                    Set.of(RegisterBlocks.FLAWLESS_EXCHANGER.get())
-//            )
+    public static final Supplier<BlockEntityType<SignalWireBlockEntity>> SIGNAL_WIRE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "signal_wire_block_entity",
+            ()-> BlockEntityType.Builder.of(
+                    SignalWireBlockEntity::new,
+                    RegisterBlocks.SINGAL_WIRE.get()
+            ).build(null)
     );
 }

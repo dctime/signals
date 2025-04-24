@@ -1,7 +1,6 @@
 package github.dctime.dctimemod;
 
 import github.dctime.dctimemod.block.BuildHelperBlock;
-import github.dctime.dctimemod.block.RegisterBlocks;
 import github.dctime.dctimemod.block.SignalWireBlock;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
