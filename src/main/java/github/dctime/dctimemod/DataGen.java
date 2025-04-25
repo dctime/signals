@@ -1,6 +1,5 @@
 package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.block.BlockLootSubProvider;
 import github.dctime.dctimemod.block.BuildHelperItemModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;

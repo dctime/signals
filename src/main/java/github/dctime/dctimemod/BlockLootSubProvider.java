@@ -1,6 +1,5 @@
-package github.dctime.dctimemod.block;
+package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.RegisterBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;

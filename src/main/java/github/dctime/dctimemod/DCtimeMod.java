@@ -1,7 +1,5 @@
 package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.block.RegisterBlockItems;
-import github.dctime.dctimemod.block.RegisterMenuTypes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 

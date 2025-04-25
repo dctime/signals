@@ -1,6 +1,9 @@
 package github.dctime.dctimemod;
 
+import github.dctime.dctimemod.block.SignalWireBlock;
+import github.dctime.dctimemod.block.SignalWireInformation;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -12,6 +15,15 @@ import org.jetbrains.annotations.Nullable;
 @EventBusSubscriber(modid= DCtimeMod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class RegisterCapabilities {
 
+    public static final BlockCapability<SignalWireInformation, @Nullable Direction> SIGNAL_VALUE =
+            BlockCapability.create(
+                    // Provide a name to uniquely identify the capability.
+                    ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_value"),
+                    // Provide the queried type. Here, we want to look up `IItemHandler` instances.
+                    SignalWireInformation.class,
+                    Direction.class
+            );
+
     @SubscribeEvent
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
@@ -22,5 +34,17 @@ public class RegisterCapabilities {
                     else return null;
                 }
         );
+
+        event.registerBlockEntity(
+                SIGNAL_VALUE,
+                RegisterBlockEntities.SIGNAL_WIRE_BLOCK_ENTITY.get(),
+                (entity, direction) -> {
+                    if (SignalWireBlock.directionGotConnection(entity, direction)) {
+                        return entity.getInformation();
+                    } else return null;
+                }
+        );
     }
+
+
 }

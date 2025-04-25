@@ -9,25 +9,23 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class SignalWireBlockEntity extends BlockEntity {
 
-    private int signalStrength = 0;
-    private int signalValue = 0;
+    private final SignalWireInformation information = new SignalWireInformation(0);
 
-    public int getSignalStrength() {
-        return this.signalStrength;
+    public void setSignalValue(int value) {
+        this.information.setSignalValue(value);
     }
 
     public int getSignalValue() {
-        return this.signalValue;
+        return this.information.getSignalValue();
     }
 
-    public void setSignalValue(int value) {
-        this.signalValue = value;
+    public SignalWireInformation getInformation() {
+        return this.information;
     }
 
     public SignalWireBlockEntity(BlockPos pos, BlockState blockState) {
@@ -37,20 +35,18 @@ public class SignalWireBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.signalStrength = tag.getInt("signalStrength");
-        this.signalValue = tag.getInt("signalValue");
+        this.information.setSignalValue(tag.getInt("signalValue"));
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.putInt("signalStrength", this.signalStrength);
-        tag.putInt("signalValue", this.signalValue);
+        tag.putInt("signalValue", this.information.getSignalValue());
+
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
         if (level.isClientSide()) return;
-
     }
 
 

@@ -1,6 +1,7 @@
 package github.dctime.dctimemod.block;
 
 import github.dctime.dctimemod.RegisterBlockEntities;
+import github.dctime.dctimemod.RegisterCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -60,22 +61,65 @@ public class SignalWireBlock extends Block implements EntityBlock {
     public static final BooleanProperty UP = BooleanProperty.create("up");
     public static final BooleanProperty DOWN = BooleanProperty.create("down");
 
+    public static boolean directionGotConnection(SignalWireBlockEntity entity, @Nullable Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return entity.getBlockState().getValue(SignalWireBlock.SOUTH);
+            case SOUTH:
+                return entity.getBlockState().getValue(SignalWireBlock.NORTH);
+            case EAST:
+                return entity.getBlockState().getValue(SignalWireBlock.WEST);
+            case WEST:
+                return entity.getBlockState().getValue(SignalWireBlock.EAST);
+            case UP:
+                return entity.getBlockState().getValue(SignalWireBlock.DOWN);
+            case DOWN:
+                return entity.getBlockState().getValue(SignalWireBlock.UP);
+            case null:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean directionHasConnection(SignalWireBlockEntity entity, @Nullable Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return entity.getBlockState().getValue(SignalWireBlock.NORTH);
+            case SOUTH:
+                return entity.getBlockState().getValue(SignalWireBlock.SOUTH);
+            case EAST:
+                return entity.getBlockState().getValue(SignalWireBlock.EAST);
+            case WEST:
+                return entity.getBlockState().getValue(SignalWireBlock.WEST);
+            case UP:
+                return entity.getBlockState().getValue(SignalWireBlock.UP);
+            case DOWN:
+                return entity.getBlockState().getValue(SignalWireBlock.DOWN);
+            case null:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN);
     }
 
     public static final int WIRE_WIDTH = 4;
+
     // collision box
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return Block.box(
-            8- (double) WIRE_WIDTH /2,
-            8- (double) WIRE_WIDTH /2,
-            8- (double) WIRE_WIDTH /2,
-            8+ (double) WIRE_WIDTH /2,
-            8+ (double) WIRE_WIDTH /2,
-            8+ (double) WIRE_WIDTH /2
+                8 - (double) WIRE_WIDTH / 2,
+                8 - (double) WIRE_WIDTH / 2,
+                8 - (double) WIRE_WIDTH / 2,
+                8 + (double) WIRE_WIDTH / 2,
+                8 + (double) WIRE_WIDTH / 2,
+                8 + (double) WIRE_WIDTH / 2
         );
     }
 
@@ -83,12 +127,12 @@ public class SignalWireBlock extends Block implements EntityBlock {
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return Block.box(
-            8- (double) WIRE_WIDTH,
-            8- (double) WIRE_WIDTH,
-            8- (double) WIRE_WIDTH,
-            8+ (double) WIRE_WIDTH,
-            8+ (double) WIRE_WIDTH,
-            8+ (double) WIRE_WIDTH
+                8 - (double) WIRE_WIDTH,
+                8 - (double) WIRE_WIDTH,
+                8 - (double) WIRE_WIDTH,
+                8 + (double) WIRE_WIDTH,
+                8 + (double) WIRE_WIDTH,
+                8 + (double) WIRE_WIDTH
         );
     }
 
@@ -99,7 +143,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
 
         if (player.getMainHandItem().getItem() == Items.STICK) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
-            System.out.println("Signal Strength: "+entity.getSignalStrength()+", Signal Value: "+entity.getSignalValue());
+            System.out.println("Signal Value: " + entity.getSignalValue());
         } else if (player.getMainHandItem().isEmpty()) {
             setBlockStateByPlayerInput(state, level, pos, player, hitResult);
         }
@@ -125,18 +169,36 @@ public class SignalWireBlock extends Block implements EntityBlock {
         }
 
         System.out.println("BlockState Updated");
+        SignalWireInformation info = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, pos, null);
+        if (info != null) {
+            info.setSignalValue(0);
+        }
+
         level.setBlockAndUpdate(pos, state);
     }
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
-        if (level.isClientSide()) return;
 
+        if (!oldState.is(this)) {
+            level.invalidateCapabilities(pos);
+        }
+        if (level.isClientSide()) return;
         //server
         if (level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
-            if (signalSourceDetected(level, pos)) {
+            if (signalSourceDetected(level, pos) != null) {
+                // set the wire to 30
                 entity.setSignalValue(30);
+                level.updateNeighborsAt(pos, this);
             }
+        }
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, movedByPiston);
+        if (!state.is(newState.getBlock())) {
+            level.invalidateCapabilities(pos);
         }
     }
 
@@ -144,25 +206,55 @@ public class SignalWireBlock extends Block implements EntityBlock {
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
         if (level.isClientSide()) return;
-        if (level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
-            if (signalSourceDetected(level, pos)) {
-                entity.setSignalValue(30);
-            } else {
-                entity.setSignalValue(0);
-            }
-        }
+        //server
 
+        if (level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
+            // if redstone block got some problems like broken
+            System.out.println("Neighbor Block Changed: Block: " + neighborBlock.toString());
+            if (neighborBlock == Blocks.REDSTONE_BLOCK) {
+                if (signalSourceDetected(level, pos) == null) {
+                    entity.setSignalValue(0);
+                }
+            }
+            // check if redstone block added
+            if (signalSourceDetected(level, pos) != null) {
+                entity.setSignalValue(30);
+            }
+            // telling neighbors to update signal source
+            List<BlockPos> positions = List.of(pos.above(), pos.below(), pos.north(), pos.south(), pos.east(), pos.west());
+            List<Direction> posDirections = List.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+            System.out.println("Neighbor Block Changed: From Pos: " + pos.toString());
+            for (int i = 0; i < positions.size(); i++) {
+                SignalWireInformation neighborP = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, positions.get(i), posDirections.get(i));
+                if (neighborP == null) {
+                    continue;
+                }
+
+                if (neighborP.getSignalValue() == entity.getSignalValue() || !directionHasConnection(entity, posDirections.get(i))) {
+                    System.out.println("Neighbor Block Not Changed: " + neighborP.getSignalValue() + ", self: " + entity.getSignalValue());
+                    continue;
+                }
+                // modify the information value
+                System.out.println("Neighbor Block Changed: " + neighborP.getSignalValue() + ", self: " + entity.getSignalValue());
+                neighborP.setSignalValue(entity.getSignalValue());
+                level.updateNeighborsAt(pos, this);
+            }
+
+        }
     }
 
-    private boolean signalSourceDetected(Level level, BlockPos pos) {
+    @Nullable
+    private Direction signalSourceDetected(Level level, BlockPos pos) {
         List<BlockPos> positions = List.of(pos.above(), pos.below(), pos.north(), pos.south(), pos.east(), pos.west());
+        List<Direction> directions = List.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
         for (int i = 0; i < positions.size(); i++) {
             if (level.getBlockState(positions.get(i)).getBlock() == Blocks.REDSTONE_BLOCK) {
-                return true;
+                return directions.get(i);
             }
         }
-        return false;
+        return null;
     }
+
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
