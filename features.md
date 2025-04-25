@@ -33,3 +33,7 @@ Removing the redstone block will update the signal wire.
 
 Init SignalWireInformation to SignalWireBlock
 
+SignalWireBlock now behave like eletrical wires put redstone by the wire to make the net of the wire got 30V. 
+Support connections and disconnections and loops of wires. Doesnt support multiple voltages applied to one net of wire.
+
+Fixed Issue 2025.4.25 (1)

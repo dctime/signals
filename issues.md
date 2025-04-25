@@ -17,5 +17,5 @@ Signal Wire break box isnt the same as the model (make the break box bigger than
 
 ### 2025.4.25
 
-Let the one who is updated to modify its capability, not the one who sends the update
+Let the one who is updated to modify its capability, not the one who sends the update (1)
 
