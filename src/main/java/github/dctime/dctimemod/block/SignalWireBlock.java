@@ -40,12 +40,12 @@ public class SignalWireBlock extends Block implements EntityBlock {
     public SignalWireBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
-                .setValue(NORTH, false)
-                .setValue(SOUTH, false)
-                .setValue(EAST, false)
-                .setValue(WEST, false)
-                .setValue(UP, false)
-                .setValue(DOWN, false)
+            .setValue(NORTH, false)
+            .setValue(SOUTH, false)
+            .setValue(EAST, false)
+            .setValue(WEST, false)
+            .setValue(UP, false)
+            .setValue(DOWN, false)
         );
     }
 
@@ -114,12 +114,12 @@ public class SignalWireBlock extends Block implements EntityBlock {
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return Block.box(
-                8 - (double) WIRE_WIDTH / 2,
-                8 - (double) WIRE_WIDTH / 2,
-                8 - (double) WIRE_WIDTH / 2,
-                8 + (double) WIRE_WIDTH / 2,
-                8 + (double) WIRE_WIDTH / 2,
-                8 + (double) WIRE_WIDTH / 2
+            8 - (double) WIRE_WIDTH / 2,
+            8 - (double) WIRE_WIDTH / 2,
+            8 - (double) WIRE_WIDTH / 2,
+            8 + (double) WIRE_WIDTH / 2,
+            8 + (double) WIRE_WIDTH / 2,
+            8 + (double) WIRE_WIDTH / 2
         );
     }
 
@@ -127,12 +127,12 @@ public class SignalWireBlock extends Block implements EntityBlock {
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return Block.box(
-                8 - (double) WIRE_WIDTH,
-                8 - (double) WIRE_WIDTH,
-                8 - (double) WIRE_WIDTH,
-                8 + (double) WIRE_WIDTH,
-                8 + (double) WIRE_WIDTH,
-                8 + (double) WIRE_WIDTH
+            8 - (double) WIRE_WIDTH,
+            8 - (double) WIRE_WIDTH,
+            8 - (double) WIRE_WIDTH,
+            8 + (double) WIRE_WIDTH,
+            8 + (double) WIRE_WIDTH,
+            8 + (double) WIRE_WIDTH
         );
     }
 
@@ -171,7 +171,11 @@ public class SignalWireBlock extends Block implements EntityBlock {
         System.out.println("BlockState Updated");
         SignalWireInformation info = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, pos, null);
         if (info != null) {
-            info.setSignalValue(0);
+            if (signalSourceDetected(level, pos) != null) {
+                info.setSignalValue(30);
+            } else {
+                info.setSignalValue(0);
+            }
         }
 
         level.setBlockAndUpdate(pos, state);
@@ -208,37 +212,86 @@ public class SignalWireBlock extends Block implements EntityBlock {
         if (level.isClientSide()) return;
         //server
 
+
         if (level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
-            // if redstone block got some problems like broken
-            System.out.println("Neighbor Block Changed: Block: " + neighborBlock.toString());
-            if (neighborBlock == Blocks.REDSTONE_BLOCK) {
+            // events that will trigger the method:
+            // self blockstate modifies like connections to someone else
+            // nearby blocks break/placed
+            // nearby signal wires updated
+
+            // get direction of the updated block
+            // if he is a signal block do the following:
+            // if he has connection to you and you have connection to him and the value is different
+            // use the capability system
+            // get value from him and modify your value
+            // if there is signal block nearby then modify your value again
+            // (for signal web signal block break edge cases)
+            // update the surroundings
+            // else then
+            // break and do not update other stuff and this is the end of the update tree
+            Direction direction = Direction.fromDelta(neighborPos.getX() - pos.getX(), neighborPos.getY() - pos.getY(), neighborPos.getZ() - pos.getZ());
+            if (neighborBlock instanceof SignalWireBlock signalWireBlock) {
+                SignalWireInformation info = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, neighborPos, direction);
+                // neighbor connection stored in info
+                // self connection stored in directionHasConnection
+                System.out.println("Direction: " + direction.getName());
+                System.out.println("BlockPos: " + "x: " + pos.getX() + ", y:" + pos.getY() + ",z: " + pos.getZ()
+                    + ", Neighbor: " + "x: " + neighborPos.getX() + ", y: " + neighborPos.getY() + ", z: " + neighborPos.getZ());
+                if (info == null) {
+                    System.out.println("Neighbor not connected");
+                }
+                else if (!SignalWireBlock.directionHasConnection(entity, direction)) {
+                    System.out.println("Self not connected");
+                }
+                else if (info != null && SignalWireBlock.directionHasConnection(entity, direction) && info.getSignalValue() != entity.getSignalValue()) {
+                    entity.setSignalValue(info.getSignalValue());
+                    level.updateNeighborsAt(pos, this);
+                }
+            } else {
+                // might be redstone block been broke
                 if (signalSourceDetected(level, pos) == null) {
                     entity.setSignalValue(0);
+                    level.updateNeighborsAt(pos, this);
                 }
             }
-            // check if redstone block added
+
             if (signalSourceDetected(level, pos) != null) {
                 entity.setSignalValue(30);
             }
-            // telling neighbors to update signal source
-            List<BlockPos> positions = List.of(pos.above(), pos.below(), pos.north(), pos.south(), pos.east(), pos.west());
-            List<Direction> posDirections = List.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
-            System.out.println("Neighbor Block Changed: From Pos: " + pos.toString());
-            for (int i = 0; i < positions.size(); i++) {
-                SignalWireInformation neighborP = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, positions.get(i), posDirections.get(i));
-                if (neighborP == null) {
-                    continue;
-                }
+            // if he is not a signal block then check if nearby has signal block
+            // the signal block it relies on might be broken by someone else
+            // if there is a signal block nearby then value = 30
+            // update the surroundings
 
-                if (neighborP.getSignalValue() == entity.getSignalValue() || !directionHasConnection(entity, posDirections.get(i))) {
-                    System.out.println("Neighbor Block Not Changed: " + neighborP.getSignalValue() + ", self: " + entity.getSignalValue());
-                    continue;
-                }
-                // modify the information value
-                System.out.println("Neighbor Block Changed: " + neighborP.getSignalValue() + ", self: " + entity.getSignalValue());
-                neighborP.setSignalValue(entity.getSignalValue());
-                level.updateNeighborsAt(pos, this);
-            }
+//            // if redstone block got some problems like broken
+//            System.out.println("Neighbor Block Changed: Block: " + neighborBlock.toString());
+//            if (neighborBlock == Blocks.REDSTONE_BLOCK) {
+//                if (signalSourceDetected(level, pos) == null) {
+//                    entity.setSignalValue(0);
+//                }
+//            }
+//            // check if redstone block added
+//            if (signalSourceDetected(level, pos) != null) {
+//                entity.setSignalValue(30);
+//            }
+//            // telling neighbors to update signal source
+//            List<BlockPos> positions = List.of(pos.above(), pos.below(), pos.north(), pos.south(), pos.east(), pos.west());
+//            List<Direction> posDirections = List.of(Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+//            System.out.println("Neighbor Block Changed: From Pos: " + pos.toString());
+//            for (int i = 0; i < positions.size(); i++) {
+//                SignalWireInformation neighborP = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, positions.get(i), posDirections.get(i));
+//                if (neighborP == null) {
+//                    continue;
+//                }
+//
+//                if (neighborP.getSignalValue() == entity.getSignalValue() || !directionHasConnection(entity, posDirections.get(i))) {
+//                    System.out.println("Neighbor Block Not Changed: " + neighborP.getSignalValue() + ", self: " + entity.getSignalValue());
+//                    continue;
+//                }
+//                // modify the information value
+//                System.out.println("Neighbor Block Changed: " + neighborP.getSignalValue() + ", self: " + entity.getSignalValue());
+//                level.updateNeighborsAt(pos, this);
+//            }
 
         }
     }

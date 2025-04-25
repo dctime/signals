@@ -29,3 +29,7 @@ Placing a redstone block by or placing a signal wire block by a redstone block w
 Removing the redstone block will update the signal wire.
 (Redstone block's onPlace onDestroy method calls level's updateNeightbor. After that neighbor blocks would execute neighborChanged.)
 
+### 2025.4.25
+
+Init SignalWireInformation to SignalWireBlock
+
