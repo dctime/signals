@@ -257,6 +257,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
 
             if (signalSourceDetected(level, pos) != null) {
                 entity.setSignalValue(30);
+                level.updateNeighborsAt(pos, this);
             }
             // if he is not a signal block then check if nearby has signal block
             // the signal block it relies on might be broken by someone else
