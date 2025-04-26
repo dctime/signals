@@ -247,32 +247,13 @@ public class SignalWireBlock extends Block implements EntityBlock {
                     entity.setSignalValue(info.getSignalValue());
                     level.updateNeighborsAt(pos, this);
                 }
-            } else {
-                // if he is not a signal block then check if nearby has signal block
-                // the signal block it relies on might be broken by someone else
-                // if there is a signal block nearby then value = 30
-                // update the surroundings
-
-                // Const Signal will set the value of the wire to zero when on move
-                // might be redstone block been broke
-//                if (signalSourceDetected(level, pos) == null) {
-//                    entity.setSignalValue(0);
-//                    level.updateNeighborsAt(pos, this);
-//                }
             }
-
-            // Const Signal Block will set the wire automatically
-//            if (signalSourceDetected(level, pos) != null) {
-//                entity.setSignalValue(30);
-//                level.updateNeighborsAt(pos, this);
-//            }
-
-
-
-
+            // Const Signal will set the value of the wire to zero when on move
+            // Const Signal Block will apply signal the wire automatically when updated (when some signal block destroyed in the circuit)
         }
     }
 
+    @Deprecated
     @Nullable
     private Direction signalSourceDetected(Level level, BlockPos pos) {
         List<BlockPos> positions = List.of(pos.above(), pos.below(), pos.north(), pos.south(), pos.east(), pos.west());
