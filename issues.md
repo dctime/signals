@@ -19,3 +19,11 @@ Signal Wire break box isnt the same as the model (make the break box bigger than
 
 Let the one who is updated to modify its capability, not the one who sends the update (1)
 
+### 2025.4.27
+
+The Collision box of the SignalWireBlock is so small that when a wire is connected player will fall between the wires
+
+When placing the ConstSignalBlock, the FACING blockstate is always north. The block should be face to the player when placed.
+
+ConstSignalBlock requires RF/t
+

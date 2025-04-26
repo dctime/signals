@@ -37,3 +37,9 @@ SignalWireBlock now behave like eletrical wires put redstone by the wire to make
 Support connections and disconnections and loops of wires. Doesnt support multiple voltages applied to one net of wire.
 
 Fixed Issue 2025.4.25 (1)
+
+### 2025.4.27
+
+Redstone block will not power SignalWireBlock anymore.
+
+ConstSignalBlock Init and ready for applying signal to the SignalWireBlock if connected.
