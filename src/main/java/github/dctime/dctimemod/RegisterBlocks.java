@@ -1,9 +1,11 @@
 package github.dctime.dctimemod;
 
 import github.dctime.dctimemod.block.BuildHelperBlock;
+import github.dctime.dctimemod.block.ConstSignalBlock;
 import github.dctime.dctimemod.block.FlawlessExchangerBlock;
 import github.dctime.dctimemod.block.SignalWireBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -39,5 +41,14 @@ public class RegisterBlocks {
                     .explosionResistance(100.0f)
                     .sound(SoundType.METAL)
                     .noOcclusion()
+    );
+
+    public static final DeferredBlock<DirectionalBlock> CONSTANT_SIGNAL_BLOCK = BLOCKS.registerBlock(
+            "const_signal_block",
+            ConstSignalBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
     );
 }

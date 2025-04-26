@@ -16,4 +16,6 @@ public class RegisterBlockItems {
             ITEMS.registerSimpleBlockItem(
                     RegisterBlocks.SINGAL_WIRE
             );
+
+    public static final DeferredItem<BlockItem> CONSTANT_SIGNAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(RegisterBlocks.CONSTANT_SIGNAL_BLOCK);
 }

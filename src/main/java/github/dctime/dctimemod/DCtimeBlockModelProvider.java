@@ -3,10 +3,7 @@ package github.dctime.dctimemod;
 import github.dctime.dctimemod.block.BuildHelperBlock;
 import github.dctime.dctimemod.block.SignalWireBlock;
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
-import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
+import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class DCtimeBlockModelProvider extends BlockStateProvider {
@@ -78,5 +75,13 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
                 .condition(SignalWireBlock.DOWN, true)
                 .end();
 
+        ModelFile constSignalModel = models().orientableVertical(
+                "const_signal_block",
+                modLoc("block/const_signal_block_side"),
+                modLoc("block/const_signal_block_front")
+        );
+
+
+        directionalBlock(RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get(), constSignalModel);
     }
 }
