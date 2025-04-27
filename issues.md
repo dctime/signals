@@ -27,3 +27,11 @@ When placing the ConstSignalBlock, the FACING blockstate is always north. The bl
 
 ConstSignalBlock requires RF/t
 
+Nearby wires not updated when break (4)
+
+### 2025.4.28
+
+Nearby source not applying source to newly configured wire. (1)
+
+Signal to Redstone converter redstone feature not implemented.
+

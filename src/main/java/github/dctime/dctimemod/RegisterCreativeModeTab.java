@@ -19,6 +19,7 @@ public class RegisterCreativeModeTab {
                 output.accept(RegisterBlockItems.BUILD_HELPER_BLOCK_ITEM);
                 output.accept(RegisterBlockItems.SIGNAL_WIRE);
                 output.accept(RegisterBlockItems.CONSTANT_SIGNAL_BLOCK_ITEM);
+                output.accept(RegisterBlockItems.SINGAL_TO_REDSTONE_CONVERTER);
             })
             .build()
     );

@@ -4,6 +4,7 @@ import github.dctime.dctimemod.RegisterBlockEntities;
 import github.dctime.dctimemod.RegisterCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -33,10 +34,12 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Entity;
 
+import java.util.HashMap;
 import java.util.List;
 
 
 public class SignalWireBlock extends Block implements EntityBlock {
+    protected HashMap<Direction, BooleanProperty> directionToConnectionProperty;
     public SignalWireBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
@@ -47,6 +50,15 @@ public class SignalWireBlock extends Block implements EntityBlock {
             .setValue(UP, false)
             .setValue(DOWN, false)
         );
+
+        directionToConnectionProperty = new HashMap<>();
+
+        directionToConnectionProperty.put(Direction.NORTH, SignalWireBlock.NORTH);
+        directionToConnectionProperty.put(Direction.SOUTH, SignalWireBlock.SOUTH);
+        directionToConnectionProperty.put(Direction.EAST, SignalWireBlock.EAST);
+        directionToConnectionProperty.put(Direction.WEST, SignalWireBlock.WEST);
+        directionToConnectionProperty.put(Direction.UP, SignalWireBlock.UP);
+        directionToConnectionProperty.put(Direction.DOWN, SignalWireBlock.DOWN);
     }
 
     @Override
@@ -54,12 +66,12 @@ public class SignalWireBlock extends Block implements EntityBlock {
         return SignalWireBlockEntity::tick;
     }
 
-    public static final BooleanProperty NORTH = BooleanProperty.create("north");
-    public static final BooleanProperty SOUTH = BooleanProperty.create("south");
-    public static final BooleanProperty EAST = BooleanProperty.create("east");
-    public static final BooleanProperty WEST = BooleanProperty.create("west");
-    public static final BooleanProperty UP = BooleanProperty.create("up");
-    public static final BooleanProperty DOWN = BooleanProperty.create("down");
+    public static final BooleanProperty NORTH = BooleanProperty.create("signal_wire_north");
+    public static final BooleanProperty SOUTH = BooleanProperty.create("signal_wire_south");
+    public static final BooleanProperty EAST = BooleanProperty.create("signal_wire_east");
+    public static final BooleanProperty WEST = BooleanProperty.create("signal_wire_west");
+    public static final BooleanProperty UP = BooleanProperty.create("signal_wire_up");
+    public static final BooleanProperty DOWN = BooleanProperty.create("signal_wire_down");
 
     public static boolean directionGotConnection(SignalWireBlockEntity entity, @Nullable Direction direction) {
         switch (direction) {
@@ -138,47 +150,42 @@ public class SignalWireBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (level.isClientSide()) return InteractionResult.PASS;
+        if (level.isClientSide()) return InteractionResult.CONSUME;
         //server
 
         if (player.getMainHandItem().getItem() == Items.STICK) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
             System.out.println("Signal Value: " + entity.getSignalValue());
+            player.displayClientMessage(Component.literal("Signal Value: " + entity.getSignalValue()), true);
         } else if (player.getMainHandItem().isEmpty()) {
-            setBlockStateByPlayerInput(state, level, pos, player, hitResult);
+            System.out.println("Player hand is empty");
+            if (!player.isCrouching())
+                switchConnectionOutput(hitResult.getDirection(), level, pos);
+            else
+                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos);
         }
+
+        // changing the wire configuration may cause wire connection change
+        updateWireValue(state, level, pos);
 
         return InteractionResult.SUCCESS;
     }
 
-    private void setBlockStateByPlayerInput(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!player.isCrouching()) {
-            if (hitResult.getDirection() == Direction.UP) state = state.setValue(UP, !state.getValue(UP));
-            if (hitResult.getDirection() == Direction.DOWN) state = state.setValue(DOWN, !state.getValue(DOWN));
-            if (hitResult.getDirection() == Direction.NORTH) state = state.setValue(NORTH, !state.getValue(NORTH));
-            if (hitResult.getDirection() == Direction.SOUTH) state = state.setValue(SOUTH, !state.getValue(SOUTH));
-            if (hitResult.getDirection() == Direction.EAST) state = state.setValue(EAST, !state.getValue(EAST));
-            if (hitResult.getDirection() == Direction.WEST) state = state.setValue(WEST, !state.getValue(WEST));
-        } else {
-            if (hitResult.getDirection() == Direction.DOWN) state = state.setValue(UP, !state.getValue(UP));
-            if (hitResult.getDirection() == Direction.UP) state = state.setValue(DOWN, !state.getValue(DOWN));
-            if (hitResult.getDirection() == Direction.SOUTH) state = state.setValue(NORTH, !state.getValue(NORTH));
-            if (hitResult.getDirection() == Direction.NORTH) state = state.setValue(SOUTH, !state.getValue(SOUTH));
-            if (hitResult.getDirection() == Direction.WEST) state = state.setValue(EAST, !state.getValue(EAST));
-            if (hitResult.getDirection() == Direction.EAST) state = state.setValue(WEST, !state.getValue(WEST));
-        }
+    private void switchConnectionOutput(Direction direction, Level level, BlockPos pos) {
+        BlockState oldState = level.getBlockState(pos);
+        BooleanProperty targetConnectionProperty = directionToConnectionProperty.get(direction);
 
-        System.out.println("BlockState Updated");
-        SignalWireInformation info = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, pos, null);
-        if (info != null) {
-            if (signalSourceDetected(level, pos) != null) {
-                info.setSignalValue(30);
-            } else {
-                info.setSignalValue(0);
-            }
-        }
+        boolean isOldConnection = oldState.getValue(targetConnectionProperty);
 
-        level.setBlockAndUpdate(pos, state);
+        if (!isOldConnection)
+            level.setBlockAndUpdate(pos, oldState
+                    .setValue(targetConnectionProperty, true)
+
+            );
+        else
+            level.setBlockAndUpdate(pos, oldState
+                    .setValue(targetConnectionProperty, false)
+            );
     }
 
     @Override
@@ -189,13 +196,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
         }
         if (level.isClientSide()) return;
         //server
-        if (level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
-            if (signalSourceDetected(level, pos) != null) {
-                // set the wire to 30
-                entity.setSignalValue(30);
-                level.updateNeighborsAt(pos, this);
-            }
-        }
+        updateWireValue(state, level, pos);
     }
 
     @Override
@@ -204,6 +205,9 @@ public class SignalWireBlock extends Block implements EntityBlock {
         if (!state.is(newState.getBlock())) {
             level.invalidateCapabilities(pos);
         }
+        if (level.isClientSide()) return;
+        updateWireValue(state, level, pos);
+
     }
 
     @Override
@@ -272,5 +276,33 @@ public class SignalWireBlock extends Block implements EntityBlock {
         return new SignalWireBlockEntity(blockPos, blockState);
     }
 
+    // call this function if there is a chance that the wires value is changed
+    protected void updateWireValue(BlockState state, Level level, BlockPos pos) {
+        // update the wire
+        if (level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
+            entity.getInformation().setSignalValue(0);
+        }
 
+        BooleanProperty[] directionProperties = {NORTH, SOUTH, EAST, WEST, UP, DOWN};
+        Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.UP, Direction.DOWN};
+        for (int i = 0; i < 6; i++) {
+            if (state.getValue(directionProperties[i])) {
+                BlockPos nearbyPos = pos.relative(directions[i]);
+                SignalWireInformation info = level.getCapability(
+                        RegisterCapabilities.SIGNAL_VALUE,
+                        nearbyPos,
+                        directions[i]
+                );
+
+                if (info != null) {
+                    // for self connection break case like editing connection and breaking block
+                    System.out.println("Updated onRemove");
+                    info.setSignalValue(0);
+                    level.updateNeighborsAt(nearbyPos, this);
+                }
+            }
+        }
+        // for signal block nearby case
+        level.updateNeighborsAt(pos, this);
+    }
 }

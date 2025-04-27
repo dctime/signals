@@ -1,9 +1,6 @@
 package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.block.BuildHelperBlock;
-import github.dctime.dctimemod.block.ConstSignalBlock;
-import github.dctime.dctimemod.block.FlawlessExchangerBlock;
-import github.dctime.dctimemod.block.SignalWireBlock;
+import github.dctime.dctimemod.block.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -50,5 +47,15 @@ public class RegisterBlocks {
                     .destroyTime(1.0f)
                     .explosionResistance(100.0f)
                     .sound(SoundType.METAL)
+    );
+
+    public static final DeferredBlock<Block> SINGAL_TO_REDSTONE_CONVERTER = BLOCKS.registerBlock(
+            "signal_to_redstone_converter",
+            SignalToRedstoneConverter::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
     );
 }

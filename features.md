@@ -43,3 +43,13 @@ Fixed Issue 2025.4.25 (1)
 Redstone block will not power SignalWireBlock anymore.
 
 ConstSignalBlock Init and ready for applying signal to the SignalWireBlock if connected.
+
+Fixed 2025.4.27 Issue (4)
+
+### 2025.4.28
+
+Solved problem that when wire configuration changed while source is near. Issue 2025.4.28 (1)
+
+Signal to Redstone converter init. Use redstone dust to turn one side of a wire to redstone output.
+
+

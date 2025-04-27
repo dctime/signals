@@ -23,6 +23,7 @@ public class BlockLootSubProvider extends net.minecraft.data.loot.BlockLootSubPr
         this.add(RegisterBlocks.FLAWLESS_EXCHANGER.get(), this.createSingleItemTable(Items.DIRT));
         this.add(RegisterBlocks.SINGAL_WIRE.get(), this.createSingleItemTable(RegisterBlockItems.SIGNAL_WIRE));
         this.add(RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get(), this.createSingleItemTable(RegisterBlockItems.CONSTANT_SIGNAL_BLOCK_ITEM));
+        this.add(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER.get(), this.createSingleItemTable(RegisterBlockItems.SINGAL_TO_REDSTONE_CONVERTER));
 
     }
 }
