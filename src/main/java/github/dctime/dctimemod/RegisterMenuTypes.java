@@ -1,5 +1,6 @@
 package github.dctime.dctimemod;
 
+import github.dctime.dctimemod.block.ConstSignalMenu;
 import github.dctime.dctimemod.block.FlawlessExchangerMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
@@ -13,4 +14,7 @@ public class RegisterMenuTypes {
     // client menu
     public static final Supplier<MenuType<FlawlessExchangerMenu>> FLAWLESS_EXCHANGER_MENU =
             MENUS.register("flawless_exchanger_menu", ()->new MenuType<>(FlawlessExchangerMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
+    public static final Supplier<MenuType<ConstSignalMenu>> CONST_SIGNAL_MENU =
+            MENUS.register("const_signal_menu", ()->new MenuType<>(ConstSignalMenu::new, FeatureFlags.DEFAULT_FLAGS));
 }

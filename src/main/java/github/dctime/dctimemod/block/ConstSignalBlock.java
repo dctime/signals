@@ -5,14 +5,25 @@ import com.mojang.serialization.MapCodec;
 import github.dctime.dctimemod.RegisterCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.ObserverBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 
-public class ConstSignalBlock extends DirectionalBlock {
+public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
     public static final MapCodec<ConstSignalBlock> CODEC = simpleCodec(ConstSignalBlock::new);
 
     public ConstSignalBlock(Properties properties) {
@@ -31,7 +42,9 @@ public class ConstSignalBlock extends DirectionalBlock {
         }
 
         if (level.isClientSide()) return;
-        detectSignalWireAndUpdate(state, level, pos, movedByPiston, 30);
+
+        if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity)
+        detectSignalWireAndUpdate(state, level, pos, movedByPiston, entity.getOutputSignalValue());
 
     }
 
@@ -43,7 +56,7 @@ public class ConstSignalBlock extends DirectionalBlock {
         }
 
         if (level.isClientSide()) return;
-        detectSignalWireAndUpdate(state, level, pos, movedByPiston, 0);
+        detectSignalWireAndUpdate(state, level, pos, movedByPiston, SignalValue.GROUND_SIGNAL_VALUE);
     }
 
     @Override
@@ -51,8 +64,33 @@ public class ConstSignalBlock extends DirectionalBlock {
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
 
         if (level.isClientSide()) return;
-        detectSignalWireAndUpdate(state, level, pos, movedByPiston, 30);
+        if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity) {
+            detectSignalWireAndUpdate(state, level, pos, movedByPiston, entity.getOutputSignalValue());
+        }
 
+
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.openMenu(state.getMenuProvider(level, pos));
+        }
+
+        return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        return new SimpleMenuProvider((containerId, playerInventory, player)-> {
+            ConstSignalBlockEntity entity = ((ConstSignalBlockEntity) level.getBlockEntity(pos));
+            return new ConstSignalMenu(
+                    containerId,
+                    playerInventory,
+                    ContainerLevelAccess.create(level, pos),
+                    entity.data);
+        },
+                Component.translatable("menu.title.dctimemod.const_signal_block_menu"));
     }
 
     private void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean movedByPiston, int signalValue) {
@@ -74,5 +112,11 @@ public class ConstSignalBlock extends DirectionalBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
+    }
+
+
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new ConstSignalBlockEntity(blockPos, blockState);
     }
 }

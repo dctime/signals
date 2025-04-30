@@ -1,5 +1,6 @@
 package github.dctime.dctimemod;
 
+import github.dctime.dctimemod.block.ConstSignalBlockEntity;
 import github.dctime.dctimemod.block.FlawlessExchangerBlockEntity;
 import github.dctime.dctimemod.block.SignalWireBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -30,4 +31,13 @@ public class RegisterBlockEntities {
                     RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER.get()
             ).build(null)
     );
+
+    public static final Supplier<BlockEntityType<ConstSignalBlockEntity>> CONST_SIGNAL_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "const_signal_block_entity",
+            ()-> BlockEntityType.Builder.of(
+                    ConstSignalBlockEntity::new,
+                    RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get()
+            ).build(null)
+    );
+
 }

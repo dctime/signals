@@ -52,4 +52,16 @@ Solved problem that when wire configuration changed while source is near. Issue 
 
 Signal to Redstone converter init. Use redstone dust to turn one side of a wire to redstone output.
 
+### 2025.4.29
+
+Now redstone converter sends out 15 if signal value exceeds 15 and the same value as the signal value if between 0 and 15
+
+Fixed Issue 2025.4.28 (2)
+
+### 2025.4.30
+
+ConstSignalBlock Screen Init
+
+Fixed Issue 2025.4.30 (1) Container Menu overrides the keyPressed method
+
 

@@ -1,5 +1,6 @@
 package github.dctime.dctimemod;
 
+import github.dctime.dctimemod.block.ConstSignalScreen;
 import github.dctime.dctimemod.block.FlawlessExchangerScreen;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -11,5 +12,6 @@ public class RegisterScreens {
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(RegisterMenuTypes.FLAWLESS_EXCHANGER_MENU.get(), FlawlessExchangerScreen::new);
+        event.register(RegisterMenuTypes.CONST_SIGNAL_MENU.get(), ConstSignalScreen::new);
     }
 }

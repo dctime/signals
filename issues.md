@@ -33,5 +33,11 @@ Nearby wires not updated when break (4)
 
 Nearby source not applying source to newly configured wire. (1)
 
-Signal to Redstone converter redstone feature not implemented.
+Signal to Redstone converter redstone feature not implemented. (2)
+
+### 2025.4.30
+
+Cannot type anything to the editbox (1)
+
+Not checking inputs and sending inputs to the entity
 
