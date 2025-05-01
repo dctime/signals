@@ -1,0 +1,46 @@
+package github.dctime.dctimemod.payload;
+
+import com.mojang.datafixers.kinds.Const;
+import github.dctime.dctimemod.block.ConstSignalBlockEntity;
+import github.dctime.dctimemod.block.ConstSignalMenu;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+public record ConstSignalValueChangePayload(int signalValue) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<ConstSignalValueChangePayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("mymod", "my_data"));
+
+    // Each pair of elements defines the stream codec of the element to encode/decode and the getter for the element to encode
+    // 'name' will be encoded and decoded as a string
+    // 'age' will be encoded and decoded as an integer
+    // The final parameter takes in the previous parameters in the order they are provided to construct the payload object
+    public static final StreamCodec<ByteBuf, ConstSignalValueChangePayload> STREAM_CODEC = StreamCodec.composite(
+        ByteBufCodecs.VAR_INT,
+        ConstSignalValueChangePayload::signalValue,
+        ConstSignalValueChangePayload::new
+    );
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
+    public static void handleDataInServer(final ConstSignalValueChangePayload data, final IPayloadContext context) {
+        System.out.println("Calling Server to do something");
+        if (context.player().containerMenu instanceof ConstSignalMenu menu) {
+            menu.getData().set(ConstSignalBlockEntity.OUTPUT_SIGNAL_VALUE_INDEX, data.signalValue());
+        }
+
+
+    }
+
+    public static void handleDataInClient(final ConstSignalValueChangePayload data, final IPayloadContext context) {
+        System.out.println("Calling Client to do something");
+    }
+
+}

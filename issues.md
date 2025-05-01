@@ -39,5 +39,11 @@ Signal to Redstone converter redstone feature not implemented. (2)
 
 Cannot type anything to the editbox (1)
 
-Not checking inputs and sending inputs to the entity
+Not checking inputs and sending inputs to the entity (2)
+
+### 2025.5.1
+
+Signal Block needs to update wires which is connected
+
+Higher Signal Values should dominate Low Signal Values in wire networks
 

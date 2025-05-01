@@ -67,8 +67,6 @@ public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
         if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity) {
             detectSignalWireAndUpdate(state, level, pos, movedByPiston, entity.getOutputSignalValue());
         }
-
-
     }
 
     @Override

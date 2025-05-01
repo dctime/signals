@@ -1,11 +1,15 @@
 package github.dctime.dctimemod.block;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import github.dctime.dctimemod.payload.ConstSignalValueChangePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class ConstSignalScreen extends AbstractContainerScreen<ConstSignalMenu> {
 
@@ -18,7 +22,7 @@ public class ConstSignalScreen extends AbstractContainerScreen<ConstSignalMenu> 
     @Override
     protected void init() {
         super.init();
-        editBox = new EditBox(Minecraft.getInstance().font, 0, 0, Component.literal("Hello"));
+        editBox = new EditBox(Minecraft.getInstance().font, 0, 0, Component.literal("dctimemod.const_signal_edit_box"));
         this.addRenderableOnly(editBox);
         setFocused(true);
         editBox.setEditable(true);
@@ -36,7 +40,7 @@ public class ConstSignalScreen extends AbstractContainerScreen<ConstSignalMenu> 
 
         editBox.render(guiGraphics, mouseX, mouseY, partialTick);
 
-        System.out.println("Active:" + editBox.isActive() + "Focused:" + editBox.isFocused() + "MouseX:" + mouseX + "MouseY:" + mouseY);
+        // System.out.println("Active:" + editBox.isActive() + "Focused:" + editBox.isFocused() + "MouseX:" + mouseX + "MouseY:" + mouseY);
     }
 
     @Override
@@ -53,9 +57,18 @@ public class ConstSignalScreen extends AbstractContainerScreen<ConstSignalMenu> 
                 || super.keyPressed(keyCode, scanCode, uhh);
     }
 
+
+
     @Override
     public void onClose() {
-        getMenu().getData().set(ConstSignalBlockEntity.OUTPUT_SIGNAL_VALUE_INDEX, Integer.parseInt(editBox.getValue()));
+        try {
+            // getMenu().getData().set(ConstSignalBlockEntity.OUTPUT_SIGNAL_VALUE_INDEX, Integer.parseInt(editBox.getValue()));
+            PacketDistributor.sendToServer(new ConstSignalValueChangePayload(Integer.parseInt(editBox.getValue())));
+            System.out.println("Signal Value Changed to: " + getMenu().getData().get(ConstSignalBlockEntity.OUTPUT_SIGNAL_VALUE_INDEX));
+        } catch (final NumberFormatException e) {
+            System.out.println("Input not integer");
+        }
+
         super.onClose();
     }
 
