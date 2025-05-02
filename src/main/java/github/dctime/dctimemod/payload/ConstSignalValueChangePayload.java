@@ -1,6 +1,7 @@
 package github.dctime.dctimemod.payload;
 
 import com.mojang.datafixers.kinds.Const;
+import github.dctime.dctimemod.block.ConstSignalBlock;
 import github.dctime.dctimemod.block.ConstSignalBlockEntity;
 import github.dctime.dctimemod.block.ConstSignalMenu;
 import io.netty.buffer.ByteBuf;
@@ -34,9 +35,13 @@ public record ConstSignalValueChangePayload(int signalValue) implements CustomPa
         System.out.println("Calling Server to do something");
         if (context.player().containerMenu instanceof ConstSignalMenu menu) {
             menu.getData().set(ConstSignalBlockEntity.OUTPUT_SIGNAL_VALUE_INDEX, data.signalValue());
+            ConstSignalBlockEntity entity = menu.getBlockEntity();
+            if (entity.getBlockState().getBlock() instanceof ConstSignalBlock block) {
+                // forcefully: changing signal value from high to low needs to forcefully rewrite if the wire keeps the signal the signal block's signal
+                block.detectSignalWireAndUpdate(entity.getBlockState(), entity.getLevel(), entity.getPos(), true, data.signalValue());
+                System.out.println("Updating Signal Wire cuz ConstSignalValue changed");
+            }
         }
-
-
     }
 
     public static void handleDataInClient(final ConstSignalValueChangePayload data, final IPayloadContext context) {

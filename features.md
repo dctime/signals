@@ -68,4 +68,11 @@ Fixed Issue 2025.4.30 (1) Container Menu overrides the keyPressed method
 
 Fixed Issue 2025.4.30 (2)
 
+### 2025.5.2
+
+Fixed Issue 2025.5.1 (1) (2)
+
+Fixed Issue 2025.5.2 (2)
+
+
 

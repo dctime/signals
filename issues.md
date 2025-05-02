@@ -43,7 +43,13 @@ Not checking inputs and sending inputs to the entity (2)
 
 ### 2025.5.1
 
-Signal Block needs to update wires which is connected
+Signal Block needs to update wires which is connected (1)
 
-Higher Signal Values should dominate Low Signal Values in wire networks
+Higher Signal Values should dominate Low Signal Values in wire networks (2)
+
+### 2025.5.2
+
+Packet should use method in the const signal block to update signal value it outputs. Do not hardcode stuff.
+
+Breaking const signal block with two signal blocks connection to each other with wires doesn't update the wires. (2)
 

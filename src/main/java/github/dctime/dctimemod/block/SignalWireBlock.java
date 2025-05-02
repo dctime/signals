@@ -280,12 +280,13 @@ public class SignalWireBlock extends Block implements EntityBlock {
     protected void updateWireValue(BlockState state, Level level, BlockPos pos) {
         // update the wire
         if (level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
-            entity.getInformation().setSignalValue(0);
+            entity.getInformation().setSignalValue(SignalValue.GROUND_SIGNAL_VALUE);
         }
 
         BooleanProperty[] directionProperties = {NORTH, SOUTH, EAST, WEST, UP, DOWN};
         Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.UP, Direction.DOWN};
         for (int i = 0; i < 6; i++) {
+            // wire extends connection to certain direction
             if (state.getValue(directionProperties[i])) {
                 BlockPos nearbyPos = pos.relative(directions[i]);
                 SignalWireInformation info = level.getCapability(
@@ -296,8 +297,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
 
                 if (info != null) {
                     // for self connection break case like editing connection and breaking block
-                    System.out.println("Updated onRemove");
-                    info.setSignalValue(0);
+                    info.setSignalValue(SignalValue.GROUND_SIGNAL_VALUE);
                     level.updateNeighborsAt(nearbyPos, this);
                 }
             }

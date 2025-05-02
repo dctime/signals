@@ -44,19 +44,19 @@ public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
         if (level.isClientSide()) return;
 
         if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity)
-        detectSignalWireAndUpdate(state, level, pos, movedByPiston, entity.getOutputSignalValue());
+        detectSignalWireAndUpdate(state, level, pos, false, entity.getOutputSignalValue());
 
     }
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, movedByPiston);
+        super.onRemove(state, level, pos, newState, true);
         if (!state.is(newState.getBlock())) {
             level.invalidateCapabilities(pos);
         }
 
         if (level.isClientSide()) return;
-        detectSignalWireAndUpdate(state, level, pos, movedByPiston, SignalValue.GROUND_SIGNAL_VALUE);
+        detectSignalWireAndUpdate(state, level, pos, true, SignalValue.GROUND_SIGNAL_VALUE);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
 
         if (level.isClientSide()) return;
         if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity) {
-            detectSignalWireAndUpdate(state, level, pos, movedByPiston, entity.getOutputSignalValue());
+            detectSignalWireAndUpdate(state, level, pos, false, entity.getOutputSignalValue());
         }
     }
 
@@ -86,12 +86,14 @@ public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
                     containerId,
                     playerInventory,
                     ContainerLevelAccess.create(level, pos),
-                    entity.data);
+                    entity.data,
+                    entity
+            );
         },
                 Component.translatable("menu.title.dctimemod.const_signal_block_menu"));
     }
 
-    private void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean movedByPiston, int signalValue) {
+    public void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, int signalValue) {
         Direction direction = state.getValue(FACING);
         BlockPos targetPos = pos.relative(direction);
 
@@ -101,7 +103,9 @@ public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
         SignalWireInformation targetInfo = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, targetPos, direction);
         if (targetInfo == null) return;
         System.out.println("got signal wire");
-        if (targetInfo.getSignalValue() == signalValue) return;
+        // higher signal value dominates lower signal value
+        // onBreak set to 0 forcefully to prevent edge case that the wire remains the signal the signal block sends
+        if (targetInfo.getSignalValue() >= signalValue && !forcefully) return;
         System.out.println("signal value changed");
         targetInfo.setSignalValue(signalValue);
         level.updateNeighborsAt(targetPos, level.getBlockState(targetPos).getBlock());
