@@ -2,6 +2,7 @@ package github.dctime.dctimemod;
 
 import github.dctime.dctimemod.block.ConstSignalBlockEntity;
 import github.dctime.dctimemod.block.FlawlessExchangerBlockEntity;
+import github.dctime.dctimemod.block.SignalOperationBlockEntity;
 import github.dctime.dctimemod.block.SignalWireBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -38,6 +39,14 @@ public class RegisterBlockEntities {
                     ConstSignalBlockEntity::new,
                     RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get()
             ).build(null)
+    );
+
+    public static final Supplier<BlockEntityType<SignalOperationBlockEntity>> SIGNAL_OPERATION_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+        "signal_operation_block_entity",
+        ()-> BlockEntityType.Builder.of(
+            SignalOperationBlockEntity::new,
+            RegisterBlocks.SIGNAL_OPERATION_BLOCK.get()
+        ).build(null)
     );
 
 }

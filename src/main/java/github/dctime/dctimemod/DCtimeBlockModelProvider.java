@@ -200,5 +200,11 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
                 .condition(SignalToRedstoneConverter.DOWN, true)
                 .condition(SignalWireBlock.DOWN, false)
                 .end();
+
+        ConfiguredModel[] model = ConfiguredModel.builder().modelFile(
+            models().cubeAll("signal_operation_block", modLoc("block/signal_input_side"))
+        ).build();
+
+        simpleBlock(RegisterBlocks.SIGNAL_OPERATION_BLOCK.get(), model);
     }
 }
