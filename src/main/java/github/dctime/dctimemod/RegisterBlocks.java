@@ -40,7 +40,7 @@ public class RegisterBlocks {
                     .noOcclusion()
     );
 
-    public static final DeferredBlock<DirectionalBlock> CONSTANT_SIGNAL_BLOCK = BLOCKS.registerBlock(
+    public static final DeferredBlock<Block> CONSTANT_SIGNAL_BLOCK = BLOCKS.registerBlock(
             "const_signal_block",
             ConstSignalBlock::new,
             BlockBehaviour.Properties.of()
@@ -57,5 +57,14 @@ public class RegisterBlocks {
                     .explosionResistance(100.0f)
                     .sound(SoundType.METAL)
                     .noOcclusion()
+    );
+
+    public static final DeferredBlock<Block> SIGNAL_OPERATION_BLOCK = BLOCKS.registerBlock(
+            "signal_operation_block",
+            SignalOperationBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
     );
 }

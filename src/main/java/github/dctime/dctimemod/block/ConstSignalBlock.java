@@ -20,20 +20,19 @@ import net.minecraft.world.level.block.ObserverBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
-    public static final MapCodec<ConstSignalBlock> CODEC = simpleCodec(ConstSignalBlock::new);
+public class ConstSignalBlock extends Block implements EntityBlock {
+    public static final EnumProperty<Direction> OUTPUT_DIRECTION = DirectionProperty.create("output_direction", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);
 
     public ConstSignalBlock(Properties properties) {
         super(properties);
     }
 
-    @Override
-    protected MapCodec<? extends DirectionalBlock> codec() {
-        return CODEC;
-    }
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
@@ -94,7 +93,7 @@ public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
     }
 
     public void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, int signalValue) {
-        Direction direction = state.getValue(FACING);
+        Direction direction = state.getValue(OUTPUT_DIRECTION);
         BlockPos targetPos = pos.relative(direction);
 
         System.out.println("pos: x: " + pos.getX() + ", y: " + pos.getY() + ", z:" + pos.getZ());
@@ -113,7 +112,7 @@ public class ConstSignalBlock extends DirectionalBlock implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(OUTPUT_DIRECTION);
     }
 
 

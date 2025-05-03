@@ -53,3 +53,5 @@ Packet should use method in the const signal block to update signal value it out
 
 Breaking const signal block with two signal blocks connection to each other with wires doesn't update the wires. (2)
 
+Add signal operation block and switch operation by storing item
+

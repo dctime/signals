@@ -1,11 +1,18 @@
 package github.dctime.dctimemod;
 
 import github.dctime.dctimemod.block.BuildHelperBlock;
+import github.dctime.dctimemod.block.ConstSignalBlock;
 import github.dctime.dctimemod.block.SignalToRedstoneConverter;
 import github.dctime.dctimemod.block.SignalWireBlock;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import java.util.function.Function;
 
 public class DCtimeBlockModelProvider extends BlockStateProvider {
 
@@ -81,9 +88,18 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
                 modLoc("block/const_signal_block_side"),
                 modLoc("block/const_signal_block_front")
         );
+        Block constSignalBlock = RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get();
 
+        Function<BlockState, ModelFile> constModelFunc = (Function)(($) -> constSignalModel);
+        this.getVariantBuilder(constSignalBlock).forAllStates((state) -> {
+            Direction dir = (Direction)state.getValue(ConstSignalBlock.OUTPUT_DIRECTION);
+            return ConfiguredModel.builder()
+                    .modelFile((ModelFile)constModelFunc.apply(state))
+                    .rotationX(dir == Direction.DOWN ? 180 : (dir.getAxis().isHorizontal() ? 90 : 0))
+                    .rotationY(dir.getAxis().isVertical() ? 0 : ((int)dir.toYRot() + 180) % 360)
+                    .build();
+        });
 
-        directionalBlock(RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get(), constSignalModel);
 
         MultiPartBlockStateBuilder signalToRedstoneBuilder = getMultipartBuilder(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER.get());
         signalToRedstoneBuilder.part()
