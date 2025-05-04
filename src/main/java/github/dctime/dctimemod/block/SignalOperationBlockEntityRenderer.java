@@ -2,6 +2,7 @@ package github.dctime.dctimemod.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import github.dctime.dctimemod.DCtimeMod;
 import github.dctime.dctimemod.RegisterBlockItems;
 import github.dctime.dctimemod.RegisterEntityRenderers;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -13,9 +14,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import org.joml.Matrix4f;
 
 public class SignalOperationBlockEntityRenderer implements BlockEntityRenderer<SignalOperationBlockEntity> {
     BlockEntityRendererProvider.Context context;
@@ -47,6 +50,52 @@ public class SignalOperationBlockEntityRenderer implements BlockEntityRenderer<S
 //            0, 0, 0,
 //            3, 3, 3,
 //            1, 0, 1, 1, 1, 0, 1);
+
+//        poseStack.scale(2, 2, 2);
+//        int renderId = (int) entity.getBlockPos().asLong();
+//        context.getItemRenderer().renderStatic(
+//                RegisterBlockItems.BUILD_HELPER_BLOCK_ITEM.toStack(),
+//                ItemDisplayContext.FIXED,
+//                LightTexture.FULL_BRIGHT,
+//                packedOverlay,
+//                poseStack,
+//                multiBufferSource,
+//                entity.getLevel(),
+//                renderId
+//        );
+
+        // right hand method
+        // uv 1 = 16 pixels
+        poseStack.scale(2, 2, 2);
+        RenderType renderType = RenderType.entityTranslucentCull(ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "textures/block/signal_input_side.png"));
+        VertexConsumer vertexBuilder = multiBufferSource.getBuffer(renderType);
+        Matrix4f matrix4f = poseStack.last().pose();
+        vertexBuilder.addVertex(matrix4f, 0, 0, 0)
+                .setColor(255, 255, 255, 255)
+                .setUv(0, 0)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(0, 1,0);
+        vertexBuilder.addVertex(matrix4f, 0, 1, 0)
+                .setColor(255, 255, 255, 255)
+                .setUv(1, 0)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(0, 1,0);
+
+        vertexBuilder.addVertex(matrix4f, 1, 1, 1)
+                .setColor(255, 255, 255, 255)
+                .setUv(1, 1)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(0, 1,0);
+        vertexBuilder.addVertex(matrix4f, 1, 0, 1)
+                .setColor(255, 255, 255, 255)
+                .setUv(0, 1)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(0, 1,0);
+
 
 
 
