@@ -17,6 +17,5 @@
 				"down": {"uv": [8, 0, 10, 2], "rotation": 90, "texture": "#1"}
 			}
 		}
-	],
-	"display": {}
+	]
 }

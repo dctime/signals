@@ -66,5 +66,6 @@ public class RegisterBlocks {
                     .destroyTime(1.0f)
                     .explosionResistance(100.0f)
                     .sound(SoundType.METAL)
+                    .noOcclusion()
     );
 }

@@ -201,10 +201,16 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
                 .condition(SignalWireBlock.DOWN, false)
                 .end();
 
-        ConfiguredModel[] model = ConfiguredModel.builder().modelFile(
-            models().cubeAll("signal_operation_block", modLoc("block/signal_input_side"))
-        ).build();
+//        ConfiguredModel[] model = ConfiguredModel.builder().modelFile(
+//            models().cubeAll("signal_operation_block", modLoc("block/signal_input_side"))
+//        ).build();
 
-        simpleBlock(RegisterBlocks.SIGNAL_OPERATION_BLOCK.get(), model);
+        MultiPartBlockStateBuilder operationBlockBuilder = getMultipartBuilder(RegisterBlocks.SIGNAL_OPERATION_BLOCK.get());
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_block_none")))
+                .addModel()
+                .end();
+
+
     }
 }

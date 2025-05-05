@@ -29,6 +29,7 @@ public class SignalOperationBlockEntityRenderer implements BlockEntityRenderer<S
     @Override
     public void render(SignalOperationBlockEntity entity, float partialTick, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
         poseStack.pushPose();
+
 //        poseStack.translate(0, 1, 0);
 //        ItemRenderer renderer = context.getItemRenderer();
 //        BakedModel bakedModel = renderer.getModel(RegisterBlockItems.BUILD_HELPER_BLOCK_ITEM.toStack(),entity.getLevel(),null,0);
@@ -66,37 +67,35 @@ public class SignalOperationBlockEntityRenderer implements BlockEntityRenderer<S
 
         // right hand method
         // uv 1 = 16 pixels
-        poseStack.scale(2, 2, 2);
-        RenderType renderType = RenderType.entityTranslucentCull(ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "textures/block/signal_input_side.png"));
-        VertexConsumer vertexBuilder = multiBufferSource.getBuffer(renderType);
-        Matrix4f matrix4f = poseStack.last().pose();
-        vertexBuilder.addVertex(matrix4f, 0, 0, 0)
-                .setColor(255, 255, 255, 255)
-                .setUv(0, 0)
-                .setOverlay(OverlayTexture.NO_OVERLAY)
-                .setLight(LightTexture.FULL_BRIGHT)
-                .setNormal(0, 1,0);
-        vertexBuilder.addVertex(matrix4f, 0, 1, 0)
-                .setColor(255, 255, 255, 255)
-                .setUv(1, 0)
-                .setOverlay(OverlayTexture.NO_OVERLAY)
-                .setLight(LightTexture.FULL_BRIGHT)
-                .setNormal(0, 1,0);
-
-        vertexBuilder.addVertex(matrix4f, 1, 1, 1)
-                .setColor(255, 255, 255, 255)
-                .setUv(1, 1)
-                .setOverlay(OverlayTexture.NO_OVERLAY)
-                .setLight(LightTexture.FULL_BRIGHT)
-                .setNormal(0, 1,0);
-        vertexBuilder.addVertex(matrix4f, 1, 0, 1)
-                .setColor(255, 255, 255, 255)
-                .setUv(0, 1)
-                .setOverlay(OverlayTexture.NO_OVERLAY)
-                .setLight(LightTexture.FULL_BRIGHT)
-                .setNormal(0, 1,0);
-
-
+//        poseStack.translate(0, 0, -0.01);
+//        RenderType renderType = RenderType.entitySolid(ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "textures/block/signal_input_side.png"));
+//        VertexConsumer vertexBuilder = multiBufferSource.getBuffer(renderType);
+//        Matrix4f matrix4f = poseStack.last().pose();
+//        vertexBuilder.addVertex(matrix4f, 0, 0, 0)
+//                .setColor(255, 255, 255, 255)
+//                .setUv(0, 0)
+//                .setOverlay(OverlayTexture.NO_OVERLAY)
+//                .setLight(LightTexture.FULL_BRIGHT)
+//                .setNormal(0, 0,-1);
+//        vertexBuilder.addVertex(matrix4f, 0, 1, 0)
+//                .setColor(255, 255, 255, 255)
+//                .setUv(1, 0)
+//                .setOverlay(OverlayTexture.NO_OVERLAY)
+//                .setLight(LightTexture.FULL_BRIGHT)
+//                .setNormal(0, 0,-1);
+//
+//        vertexBuilder.addVertex(matrix4f, 1, 1, 0)
+//                .setColor(255, 255, 255, 255)
+//                .setUv(1, 1)
+//                .setOverlay(OverlayTexture.NO_OVERLAY)
+//                .setLight(packedLight)
+//                .setNormal(0, 0,-1);
+//        vertexBuilder.addVertex(matrix4f, 1, 0, 0)
+//                .setColor(255, 255, 255, 255)
+//                .setUv(0, 1)
+//                .setOverlay(OverlayTexture.NO_OVERLAY)
+//                .setLight(packedLight)
+//                .setNormal(0, 0,-1);
 
 
         poseStack.popPose();
