@@ -53,5 +53,12 @@ Packet should use method in the const signal block to update signal value it out
 
 Breaking const signal block with two signal blocks connection to each other with wires doesn't update the wires. (2)
 
-Add signal operation block and switch operation by storing item
+Add signal operation block and switch operation by storing item (3)
+
+### 2025.5.5
+
+Adding input port and output port models. 
+clicking the sides to switch input and output. 
+Limiting input and output sides. 
+Turning off functionality if not enough input and output sides. 
 
