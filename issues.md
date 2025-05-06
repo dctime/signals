@@ -57,8 +57,16 @@ Add signal operation block and switch operation by storing item (3)
 
 ### 2025.5.5
 
-Adding input port and output port models. 
-clicking the sides to switch input and output. 
-Limiting input and output sides. 
-Turning off functionality if not enough input and output sides. 
+Adding input port and output port models. (1)
+
+clicking the sides to switch input and output. (2)
+
+Limiting input and output sides.
+
+Turning off functionality if not enough input and output sides.
+
+### 2025.5.7
+
+Render the model of input and output ports of the operation block
+
 

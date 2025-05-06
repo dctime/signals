@@ -78,3 +78,9 @@ Fixed Issue 2025.5.2 (2)
 
 Operation Block Init 2025.5.2 (3)
 
+### 2025.5.7
+
+Input and output model of operation block created. 2025.5.5 (1)
+
+Clicking the sides of the operation block will switch side mode. Crouching will instead switch opposite side's side mode. 2025.5.5 (2)
+
