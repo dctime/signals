@@ -67,6 +67,8 @@ Turning off functionality if not enough input and output sides.
 
 ### 2025.5.7
 
-Render the model of input and output ports of the operation block
+Render the model of input and output ports of the operation block (1)
+
+Adding functionalities to the operation block
 
 

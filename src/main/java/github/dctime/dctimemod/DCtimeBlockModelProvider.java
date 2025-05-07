@@ -1,9 +1,6 @@
 package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.block.BuildHelperBlock;
-import github.dctime.dctimemod.block.ConstSignalBlock;
-import github.dctime.dctimemod.block.SignalToRedstoneConverter;
-import github.dctime.dctimemod.block.SignalWireBlock;
+import github.dctime.dctimemod.block.*;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
@@ -209,6 +206,92 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         operationBlockBuilder.part()
                 .modelFile(models().getExistingFile(modLoc("block/operation_block_none")))
                 .addModel()
+                .end();
+
+        // inputs
+        // north
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north")))
+                .addModel()
+                .condition(SignalOperationBlock.NORTH_SIDE_MODE, SignalOperationBlock.SideMode.INPUT)
+                .end();
+        //south
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north")))
+                .rotationY(180)
+                .addModel()
+                .condition(SignalOperationBlock.SOUTH_SIDE_MODE, SignalOperationBlock.SideMode.INPUT)
+                .end();
+        // EAST
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north")))
+                .rotationY(90)
+                .addModel()
+                .condition(SignalOperationBlock.EAST_SIDE_MODE, SignalOperationBlock.SideMode.INPUT)
+                .end();
+        // WEST
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north")))
+                .rotationY(270)
+                .addModel()
+                .condition(SignalOperationBlock.WEST_SIDE_MODE, SignalOperationBlock.SideMode.INPUT)
+                .end();
+        // UP
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north")))
+                .rotationX(270)
+                .addModel()
+                .condition(SignalOperationBlock.UP_SIDE_MODE, SignalOperationBlock.SideMode.INPUT)
+                .end();
+        // DOWN
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north")))
+                .rotationX(90)
+                .addModel()
+                .condition(SignalOperationBlock.DOWN_SIDE_MODE, SignalOperationBlock.SideMode.INPUT)
+                .end();
+
+        // outputs
+        // north
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_output_north")))
+                .addModel()
+                .condition(SignalOperationBlock.NORTH_SIDE_MODE, SignalOperationBlock.SideMode.OUTPUT)
+                .end();
+        //south
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_output_north")))
+                .rotationY(180)
+                .addModel()
+                .condition(SignalOperationBlock.SOUTH_SIDE_MODE, SignalOperationBlock.SideMode.OUTPUT)
+                .end();
+        // EAST
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_output_north")))
+                .rotationY(90)
+                .addModel()
+                .condition(SignalOperationBlock.EAST_SIDE_MODE, SignalOperationBlock.SideMode.OUTPUT)
+                .end();
+        // WEST
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_output_north")))
+                .rotationY(270)
+                .addModel()
+                .condition(SignalOperationBlock.WEST_SIDE_MODE, SignalOperationBlock.SideMode.OUTPUT)
+                .end();
+        // UP
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_output_north")))
+                .rotationX(270)
+                .addModel()
+                .condition(SignalOperationBlock.UP_SIDE_MODE, SignalOperationBlock.SideMode.OUTPUT)
+                .end();
+        // DOWN
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_output_north")))
+                .rotationX(90)
+                .addModel()
+                .condition(SignalOperationBlock.DOWN_SIDE_MODE, SignalOperationBlock.SideMode.OUTPUT)
                 .end();
 
 
