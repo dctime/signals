@@ -38,7 +38,7 @@ public record ConstSignalValueChangePayload(int signalValue) implements CustomPa
             ConstSignalBlockEntity entity = menu.getBlockEntity();
             if (entity.getBlockState().getBlock() instanceof ConstSignalBlock block) {
                 // forcefully: changing signal value from high to low needs to forcefully rewrite if the wire keeps the signal the signal block's signal
-                block.detectSignalWireAndUpdate(entity.getBlockState(), entity.getLevel(), entity.getPos(), true, data.signalValue());
+                block.detectSignalWireAndUpdate(entity.getBlockState(), entity.getLevel(), entity.getPos(), true, false, data.signalValue());
                 System.out.println("Updating Signal Wire cuz ConstSignalValue changed");
             }
         }

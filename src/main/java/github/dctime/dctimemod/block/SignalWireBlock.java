@@ -155,8 +155,10 @@ public class SignalWireBlock extends Block implements EntityBlock {
 
         if (player.getMainHandItem().getItem() == Items.STICK) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
-            System.out.println("Signal Value: " + entity.getSignalValue());
-            player.displayClientMessage(Component.literal("Signal Value: " + entity.getSignalValue()), true);
+            Integer signalValue = entity.getSignalValue();
+            if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), true);
+            else player.displayClientMessage(Component.literal("Signal Value: " + signalValue), true);
+
             return InteractionResult.SUCCESS;
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Player hand is empty");
@@ -248,8 +250,17 @@ public class SignalWireBlock extends Block implements EntityBlock {
                 else if (!SignalWireBlock.directionHasConnection(entity, direction)) {
 //                    System.out.println("Self not connected");
                 }
-                else if (info != null && SignalWireBlock.directionHasConnection(entity, direction) && info.getSignalValue() != entity.getSignalValue()) {
-                    entity.setSignalValue(info.getSignalValue());
+                else if (info != null && SignalWireBlock.directionHasConnection(entity, direction)) {
+                    if (info.getSignalValue() == null && entity.getSignalValue() == null) return;
+                    if ((info.getSignalValue() != null && entity.getSignalValue() != null) &&
+                    (info.getSignalValue().intValue() == entity.getSignalValue().intValue())) return;
+
+                    if (info.getSignalValue() == null) {
+                        entity.setNoSignal();
+                    } else {
+                        entity.setSignalValue(info.getSignalValue());
+                    }
+
                     level.updateNeighborsAt(pos, this);
                 }
             }
@@ -281,7 +292,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
     protected void updateWireValue(BlockState state, Level level, BlockPos pos) {
         // update the wire
         if (level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
-            entity.getInformation().setSignalValue(SignalValue.GROUND_SIGNAL_VALUE);
+            entity.getInformation().setNoSignal();
         }
 
         BooleanProperty[] directionProperties = {NORTH, SOUTH, EAST, WEST, UP, DOWN};
@@ -298,7 +309,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
 
                 if (info != null) {
                     // for self connection break case like editing connection and breaking block
-                    info.setSignalValue(SignalValue.GROUND_SIGNAL_VALUE);
+                    info.setNoSignal();
                     level.updateNeighborsAt(nearbyPos, this);
                 }
             }

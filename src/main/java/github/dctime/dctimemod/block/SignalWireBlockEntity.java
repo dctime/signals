@@ -14,13 +14,18 @@ import org.jetbrains.annotations.Nullable;
 
 public class SignalWireBlockEntity extends BlockEntity {
 
-    private final SignalWireInformation information = new SignalWireInformation(0);
+    private final SignalWireInformation information = new SignalWireInformation();
+
+    public void setNoSignal() {
+        this.information.setNoSignal();
+    }
 
     public void setSignalValue(int value) {
         this.information.setSignalValue(value);
     }
 
-    public int getSignalValue() {
+    @Nullable
+    public Integer getSignalValue() {
         return this.information.getSignalValue();
     }
 
@@ -35,14 +40,23 @@ public class SignalWireBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.information.setSignalValue(tag.getInt("signalValue"));
+        if (tag.getBoolean("noSignal")) {
+            this.information.setNoSignal();
+        } else {
+            this.information.setSignalValue(tag.getInt("signalValue"));
+        }
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.putInt("signalValue", this.information.getSignalValue());
-
+        if (this.information.getSignalValue() == null) {
+            tag.putBoolean("noSignal", true);
+            tag.putInt("signalValue", 0);
+        } else {
+            tag.putBoolean("noSignal", false);
+            tag.putInt("signalValue", this.information.getSignalValue());
+        }
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {

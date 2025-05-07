@@ -105,13 +105,13 @@ public class SignalOperationBlock extends Block implements EntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.CONSUME;
         //server
-        if (player.getMainHandItem() == Items.STICK.getDefaultInstance()) {
+        if (player.getMainHandItem().getItem() == Items.STICK) {
             if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity)
-                player.displayClientMessage(Component.literal("Signal Value: " + entity.getOutputValue()), true);
+                player.displayClientMessage(Component.literal("Output Signal Value: " + entity.getOutputValue()), true);
             return InteractionResult.SUCCESS;
         }
         if (player.getMainHandItem().isEmpty()) {
-            System.out.println("Player hand is empty");
+//            System.out.println("Player hand is empty");
             if (!player.isCrouching())
                 switchConnectionOutput(hitResult.getDirection(), level, pos);
             else
@@ -153,8 +153,13 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 
         if (level.isClientSide()) return;
 
-        if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity)
-            detectSignalWireAndUpdate(state, level, pos, false, entity.getOutputValue(), getOutputDirection(pos, level));
+        if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {
+            Direction outputDirection = getOutputDirection(pos, level);
+            if (outputDirection == null) return;
+
+            detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputValue(), outputDirection);
+        }
+
 
     }
 
@@ -166,7 +171,10 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         }
 
         if (level.isClientSide()) return;
-        detectSignalWireAndUpdate(state, level, pos, true, SignalValue.GROUND_SIGNAL_VALUE, getOutputDirection(pos, level));
+        Direction outputDirection = getOutputDirection(pos, level);
+        if (outputDirection == null) return;
+        //
+        detectSignalWireAndUpdate(state, level, pos, true, true, 0, outputDirection);
     }
 
     @Override
@@ -175,11 +183,11 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 
         if (level.isClientSide()) return;
         if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {
-            detectSignalWireAndUpdate(state, level, pos, false, entity.getOutputValue(), getOutputDirection(pos, level));
+            detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputValue(), getOutputDirection(pos, level));
         }
     }
 
-    public static void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, int signalValue, Direction outputDirection) {
+    public static void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, boolean noSignal, int signalValue, Direction outputDirection) {
         BlockPos targetPos = pos.relative(outputDirection);
 
 //        System.out.println("pos: x: " + pos.getX() + ", y: " + pos.getY() + ", z:" + pos.getZ());
@@ -190,9 +198,28 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 //        System.out.println("got signal wire");
         // higher signal value dominates lower signal value
         // onBreak set to 0 forcefully to prevent edge case that the wire remains the signal the signal block sends
-        if (targetInfo.getSignalValue() >= signalValue && !forcefully) return;
-        System.out.println("signal value changed from " + targetInfo.getSignalValue() + " to " + signalValue);
-        targetInfo.setSignalValue(signalValue);
+        if (targetInfo.getSignalValue() != null) {
+            if (targetInfo.getSignalValue() >= signalValue && !forcefully) return;
+        }
+
+        if (noSignal) {
+            if (targetInfo.getSignalValue() == null) {
+//                System.out.println("signal value changed from NULL to NULL");
+            } else {
+//                System.out.println("signal value changed from " + targetInfo.getSignalValue() + " to NULL");
+            }
+
+            targetInfo.setNoSignal();
+        } else {
+            if (targetInfo.getSignalValue() == null) {
+//                System.out.println("signal value changed from NULL to " + signalValue);
+            } else {
+//                System.out.println("signal value changed from " + targetInfo.getSignalValue() + " to " + signalValue);
+            }
+
+            targetInfo.setSignalValue(signalValue);
+        }
+
         level.updateNeighborsAt(targetPos, level.getBlockState(targetPos).getBlock());
     }
 

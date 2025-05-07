@@ -81,8 +81,9 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
             switchRedstoneOutput(hitResult.getDirection(), level, pos);
         } else if (mainHandItem == Items.STICK) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
-            System.out.println("Signal Value: " + entity.getSignalValue());
-            player.displayClientMessage(Component.literal("Signal Value: " + entity.getSignalValue()), true);
+            Integer signalValue = entity.getSignalValue();
+            if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), true);
+            else player.displayClientMessage(Component.literal("Signal Value: " + signalValue), true);
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Adjusting using empty hand");
             if (!player.isCrouching())
@@ -139,7 +140,8 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
     @Override
     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         if (state.getValue(directionToRedstoneProperty.get(direction.getOpposite()))
-        && level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity) {
+        && level.getBlockEntity(pos) instanceof SignalWireBlockEntity entity
+        && entity.getSignalValue() != null) {
             return Math.min(entity.getSignalValue(), 15);
         }
         return 0;

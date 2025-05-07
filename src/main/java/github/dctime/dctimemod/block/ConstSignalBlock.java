@@ -43,7 +43,7 @@ public class ConstSignalBlock extends Block implements EntityBlock {
         if (level.isClientSide()) return;
 
         if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity)
-        detectSignalWireAndUpdate(state, level, pos, false, entity.getOutputSignalValue());
+        detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputSignalValue());
 
     }
 
@@ -55,7 +55,7 @@ public class ConstSignalBlock extends Block implements EntityBlock {
         }
 
         if (level.isClientSide()) return;
-        detectSignalWireAndUpdate(state, level, pos, true, SignalValue.GROUND_SIGNAL_VALUE);
+        detectSignalWireAndUpdate(state, level, pos, true, true, 0);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ConstSignalBlock extends Block implements EntityBlock {
 
         if (level.isClientSide()) return;
         if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity) {
-            detectSignalWireAndUpdate(state, level, pos, false, entity.getOutputSignalValue());
+            detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputSignalValue());
         }
     }
 
@@ -92,7 +92,7 @@ public class ConstSignalBlock extends Block implements EntityBlock {
                 Component.translatable("menu.title.dctimemod.const_signal_block_menu"));
     }
 
-    public void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, int signalValue) {
+    public void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, boolean noSignal, int signalValue) {
         Direction direction = state.getValue(OUTPUT_DIRECTION);
         BlockPos targetPos = pos.relative(direction);
 
@@ -104,9 +104,14 @@ public class ConstSignalBlock extends Block implements EntityBlock {
 //        System.out.println("got signal wire");
         // higher signal value dominates lower signal value
         // onBreak set to 0 forcefully to prevent edge case that the wire remains the signal the signal block sends
-        if (targetInfo.getSignalValue() >= signalValue && !forcefully) return;
+        if (targetInfo.getSignalValue() != null) {
+            if (targetInfo.getSignalValue() >= signalValue && !forcefully) return;
+        }
 //        System.out.println("signal value changed");
-        targetInfo.setSignalValue(signalValue);
+        if (noSignal) {targetInfo.setNoSignal();}
+        else targetInfo.setSignalValue(signalValue);
+
+
         level.updateNeighborsAt(targetPos, level.getBlockState(targetPos).getBlock());
     }
 
