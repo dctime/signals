@@ -72,7 +72,7 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) {
 
-            return InteractionResult.CONSUME;
+            return super.useWithoutItem(state, level, pos, player, hitResult);
         }
 
         Item mainHandItem = player.getMainHandItem().getItem();
@@ -94,7 +94,7 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
 
         updateWireValue(state, level, pos);
 
-        return InteractionResult.SUCCESS;
+        return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
     private void switchConnectionOutput(Direction direction, Level level, BlockPos pos) {

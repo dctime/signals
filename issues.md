@@ -86,5 +86,7 @@ Replace GROUND signal with no signal (8)
 
 Source should not output if the target signal wire has higher signal value. Use Forcefully to bypass
 
+Placing Blocks on operation signal block will cause serious error. (10)
+
 
 

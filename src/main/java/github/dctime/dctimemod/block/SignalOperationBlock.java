@@ -37,6 +37,15 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 
     public SignalOperationBlock(Properties properties) {
         super(properties);
+        registerDefaultState(stateDefinition.any()
+                .setValue(NORTH_SIDE_MODE, SideMode.NONE)
+                .setValue(SOUTH_SIDE_MODE, SideMode.NONE)
+                .setValue(EAST_SIDE_MODE, SideMode.NONE)
+                .setValue(WEST_SIDE_MODE, SideMode.NONE)
+                .setValue(UP_SIDE_MODE, SideMode.NONE)
+                .setValue(DOWN_SIDE_MODE, SideMode.NONE)
+        );
+
     }
 
     public static final EnumProperty<SideMode> NORTH_SIDE_MODE = EnumProperty.create("north_side_mode", SideMode.class);
@@ -46,8 +55,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
     public static final EnumProperty<SideMode> UP_SIDE_MODE = EnumProperty.create("up_side_mode", SideMode.class);
     public static final EnumProperty<SideMode> DOWN_SIDE_MODE = EnumProperty.create("down_side_mode", SideMode.class);
 
-    public static Direction getInputDirection(BlockPos pos, Level level) {
-        BlockState state = level.getBlockState(pos);
+    public static Direction getInputDirection(BlockState state) {
         if (state.getValue(SignalOperationBlock.NORTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.NORTH;
         if (state.getValue(SignalOperationBlock.SOUTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.SOUTH;
         if (state.getValue(SignalOperationBlock.EAST_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.EAST;
@@ -57,8 +65,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         return null;
     }
 
-    public static Direction getOutputDirection(BlockPos pos, Level level) {
-        BlockState state = level.getBlockState(pos);
+    public static Direction getOutputDirection(BlockState state) {
         if (state.getValue(SignalOperationBlock.NORTH_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.NORTH;
         if (state.getValue(SignalOperationBlock.SOUTH_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.SOUTH;
         if (state.getValue(SignalOperationBlock.EAST_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.EAST;
@@ -68,8 +75,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         return null;
     }
 
-    public static Direction getInput2Direction(BlockPos pos, Level level) {
-        BlockState state = level.getBlockState(pos);
+    public static Direction getInput2Direction(BlockState state) {
         if (state.getValue(SignalOperationBlock.NORTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.NORTH;
         if (state.getValue(SignalOperationBlock.SOUTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.SOUTH;
         if (state.getValue(SignalOperationBlock.EAST_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.EAST;
@@ -103,7 +109,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (level.isClientSide()) return InteractionResult.CONSUME;
+        if (level.isClientSide()) return super.useWithoutItem(state, level, pos, player, hitResult);
         //server
         if (player.getMainHandItem().getItem() == Items.STICK) {
             if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity)
@@ -116,9 +122,11 @@ public class SignalOperationBlock extends Block implements EntityBlock {
                 switchConnectionOutput(hitResult.getDirection(), level, pos);
             else
                 switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos);
+
+            return InteractionResult.SUCCESS;
         }
 
-        return InteractionResult.SUCCESS;
+        return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
     private void switchConnectionOutput(Direction direction, Level level, BlockPos pos) {
@@ -154,7 +162,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         if (level.isClientSide()) return;
 
         if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {
-            Direction outputDirection = getOutputDirection(pos, level);
+            Direction outputDirection = getOutputDirection(state);
             if (outputDirection == null) return;
 
             detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputValue(), outputDirection);
@@ -165,16 +173,17 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, true);
         if (!state.is(newState.getBlock())) {
             level.invalidateCapabilities(pos);
         }
 
         if (level.isClientSide()) return;
-        Direction outputDirection = getOutputDirection(pos, level);
+        Direction outputDirection = getOutputDirection(state);
         if (outputDirection == null) return;
         //
         detectSignalWireAndUpdate(state, level, pos, true, true, 0, outputDirection);
+
+        super.onRemove(state, level, pos, newState, true);
     }
 
     @Override
@@ -183,10 +192,13 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 
         if (level.isClientSide()) return;
         if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {
-            detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputValue(), getOutputDirection(pos, level));
+            // no output direction
+            if (getOutputDirection(state) == null) return;
+            detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputValue(), getOutputDirection(state));
         }
     }
 
+    // for output side
     public static void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, boolean noSignal, int signalValue, Direction outputDirection) {
         BlockPos targetPos = pos.relative(outputDirection);
 

@@ -150,7 +150,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (level.isClientSide()) return InteractionResult.CONSUME;
+        if (level.isClientSide()) return super.useWithoutItem(state, level, pos, player, hitResult);
         //server
 
         if (player.getMainHandItem().getItem() == Items.STICK) {
@@ -171,7 +171,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
         // changing the wire configuration may cause wire connection change
         updateWireValue(state, level, pos);
 
-        return InteractionResult.SUCCESS;
+        return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
     private void switchConnectionOutput(Direction direction, Level level, BlockPos pos) {

@@ -62,9 +62,9 @@ public class SignalOperationBlockEntity extends BlockEntity {
 
         SignalOperationBlockEntity operationEntity = (SignalOperationBlockEntity) blockEntity;
 
-        Direction inputDirection = SignalOperationBlock.getInputDirection(pos, level);
-        Direction input2Direction = SignalOperationBlock.getInput2Direction(pos, level);
-        Direction outputDirection = SignalOperationBlock.getOutputDirection(pos, level);
+        Direction inputDirection = SignalOperationBlock.getInputDirection(state);
+        Direction input2Direction = SignalOperationBlock.getInput2Direction(state);
+        Direction outputDirection = SignalOperationBlock.getOutputDirection(state);
 
         if (inputDirection == null || input2Direction == null || outputDirection == null) return;
 
