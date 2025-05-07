@@ -1,5 +1,8 @@
 package github.dctime.dctimemod.block;
 
+import github.dctime.dctimemod.RegisterBlockEntities;
+import github.dctime.dctimemod.RegisterBlocks;
+import github.dctime.dctimemod.RegisterCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -10,6 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -21,6 +26,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
     public enum SideMode implements net.minecraft.util.StringRepresentable {
         NONE,
         INPUT,
+        INPUT2,
         OUTPUT;
 
         @Override
@@ -28,6 +34,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
             return this.name().toLowerCase();
         }
     }
+
     public SignalOperationBlock(Properties properties) {
         super(properties);
     }
@@ -38,6 +45,39 @@ public class SignalOperationBlock extends Block implements EntityBlock {
     public static final EnumProperty<SideMode> WEST_SIDE_MODE = EnumProperty.create("west_side_mode", SideMode.class);
     public static final EnumProperty<SideMode> UP_SIDE_MODE = EnumProperty.create("up_side_mode", SideMode.class);
     public static final EnumProperty<SideMode> DOWN_SIDE_MODE = EnumProperty.create("down_side_mode", SideMode.class);
+
+    public static Direction getInputDirection(BlockPos pos, Level level) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getValue(SignalOperationBlock.NORTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.NORTH;
+        if (state.getValue(SignalOperationBlock.SOUTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.SOUTH;
+        if (state.getValue(SignalOperationBlock.EAST_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.EAST;
+        if (state.getValue(SignalOperationBlock.WEST_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.WEST;
+        if (state.getValue(SignalOperationBlock.UP_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.UP;
+        if (state.getValue(SignalOperationBlock.DOWN_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.DOWN;
+        return null;
+    }
+
+    public static Direction getOutputDirection(BlockPos pos, Level level) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getValue(SignalOperationBlock.NORTH_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.NORTH;
+        if (state.getValue(SignalOperationBlock.SOUTH_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.SOUTH;
+        if (state.getValue(SignalOperationBlock.EAST_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.EAST;
+        if (state.getValue(SignalOperationBlock.WEST_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.WEST;
+        if (state.getValue(SignalOperationBlock.UP_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.UP;
+        if (state.getValue(SignalOperationBlock.DOWN_SIDE_MODE) == SignalOperationBlock.SideMode.OUTPUT) return Direction.DOWN;
+        return null;
+    }
+
+    public static Direction getInput2Direction(BlockPos pos, Level level) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getValue(SignalOperationBlock.NORTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.NORTH;
+        if (state.getValue(SignalOperationBlock.SOUTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.SOUTH;
+        if (state.getValue(SignalOperationBlock.EAST_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.EAST;
+        if (state.getValue(SignalOperationBlock.WEST_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.WEST;
+        if (state.getValue(SignalOperationBlock.UP_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.UP;
+        if (state.getValue(SignalOperationBlock.DOWN_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.DOWN;
+        return null;
+    }
 
     @Nullable
     public EnumProperty<SideMode> getSideModeProperty(Direction direction) {
@@ -52,11 +92,24 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         };
     }
 
+    @SuppressWarnings("unchecked") // Due to generics, an unchecked cast is necessary here.
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        // You can return different tickers here, depending on whatever factors you want. A common use case would be
+        // to return different tickers on the client or server, only tick one side to begin with,
+        // or only return a ticker for some blockstates (e.g. when using a "my machine is working" blockstate property).
+        return type == RegisterBlockEntities.SIGNAL_OPERATION_BLOCK_ENTITY.get() ? (BlockEntityTicker<T>) SignalOperationBlockEntity::tick : null;
+    }
+
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) return InteractionResult.CONSUME;
         //server
-
+        if (player.getMainHandItem() == Items.STICK.getDefaultInstance()) {
+            if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity)
+                player.displayClientMessage(Component.literal("Signal Value: " + entity.getOutputValue()), true);
+            return InteractionResult.SUCCESS;
+        }
         if (player.getMainHandItem().isEmpty()) {
             System.out.println("Player hand is empty");
             if (!player.isCrouching())
@@ -79,6 +132,10 @@ public class SignalOperationBlock extends Block implements EntityBlock {
             );
         } else if (oldState.getValue(targetSideModeProperty) == SideMode.INPUT) {
             level.setBlockAndUpdate(pos, oldState
+                    .setValue(targetSideModeProperty, SideMode.INPUT2)
+            );
+        } else if (oldState.getValue(targetSideModeProperty) == SideMode.INPUT2) {
+            level.setBlockAndUpdate(pos, oldState
                     .setValue(targetSideModeProperty, SideMode.OUTPUT)
             );
         } else if (oldState.getValue(targetSideModeProperty) == SideMode.OUTPUT) {
@@ -86,6 +143,57 @@ public class SignalOperationBlock extends Block implements EntityBlock {
                     .setValue(targetSideModeProperty, SideMode.NONE)
             );
         }
+    }
+
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        if (!oldState.is(this)) {
+            level.invalidateCapabilities(pos);
+        }
+
+        if (level.isClientSide()) return;
+
+        if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity)
+            detectSignalWireAndUpdate(state, level, pos, false, entity.getOutputValue(), getOutputDirection(pos, level));
+
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        super.onRemove(state, level, pos, newState, true);
+        if (!state.is(newState.getBlock())) {
+            level.invalidateCapabilities(pos);
+        }
+
+        if (level.isClientSide()) return;
+        detectSignalWireAndUpdate(state, level, pos, true, SignalValue.GROUND_SIGNAL_VALUE, getOutputDirection(pos, level));
+    }
+
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
+
+        if (level.isClientSide()) return;
+        if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {
+            detectSignalWireAndUpdate(state, level, pos, false, entity.getOutputValue(), getOutputDirection(pos, level));
+        }
+    }
+
+    public static void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, int signalValue, Direction outputDirection) {
+        BlockPos targetPos = pos.relative(outputDirection);
+
+//        System.out.println("pos: x: " + pos.getX() + ", y: " + pos.getY() + ", z:" + pos.getZ());
+//        System.out.println("targetPos: x: " + targetPos.getX() + ", y: " + targetPos.getY() + ", z:" + targetPos.getZ());
+
+        SignalWireInformation targetInfo = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, targetPos, outputDirection);
+        if (targetInfo == null) return;
+//        System.out.println("got signal wire");
+        // higher signal value dominates lower signal value
+        // onBreak set to 0 forcefully to prevent edge case that the wire remains the signal the signal block sends
+        if (targetInfo.getSignalValue() >= signalValue && !forcefully) return;
+        System.out.println("signal value changed from " + targetInfo.getSignalValue() + " to " + signalValue);
+        targetInfo.setSignalValue(signalValue);
+        level.updateNeighborsAt(targetPos, level.getBlockState(targetPos).getBlock());
     }
 
     @Override

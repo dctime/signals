@@ -157,6 +157,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
             System.out.println("Signal Value: " + entity.getSignalValue());
             player.displayClientMessage(Component.literal("Signal Value: " + entity.getSignalValue()), true);
+            return InteractionResult.SUCCESS;
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Player hand is empty");
             if (!player.isCrouching())
@@ -238,14 +239,14 @@ public class SignalWireBlock extends Block implements EntityBlock {
                 SignalWireInformation info = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, neighborPos, direction);
                 // neighbor connection stored in info
                 // self connection stored in directionHasConnection
-                System.out.println("Direction: " + direction.getName());
-                System.out.println("BlockPos: " + "x: " + pos.getX() + ", y:" + pos.getY() + ",z: " + pos.getZ()
-                    + ", Neighbor: " + "x: " + neighborPos.getX() + ", y: " + neighborPos.getY() + ", z: " + neighborPos.getZ());
+//                System.out.println("Direction: " + direction.getName());
+//                System.out.println("BlockPos: " + "x: " + pos.getX() + ", y:" + pos.getY() + ",z: " + pos.getZ()
+//                    + ", Neighbor: " + "x: " + neighborPos.getX() + ", y: " + neighborPos.getY() + ", z: " + neighborPos.getZ());
                 if (info == null) {
-                    System.out.println("Neighbor not connected");
+//                    System.out.println("Neighbor not connected");
                 }
                 else if (!SignalWireBlock.directionHasConnection(entity, direction)) {
-                    System.out.println("Self not connected");
+//                    System.out.println("Self not connected");
                 }
                 else if (info != null && SignalWireBlock.directionHasConnection(entity, direction) && info.getSignalValue() != entity.getSignalValue()) {
                     entity.setSignalValue(info.getSignalValue());

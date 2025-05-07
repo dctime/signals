@@ -96,16 +96,16 @@ public class ConstSignalBlock extends Block implements EntityBlock {
         Direction direction = state.getValue(OUTPUT_DIRECTION);
         BlockPos targetPos = pos.relative(direction);
 
-        System.out.println("pos: x: " + pos.getX() + ", y: " + pos.getY() + ", z:" + pos.getZ());
-        System.out.println("targetPos: x: " + targetPos.getX() + ", y: " + targetPos.getY() + ", z:" + targetPos.getZ());
+//        System.out.println("pos: x: " + pos.getX() + ", y: " + pos.getY() + ", z:" + pos.getZ());
+//        System.out.println("targetPos: x: " + targetPos.getX() + ", y: " + targetPos.getY() + ", z:" + targetPos.getZ());
 
         SignalWireInformation targetInfo = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, targetPos, direction);
         if (targetInfo == null) return;
-        System.out.println("got signal wire");
+//        System.out.println("got signal wire");
         // higher signal value dominates lower signal value
         // onBreak set to 0 forcefully to prevent edge case that the wire remains the signal the signal block sends
         if (targetInfo.getSignalValue() >= signalValue && !forcefully) return;
-        System.out.println("signal value changed");
+//        System.out.println("signal value changed");
         targetInfo.setSignalValue(signalValue);
         level.updateNeighborsAt(targetPos, level.getBlockState(targetPos).getBlock());
     }

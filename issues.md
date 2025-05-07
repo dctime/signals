@@ -63,12 +63,20 @@ clicking the sides to switch input and output. (2)
 
 Limiting input and output sides.
 
-Turning off functionality if not enough input and output sides.
+Turning off functionality if not the same amount of input and output sides.
 
 ### 2025.5.7
 
 Render the model of input and output ports of the operation block (1)
 
-Adding functionalities to the operation block
+Adding functionalities to the operation block (2)
 
+Shrink the hit box of the operation block
+
+need input 1 and input 2 models (4)
+
+Signal Operation Block output will be pulled to zero when output and one of the input connected to each other and the wire between the two updates.
+Requires a new block that provides stable feedback loop.
+
+Const Signal Block and Operation block has a lot of functionalities that are the same
 

@@ -86,3 +86,7 @@ Clicking the sides of the operation block will switch side mode. Crouching will 
 
 Rendering input and output side models 2025.5.7 (1)
 
+Adding functionalities to the operation block 2025.5.7 (2)
+
+input 1 and input 2 models added 2025.5.7 (4)
+

@@ -294,6 +294,49 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
                 .condition(SignalOperationBlock.DOWN_SIDE_MODE, SignalOperationBlock.SideMode.OUTPUT)
                 .end();
 
+        // outputs
+        // north
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north_2")))
+                .addModel()
+                .condition(SignalOperationBlock.NORTH_SIDE_MODE, SignalOperationBlock.SideMode.INPUT2)
+                .end();
+        //south
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north_2")))
+                .rotationY(180)
+                .addModel()
+                .condition(SignalOperationBlock.SOUTH_SIDE_MODE, SignalOperationBlock.SideMode.INPUT2)
+                .end();
+        // EAST
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north_2")))
+                .rotationY(90)
+                .addModel()
+                .condition(SignalOperationBlock.EAST_SIDE_MODE, SignalOperationBlock.SideMode.INPUT2)
+                .end();
+        // WEST
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north_2")))
+                .rotationY(270)
+                .addModel()
+                .condition(SignalOperationBlock.WEST_SIDE_MODE, SignalOperationBlock.SideMode.INPUT2)
+                .end();
+        // UP
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north_2")))
+                .rotationX(270)
+                .addModel()
+                .condition(SignalOperationBlock.UP_SIDE_MODE, SignalOperationBlock.SideMode.INPUT2)
+                .end();
+        // DOWN
+        operationBlockBuilder.part()
+                .modelFile(models().getExistingFile(modLoc("block/operation_input_north_2")))
+                .rotationX(90)
+                .addModel()
+                .condition(SignalOperationBlock.DOWN_SIDE_MODE, SignalOperationBlock.SideMode.INPUT2)
+                .end();
+
 
     }
 }
