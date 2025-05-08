@@ -68,6 +68,10 @@ public class ConstSignalBlock extends Block implements EntityBlock {
         }
     }
 
+    public void updateFromGui(ConstSignalBlockEntity entity, int value) {
+        detectSignalWireAndUpdate(entity.getBlockState(), entity.getLevel(), entity.getPos(), true, false, value);
+    }
+
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
