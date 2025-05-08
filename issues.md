@@ -63,7 +63,7 @@ clicking the sides to switch input and output. (2)
 
 Limiting input and output sides. (X) (Just turn off the functionality)
 
-Turning off functionality if not the same amount of input and output sides.
+Turning off functionality if not the same amount of input and output sides. (4)
 
 ### 2025.5.7
 
@@ -91,6 +91,12 @@ Placing Blocks on operation signal block will cause serious error. (10)
 ### 2025.5.8
 
 Using redstone dust will got ghost redstone dust placed (1)
+
+Turning off functionality if not the same amount of input and output sides counter can be cached.
+
+Const Signal Block output side should be bigger so that play knows where the output is. (3)
+
+Let the stick detect if the operation block is functioning (4)
 
 
 

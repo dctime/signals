@@ -25,6 +25,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class SignalOperationBlock extends Block implements EntityBlock {
     public enum SideMode implements net.minecraft.util.StringRepresentable {
         NONE,
@@ -57,6 +59,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
     public static final EnumProperty<SideMode> WEST_SIDE_MODE = EnumProperty.create("west_side_mode", SideMode.class);
     public static final EnumProperty<SideMode> UP_SIDE_MODE = EnumProperty.create("up_side_mode", SideMode.class);
     public static final EnumProperty<SideMode> DOWN_SIDE_MODE = EnumProperty.create("down_side_mode", SideMode.class);
+    public static final List<EnumProperty<SideMode>> SIDE_MODES = List.of(NORTH_SIDE_MODE, SOUTH_SIDE_MODE, EAST_SIDE_MODE, WEST_SIDE_MODE, UP_SIDE_MODE, DOWN_SIDE_MODE);
 
     public static Direction getInputDirection(BlockState state) {
         if (state.getValue(SignalOperationBlock.NORTH_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT) return Direction.NORTH;
@@ -86,6 +89,27 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         if (state.getValue(SignalOperationBlock.UP_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.UP;
         if (state.getValue(SignalOperationBlock.DOWN_SIDE_MODE) == SignalOperationBlock.SideMode.INPUT2) return Direction.DOWN;
         return null;
+    }
+
+    public boolean checkIfSideModesValid(BlockState state) {
+        int validInputCount = 1;
+        int validInput2Count = 1;
+        int validOutputCount = 1;
+
+        int inputCount = 0;
+        int input2Count = 0;
+        int outputCount = 0;
+        for (EnumProperty<SideMode> mode : SIDE_MODES) {
+            if (state.getValue(mode) == SideMode.INPUT) inputCount++;
+            if (state.getValue(mode) == SideMode.INPUT2) input2Count++;
+            if (state.getValue(mode) == SideMode.OUTPUT) outputCount++;
+        }
+
+        if (inputCount != validInputCount) return false;
+        if (input2Count != validInput2Count) return false;
+        if (outputCount != validOutputCount) return false;
+
+        return true;
     }
 
     @Nullable
@@ -143,8 +167,15 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         if (level.isClientSide()) return super.useWithoutItem(state, level, pos, player, hitResult);
         //server
         if (player.getMainHandItem().getItem() == Items.STICK) {
-            if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity)
-                player.displayClientMessage(Component.literal("Output Signal Value: " + entity.getOutputValue()), true);
+
+            if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {
+                if (!checkIfSideModesValid(state)) {
+                    player.displayClientMessage(Component.literal("Operation Signal Block not Valid").setStyle(Component.literal("").getStyle().withColor(0xFF0000)), true);
+                } else {
+                    player.displayClientMessage(Component.literal("Output Signal Value: " + entity.getOutputValue()), true);
+                }
+            }
+
             return InteractionResult.SUCCESS;
         }
         if (player.getMainHandItem().isEmpty()) {
