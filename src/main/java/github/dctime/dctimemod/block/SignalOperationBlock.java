@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -20,6 +21,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class SignalOperationBlock extends Block implements EntityBlock {
@@ -105,6 +108,34 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         // to return different tickers on the client or server, only tick one side to begin with,
         // or only return a ticker for some blockstates (e.g. when using a "my machine is working" blockstate property).
         return type == RegisterBlockEntities.SIGNAL_OPERATION_BLOCK_ENTITY.get() ? (BlockEntityTicker<T>) SignalOperationBlockEntity::tick : null;
+    }
+
+    public static final float WIRE_WIDTH = 4.5f;
+
+    // collision box
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return Block.box(
+                8 - (double) WIRE_WIDTH / 2,
+                8 - (double) WIRE_WIDTH / 2,
+                8 - (double) WIRE_WIDTH / 2,
+                8 + (double) WIRE_WIDTH / 2,
+                8 + (double) WIRE_WIDTH / 2,
+                8 + (double) WIRE_WIDTH / 2
+        );
+    }
+
+    // break box
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return Block.box(
+                8 - (double) WIRE_WIDTH,
+                8 - (double) WIRE_WIDTH,
+                8 - (double) WIRE_WIDTH,
+                8 + (double) WIRE_WIDTH,
+                8 + (double) WIRE_WIDTH,
+                8 + (double) WIRE_WIDTH
+        );
     }
 
     @Override

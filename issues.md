@@ -71,20 +71,20 @@ Render the model of input and output ports of the operation block (1)
 
 Adding functionalities to the operation block (2)
 
-Shrink the hit box of the operation block
+Shrink the hit box of the operation block (3)
 
 need input 1 and input 2 models (4)
 
 Signal Operation Block output will be pulled to zero when output and one of the input connected to each other and the wire between the two updates.
 Requires a new block that provides stable feedback loop. (5)
 
-Const Signal Block and Operation block has a lot of functionalities that are the same, use inheritance
+Const Signal Block and Operation block has a lot of functionalities that are the same, use inheritance (x) 
 
 Let signal wire have a "no signal" state in signal information (7)
 
 Replace GROUND signal with no signal (8)
 
-Source should not output if the target signal wire has higher signal value. Use Forcefully to bypass
+Source should not output if the target signal wire has higher signal value. Use Forcefully to bypass (x)
 
 Placing Blocks on operation signal block will cause serious error. (10)
 

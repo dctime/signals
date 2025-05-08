@@ -120,7 +120,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
         builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN);
     }
 
-    public static final int WIRE_WIDTH = 4;
+    public static final float WIRE_WIDTH = 2.5f;
 
     // collision box
     @Override
