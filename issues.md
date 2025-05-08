@@ -61,7 +61,7 @@ Adding input port and output port models. (1)
 
 clicking the sides to switch input and output. (2)
 
-Limiting input and output sides.
+Limiting input and output sides. (X) (Just turn off the functionality)
 
 Turning off functionality if not the same amount of input and output sides.
 
