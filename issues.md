@@ -98,5 +98,9 @@ Const Signal Block output side should be bigger so that play knows where the out
 
 Let the stick detect if the operation block is functioning (4)
 
+BlockItem rendering (5)
+
+Wires item not 3D
+
 
 
