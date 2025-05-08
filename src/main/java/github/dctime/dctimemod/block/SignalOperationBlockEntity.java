@@ -86,7 +86,7 @@ public class SignalOperationBlockEntity extends BlockEntity {
         else input2Value = input2Info.getSignalValue();
 
 //        System.out.println("Input Value: " + inputValue + ", " + input2Value);
-        int outputValue = inputValue + input2Value;
+        int outputValue = inputValue & input2Value;
         if (outputValue != operationEntity.getOutputValue()) {
             operationEntity.setOutputValue(outputValue);
             SignalOperationBlock.detectSignalWireAndUpdate(state, level, pos, true, false, outputValue, outputDirection);

@@ -88,5 +88,9 @@ Source should not output if the target signal wire has higher signal value. Use 
 
 Placing Blocks on operation signal block will cause serious error. (10)
 
+### 2025.5.8
+
+Using redstone dust will got ghost redstone dust placed (1)
+
 
 
