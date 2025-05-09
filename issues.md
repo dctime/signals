@@ -102,5 +102,14 @@ BlockItem rendering (5)
 
 Wires item not 3D
 
+### 2025.5.9
+
+Add GUI to signal opeartion block and change the operation by the card inserted into.
+
+The card defines how many input and output ports is required, the operation and holds constant if necessary. 
+No idea how to implement it.
+
+Signal Operation block needs screen
+
 
 

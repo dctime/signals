@@ -7,6 +7,7 @@ import github.dctime.dctimemod.RegisterItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -167,6 +168,14 @@ public class SignalOperationBlock extends Block implements EntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) return super.useWithoutItem(state, level, pos, player, hitResult);
         //server
+
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            System.out.println("Opening Menu");
+            // server menu
+            serverPlayer.openMenu(state.getMenuProvider(level, pos));
+            return InteractionResult.SUCCESS;
+        }
+
         if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
 
             if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {

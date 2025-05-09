@@ -15,7 +15,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SignalOperationBlockEntity extends BlockEntity {
-
+    public static final int DATA_SIZE = 0;
+    public static final int CONTAINER_DATA_SIZE = 0;
     private int outputValue = 0;
 
 
