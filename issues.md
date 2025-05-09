@@ -109,7 +109,9 @@ Add GUI to signal opeartion block and change the operation by the card inserted 
 The card defines how many input and output ports is required, the operation and holds constant if necessary. 
 No idea how to implement it.
 
-Signal Operation block needs screen
+Signal Operation block needs screen (3)
+
+Design some cards and add them to the game (& | ~)
 
 
 

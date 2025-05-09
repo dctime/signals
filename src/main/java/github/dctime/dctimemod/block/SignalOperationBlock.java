@@ -9,7 +9,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -315,5 +318,21 @@ public class SignalOperationBlock extends Block implements EntityBlock {
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new SignalOperationBlockEntity(blockPos, blockState);
+    }
+
+    @Override
+    protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        return new SimpleMenuProvider((containerId, playerInventory, player)-> {
+            SignalOperationBlockEntity entity = ((SignalOperationBlockEntity) level.getBlockEntity(pos));
+            assert entity != null;
+            return new SignalOperationMenu(
+                containerId,
+                playerInventory,
+                ContainerLevelAccess.create(level, pos),
+                entity.getData(),
+                entity.getItems());
+        },
+            Component.translatable("menu.title.dctimemod.signal_operation_menu"));
+
     }
 }

@@ -5,18 +5,36 @@ import github.dctime.dctimemod.RegisterCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class SignalOperationBlockEntity extends BlockEntity {
     public static final int DATA_SIZE = 0;
-    public static final int CONTAINER_DATA_SIZE = 0;
+    public static final int ITEM_SIZE = 1;
+
+    private IItemHandler handler = new ItemStackHandler(NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY));
+    private ContainerData data = new SimpleContainerData(DATA_SIZE);
+
+    public IItemHandler getItems() {
+        return handler;
+    }
+
+    public ContainerData getData() {
+        return data;
+    }
+
+
     private int outputValue = 0;
 
 

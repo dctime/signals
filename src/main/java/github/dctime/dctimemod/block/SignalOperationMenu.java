@@ -9,7 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
-import org.jetbrains.annotations.Nullable;
 
 public class SignalOperationMenu extends AbstractContainerMenu {
     private ContainerData data;
@@ -20,7 +19,7 @@ public class SignalOperationMenu extends AbstractContainerMenu {
     }
 
     public SignalOperationMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL, new SimpleContainerData(SignalOperationBlockEntity.DATA_SIZE), new ItemStackHandler(SignalOperationBlockEntity.CONTAINER_DATA_SIZE));
+        this(containerId, playerInventory, ContainerLevelAccess.NULL, new SimpleContainerData(SignalOperationBlockEntity.DATA_SIZE), new ItemStackHandler(SignalOperationBlockEntity.ITEM_SIZE));
     }
 
     public SignalOperationMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, ContainerData data, IItemHandler cardHandler) {
