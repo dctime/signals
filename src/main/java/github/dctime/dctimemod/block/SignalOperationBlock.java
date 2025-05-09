@@ -4,6 +4,7 @@ import github.dctime.dctimemod.RegisterBlockEntities;
 import github.dctime.dctimemod.RegisterBlocks;
 import github.dctime.dctimemod.RegisterCapabilities;
 import github.dctime.dctimemod.RegisterItems;
+import github.dctime.dctimemod.item.SignalOperationBaseCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -13,6 +14,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -96,10 +98,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         return null;
     }
 
-    public boolean checkIfSideModesValid(BlockState state) {
-        int validInputCount = 1;
-        int validInput2Count = 1;
-        int validOutputCount = 1;
+    public boolean checkIfSideModesValid(BlockState state, SignalOperationBaseCardItem cardItem) {
 
         int inputCount = 0;
         int input2Count = 0;
@@ -110,11 +109,14 @@ public class SignalOperationBlock extends Block implements EntityBlock {
             if (state.getValue(mode) == SideMode.OUTPUT) outputCount++;
         }
 
-        if (inputCount != validInputCount) return false;
-        if (input2Count != validInput2Count) return false;
-        if (outputCount != validOutputCount) return false;
+        if (inputCount > 1 || input2Count > 1 || outputCount > 1) return false;
 
-        return true;
+        int currentConfig = 0;
+        if (inputCount == 1) currentConfig += 1;
+        if (input2Count == 1) currentConfig += 2;
+        if (outputCount == 1) currentConfig += 4;
+
+        return cardItem.checkIfPortsValid(currentConfig);
     }
 
     @Nullable
@@ -175,11 +177,17 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
 
             if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {
-                if (!checkIfSideModesValid(state)) {
-                    player.displayClientMessage(Component.literal("Operation Signal Block not Valid").setStyle(Component.literal("").getStyle().withColor(0xFF0000)), true);
+                Item item = entity.getItems().getStackInSlot(SignalOperationBlockEntity.CARD_SLOT_INDEX).getItem();
+                if (item instanceof SignalOperationBaseCardItem cardItem) {
+                    if (!checkIfSideModesValid(state, cardItem)) {
+                        player.displayClientMessage(Component.literal("Operation Signal Block not Valid").setStyle(Component.literal("").getStyle().withColor(0xFF0000)), true);
+                    } else {
+                        player.displayClientMessage(Component.literal("Output Signal Value: " + entity.getOutputValue()), true);
+                    }
                 } else {
-                    player.displayClientMessage(Component.literal("Output Signal Value: " + entity.getOutputValue()), true);
+                    player.displayClientMessage(Component.literal("Operation Block must insert a card"), true);
                 }
+
             }
 
             return InteractionResult.SUCCESS;

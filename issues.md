@@ -115,5 +115,9 @@ Design some cards and add them to the game (& | ~) (4)
 
 Signal Operation Block doesn't store cards when leaving the game 
 
+Check it operation block valid by the card insert into (6)
+
+Create a configurator to modify the connections and ports of the wire block and operation block
+
 
 

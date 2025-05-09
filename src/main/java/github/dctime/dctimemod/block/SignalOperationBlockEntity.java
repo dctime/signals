@@ -2,7 +2,7 @@ package github.dctime.dctimemod.block;
 
 import github.dctime.dctimemod.RegisterBlockEntities;
 import github.dctime.dctimemod.RegisterCapabilities;
-import github.dctime.dctimemod.item.SignalOperationBaseCard;
+import github.dctime.dctimemod.item.SignalOperationBaseCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -100,38 +100,41 @@ public class SignalOperationBlockEntity extends BlockEntity {
         SignalOperationBlockEntity operationEntity = (SignalOperationBlockEntity) blockEntity;
 
         SignalOperationBlock block = (SignalOperationBlock) blockEntity.getBlockState().getBlock();
-        if (!block.checkIfSideModesValid(state)) return;
+
+        Integer inputValue;
+        Integer input2Value;
+
+        // get inputValue
 
         Direction inputDirection = SignalOperationBlock.getInputDirection(state);
+        if (inputDirection == null) inputValue = null;
+        else {
+            BlockPos inputPos = pos.relative(inputDirection);
+            SignalWireInformation inputInfo = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, inputPos, inputDirection);
+            if (inputInfo == null) inputValue = null;
+            else inputValue = inputInfo.getSignalValue();
+        }
+
         Direction input2Direction = SignalOperationBlock.getInput2Direction(state);
+        if (input2Direction == null) input2Value = null;
+        else {
+            BlockPos input2Pos = pos.relative(input2Direction);
+            SignalWireInformation input2Info = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, input2Pos, input2Direction);
+            if (input2Info == null) input2Value = null;
+            else input2Value = input2Info.getSignalValue();
+        }
+
         Direction outputDirection = SignalOperationBlock.getOutputDirection(state);
-
-        if (inputDirection == null || input2Direction == null || outputDirection == null) return;
-
-        BlockPos inputPos = pos.relative(inputDirection);
-        BlockPos input2Pos = pos.relative(input2Direction);
-
-        SignalWireInformation inputInfo = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, inputPos, inputDirection);
-        SignalWireInformation input2Info = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, input2Pos, input2Direction);
-
-        int inputValue;
-        int input2Value;
-
-        if (inputInfo == null) return;
-        else if (inputInfo.getSignalValue() == null) return;
-        else inputValue = inputInfo.getSignalValue();
-
-        if (input2Info == null) return;
-        else if (input2Info.getSignalValue() == null) return;
-        else input2Value = input2Info.getSignalValue();
+        if (outputDirection == null) return;
 
         if (operationEntity.getItems().getStackInSlot(CARD_SLOT_INDEX).isEmpty()) return;
-        if (!(operationEntity.getItems().getStackInSlot(CARD_SLOT_INDEX).getItem() instanceof SignalOperationBaseCard)) return;
-        SignalOperationBaseCard cardItem = (SignalOperationBaseCard) operationEntity.getItems().getStackInSlot(CARD_SLOT_INDEX).getItem();
-
+        if (!(operationEntity.getItems().getStackInSlot(CARD_SLOT_INDEX).getItem() instanceof SignalOperationBaseCardItem cardItem)) return;
+        if (!block.checkIfSideModesValid(state, cardItem)) return;
 
 //        System.out.println("Input Value: " + inputValue + ", " + input2Value);
-        int outputValue = cardItem.operation().apply(inputValue, input2Value);
+        // input and input2 might be null
+        if (input2Value == null) System.out.println("Input2 Value is null");
+        int outputValue = cardItem.operation(inputValue, input2Value);
 
         if (outputValue != operationEntity.getOutputValue()) {
             operationEntity.setOutputValue(outputValue);
