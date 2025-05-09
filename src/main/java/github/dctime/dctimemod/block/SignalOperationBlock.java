@@ -172,13 +172,6 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         if (level.isClientSide()) return super.useWithoutItem(state, level, pos, player, hitResult);
         //server
 
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            System.out.println("Opening Menu");
-            // server menu
-            serverPlayer.openMenu(state.getMenuProvider(level, pos));
-            return InteractionResult.SUCCESS;
-        }
-
         if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
 
             if (level.getBlockEntity(pos) instanceof SignalOperationBlockEntity entity) {
@@ -198,6 +191,13 @@ public class SignalOperationBlock extends Block implements EntityBlock {
             else
                 switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos);
 
+            return InteractionResult.SUCCESS;
+        }
+
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            System.out.println("Opening Menu");
+            // server menu
+            serverPlayer.openMenu(state.getMenuProvider(level, pos));
             return InteractionResult.SUCCESS;
         }
 

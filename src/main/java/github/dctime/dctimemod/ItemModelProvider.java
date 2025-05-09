@@ -21,6 +21,9 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
         multiModelBlock(RegisterBlocks.SIGNAL_OPERATION_BLOCK.get(), "operation_block_none");
         multiModelBlock(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER.get(), "signal_wire_none");
         basicItem(RegisterItems.SIGNAL_DETECTOR.get());
+        basicItem(RegisterItems.AND_CARD.get());
+        basicItem(RegisterItems.OR_CARD.get());
+        basicItem(RegisterItems.NOT_CARD.get());
     }
 
     private String getBlockKey(Block block) {

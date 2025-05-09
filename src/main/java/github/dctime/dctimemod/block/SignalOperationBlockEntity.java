@@ -2,6 +2,7 @@ package github.dctime.dctimemod.block;
 
 import github.dctime.dctimemod.RegisterBlockEntities;
 import github.dctime.dctimemod.RegisterCapabilities;
+import github.dctime.dctimemod.item.SignalOperationBaseCard;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -20,10 +21,27 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class SignalOperationBlockEntity extends BlockEntity {
+    public static class CardItemStackHandler extends ItemStackHandler {
+        public CardItemStackHandler(int size) {
+            super(size);
+        }
+
+        public CardItemStackHandler(NonNullList<ItemStack> stacks) {
+            super(stacks);
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
+        }
+    }
+
     public static final int DATA_SIZE = 0;
     public static final int ITEM_SIZE = 1;
 
-    private IItemHandler handler = new ItemStackHandler(NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY));
+    public static final int CARD_SLOT_INDEX = 0;
+
+    private IItemHandler handler = new CardItemStackHandler(NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY));
     private ContainerData data = new SimpleContainerData(DATA_SIZE);
 
     public IItemHandler getItems() {
@@ -107,8 +125,14 @@ public class SignalOperationBlockEntity extends BlockEntity {
         else if (input2Info.getSignalValue() == null) return;
         else input2Value = input2Info.getSignalValue();
 
+        if (operationEntity.getItems().getStackInSlot(CARD_SLOT_INDEX).isEmpty()) return;
+        if (!(operationEntity.getItems().getStackInSlot(CARD_SLOT_INDEX).getItem() instanceof SignalOperationBaseCard)) return;
+        SignalOperationBaseCard cardItem = (SignalOperationBaseCard) operationEntity.getItems().getStackInSlot(CARD_SLOT_INDEX).getItem();
+
+
 //        System.out.println("Input Value: " + inputValue + ", " + input2Value);
-        int outputValue = inputValue & input2Value;
+        int outputValue = cardItem.operation().apply(inputValue, input2Value);
+
         if (outputValue != operationEntity.getOutputValue()) {
             operationEntity.setOutputValue(outputValue);
             SignalOperationBlock.detectSignalWireAndUpdate(state, level, pos, true, false, outputValue, outputDirection);

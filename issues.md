@@ -111,7 +111,9 @@ No idea how to implement it.
 
 Signal Operation block needs screen (3)
 
-Design some cards and add them to the game (& | ~)
+Design some cards and add them to the game (& | ~) (4)
+
+Signal Operation Block doesn't store cards when leaving the game 
 
 
 
