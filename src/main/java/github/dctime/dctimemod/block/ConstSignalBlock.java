@@ -3,6 +3,7 @@ package github.dctime.dctimemod.block;
 import com.mojang.datafixers.kinds.Const;
 import com.mojang.serialization.MapCodec;
 import github.dctime.dctimemod.RegisterCapabilities;
+import github.dctime.dctimemod.RegisterItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -74,6 +75,14 @@ public class ConstSignalBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide && player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
+            ConstSignalBlockEntity entity = (ConstSignalBlockEntity) level.getBlockEntity(pos);
+            if (entity == null) return InteractionResult.FAIL;
+            player.displayClientMessage(Component.literal("Const Output Signal Value: " + entity.getOutputSignalValue()), true);
+
+            return InteractionResult.SUCCESS;
+        }
+
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             serverPlayer.openMenu(state.getMenuProvider(level, pos));
         }

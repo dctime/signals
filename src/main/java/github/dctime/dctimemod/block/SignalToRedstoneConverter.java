@@ -1,5 +1,6 @@
 package github.dctime.dctimemod.block;
 
+import github.dctime.dctimemod.RegisterItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -84,7 +85,7 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
             System.out.println("Player hand has redstone");
             switchRedstoneOutput(hitResult.getDirection(), level, pos);
             return InteractionResult.SUCCESS;
-        } else if (mainHandItem == Items.STICK) {
+        } else if (mainHandItem == RegisterItems.SIGNAL_DETECTOR.get()) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
             Integer signalValue = entity.getSignalValue();
             if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), true);

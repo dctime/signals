@@ -104,3 +104,9 @@ Fixed Issue 2025.5.7 (3)
 
 Fixed Issue 2025.5.5 (4)
 
+### 2025.5.9
+
+Init Signal Detector Item to replace STICK
+
+Add functionality to signal detector item
+

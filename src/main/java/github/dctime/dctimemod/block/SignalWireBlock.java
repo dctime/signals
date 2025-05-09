@@ -2,6 +2,7 @@ package github.dctime.dctimemod.block;
 
 import github.dctime.dctimemod.RegisterBlockEntities;
 import github.dctime.dctimemod.RegisterCapabilities;
+import github.dctime.dctimemod.RegisterItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -153,7 +154,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
         if (level.isClientSide()) return super.useWithoutItem(state, level, pos, player, hitResult);
         //server
 
-        if (player.getMainHandItem().getItem() == Items.STICK) {
+        if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
             Integer signalValue = entity.getSignalValue();
             if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), true);

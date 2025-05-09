@@ -1,19 +1,15 @@
-package github.dctime.dctimemod.block;
+package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.DCtimeMod;
-import github.dctime.dctimemod.RegisterBlockItems;
-import github.dctime.dctimemod.RegisterBlocks;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.Objects;
 
-public class BuildHelperItemModelProvider extends ItemModelProvider {
-    public BuildHelperItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+public class ItemModelProvider extends net.neoforged.neoforge.client.model.generators.ItemModelProvider {
+    public ItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, DCtimeMod.MODID, existingFileHelper);
     }
 
@@ -24,7 +20,7 @@ public class BuildHelperItemModelProvider extends ItemModelProvider {
         multiModelBlock(RegisterBlocks.SINGAL_WIRE.get(), "signal_wire_none");
         multiModelBlock(RegisterBlocks.SIGNAL_OPERATION_BLOCK.get(), "operation_block_none");
         multiModelBlock(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER.get(), "signal_wire_none");
-
+        basicItem(RegisterItems.SIGNAL_DETECTOR.get());
     }
 
     private String getBlockKey(Block block) {

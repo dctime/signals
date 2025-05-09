@@ -1,6 +1,5 @@
 package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.block.BuildHelperItemModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
@@ -47,7 +46,7 @@ public class DataGen {
         //item models
         generator.addProvider(
                 event.includeClient(),
-                new BuildHelperItemModelProvider(output, existingFileHelper)
+                new ItemModelProvider(output, existingFileHelper)
         );
         // language provider
         event.createProvider(DCtimeLanguageProvider::new);
