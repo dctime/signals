@@ -113,7 +113,7 @@ Signal Operation block needs screen (3)
 
 Design some cards and add them to the game (& | ~) (4)
 
-Signal Operation Block doesn't store cards when leaving the game 
+Signal Operation Block doesn't store cards when leaving the game (5)
 
 Check it operation block valid by the card insert into (6)
 

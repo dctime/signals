@@ -66,6 +66,7 @@ public class SignalOperationBlockEntity extends BlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         setOutputValue(tag.getInt("outputValue"));
+        ((CardItemStackHandler) handler).deserializeNBT(registries, tag.getCompound("items"));
 //        System.out.println("Output Value Changed to from saveAdditional: " + outputValue);
     }
 
@@ -73,6 +74,7 @@ public class SignalOperationBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putInt("outputValue", outputValue);
+        tag.put("items", ((CardItemStackHandler) handler).serializeNBT(registries));
 //        System.out.println("Output Value Loaded from loadAdditional: " + outputValue);
 
 
