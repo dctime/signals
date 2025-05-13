@@ -119,5 +119,13 @@ Check it operation block valid by the card insert into (6)
 
 Create a configurator to modify the connections and ports of the wire block and operation block
 
+Screen tooltip not working
+
+### 2025.5.10
+
+item quick swap not working
+
+when card plugged in. Missing wires at input will cause a null pointer exception. (2)
+
 
 

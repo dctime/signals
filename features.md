@@ -112,3 +112,7 @@ Add functionality to signal detector item
 
 Fixed Issue 2025.5.9 (3) (4) (6)
 
+### 2025.5.13
+
+Fixed Issue 2025.5.10 (2)
+

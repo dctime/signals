@@ -133,8 +133,8 @@ public class SignalOperationBlockEntity extends BlockEntity {
 
 //        System.out.println("Input Value: " + inputValue + ", " + input2Value);
         // input and input2 might be null
-        if (input2Value == null) System.out.println("Input2 Value is null");
-        int outputValue = cardItem.operation(inputValue, input2Value);
+        Integer outputValue = cardItem.operation(inputValue, input2Value);
+        if (outputValue == null) return;
 
         if (outputValue != operationEntity.getOutputValue()) {
             operationEntity.setOutputValue(outputValue);

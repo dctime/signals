@@ -22,9 +22,10 @@ public class AndCardItem extends SignalOperationBaseCardItem{
     }
 
     @Override
+    @Nullable
     public Integer operation(@Nullable Integer value1, @Nullable Integer value2) {
-        assert value1 != null;
-        assert value2 != null;
+        if (value1 == null) return null;
+        if (value2 == null) return null;
         return value1 & value2;
     }
 

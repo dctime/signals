@@ -15,5 +15,6 @@ public abstract class SignalOperationBaseCardItem extends Item {
 
     abstract public boolean checkIfPortsValid(int requiresPortConfig);
 
+    @Nullable
     public abstract Integer operation(@Nullable Integer value1, @Nullable Integer value2);
 }
