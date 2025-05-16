@@ -118,6 +118,7 @@ Signal Operation Block doesn't store cards when leaving the game (5)
 Check it operation block valid by the card insert into (6)
 
 Create a configurator to modify the connections and ports of the wire block and operation block
+because modifying the operator block requires empty hand while you have to hold item in order to open the gui
 
 Screen tooltip not working
 
