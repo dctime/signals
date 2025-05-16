@@ -118,3 +118,7 @@ Fixed Issue 2025.5.10 (2)
 
 Fixed Issue 2025.5.9 (5)
 
+### 2025.5.16
+
+Rotate Const Signal Block when placement
+

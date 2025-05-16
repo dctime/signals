@@ -13,6 +13,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
@@ -57,6 +58,10 @@ public class ConstSignalBlock extends Block implements EntityBlock {
 
         if (level.isClientSide()) return;
         detectSignalWireAndUpdate(state, level, pos, true, true, 0);
+    }
+
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return (BlockState)this.defaultBlockState().setValue(OUTPUT_DIRECTION, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
