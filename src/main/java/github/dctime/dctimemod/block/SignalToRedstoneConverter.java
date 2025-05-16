@@ -72,11 +72,6 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) {
-            if (player.getMainHandItem().getItem() == Items.REDSTONE ||
-            player.getMainHandItem().isEmpty()) {
-                return InteractionResult.SUCCESS;
-            }
-
             return super.useWithoutItem(state, level, pos, player, hitResult);
         }
 
@@ -93,39 +88,18 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
             return InteractionResult.SUCCESS;
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Adjusting using empty hand");
+            BooleanProperty targetRedstoneProperty = directionToRedstoneProperty.get(hitResult.getDirection());
             if (!player.isCrouching())
-                switchConnectionOutput(hitResult.getDirection(), level, pos);
+                switchConnectionOutput(hitResult.getDirection(), level, pos, targetRedstoneProperty);
             else
-                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos);
+                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos, targetRedstoneProperty);
+            updateWireValue(state, level, pos);
             return InteractionResult.SUCCESS;
         }
 
-        updateWireValue(state, level, pos);
-
-        return super.useWithoutItem(state, level, pos, player, hitResult);
-
-
+        return InteractionResult.PASS;
     }
 
-    private void switchConnectionOutput(Direction direction, Level level, BlockPos pos) {
-        BlockState oldState = level.getBlockState(pos);
-        BooleanProperty targetRedstoneProperty = directionToRedstoneProperty.get(direction);
-        BooleanProperty targetConnectionProperty = directionToConnectionProperty.get(direction);
-
-        boolean isOldConnection = oldState.getValue(targetConnectionProperty);
-
-        if (!isOldConnection)
-            level.setBlockAndUpdate(pos, oldState
-                    .setValue(targetConnectionProperty, true)
-                    .setValue(targetRedstoneProperty, false)
-
-            );
-        else
-            level.setBlockAndUpdate(pos, oldState
-                    .setValue(targetConnectionProperty, false)
-                    .setValue(targetRedstoneProperty, false)
-            );
-    }
 
     private void switchRedstoneOutput(Direction direction, Level level, BlockPos pos) {
 

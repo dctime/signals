@@ -40,7 +40,8 @@ import java.util.List;
 
 
 public class SignalWireBlock extends Block implements EntityBlock {
-    protected HashMap<Direction, BooleanProperty> directionToConnectionProperty;
+    public static HashMap<Direction, BooleanProperty> directionToConnectionProperty;
+
     public SignalWireBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
@@ -164,9 +165,9 @@ public class SignalWireBlock extends Block implements EntityBlock {
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Player hand is empty");
             if (!player.isCrouching())
-                switchConnectionOutput(hitResult.getDirection(), level, pos);
+                switchConnectionOutput(hitResult.getDirection(), level, pos, null);
             else
-                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos);
+                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos, null);
         }
 
         // changing the wire configuration may cause wire connection change
@@ -175,21 +176,61 @@ public class SignalWireBlock extends Block implements EntityBlock {
         return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
-    private void switchConnectionOutput(Direction direction, Level level, BlockPos pos) {
+    protected void switchConnectionOutput(Direction direction, Level level, BlockPos pos, @Nullable BooleanProperty targetRedstoneProperty) {
         BlockState oldState = level.getBlockState(pos);
         BooleanProperty targetConnectionProperty = directionToConnectionProperty.get(direction);
 
+        // if the connection is already extended
         boolean isOldConnection = oldState.getValue(targetConnectionProperty);
+        BlockPos effectNeighborPos = pos.relative(direction);
 
-        if (!isOldConnection)
-            level.setBlockAndUpdate(pos, oldState
+        BooleanProperty effectNeighborConnectionProperty = directionToConnectionProperty.get(direction.getOpposite());
+
+        if (!isOldConnection) {
+            if (targetRedstoneProperty == null) {
+                level.setBlockAndUpdate(pos, oldState
                     .setValue(targetConnectionProperty, true)
+                );
+            } else {
+                level.setBlockAndUpdate(pos, oldState
+                    .setValue(targetConnectionProperty, true)
+                    .setValue(targetRedstoneProperty, false)
+                );
+            }
 
-            );
-        else
-            level.setBlockAndUpdate(pos, oldState
+            // extend neighbor too
+            if (level.getBlockState(effectNeighborPos).getBlock() instanceof SignalWireBlock neighborBlock) {
+                level.setBlockAndUpdate(
+                    effectNeighborPos,
+                    level.getBlockState(effectNeighborPos).setValue(
+                        effectNeighborConnectionProperty, true
+                    )
+                );
+            }
+
+        } else {
+            if (targetRedstoneProperty == null) {
+                level.setBlockAndUpdate(pos, oldState
                     .setValue(targetConnectionProperty, false)
-            );
+                );
+            } else {
+                level.setBlockAndUpdate(pos, oldState
+                    .setValue(targetConnectionProperty, false)
+                    .setValue(targetRedstoneProperty, false)
+                );
+            }
+
+            // remove neighbor connection
+            if (level.getBlockState(effectNeighborPos).getBlock() instanceof SignalWireBlock neighborBlock) {
+                level.setBlockAndUpdate(
+                    effectNeighborPos,
+                    level.getBlockState(effectNeighborPos).setValue(
+                        effectNeighborConnectionProperty, false
+                    )
+                );
+            }
+        }
+
     }
 
     @Override
@@ -247,14 +288,12 @@ public class SignalWireBlock extends Block implements EntityBlock {
 //                    + ", Neighbor: " + "x: " + neighborPos.getX() + ", y: " + neighborPos.getY() + ", z: " + neighborPos.getZ());
                 if (info == null) {
 //                    System.out.println("Neighbor not connected");
-                }
-                else if (!SignalWireBlock.directionHasConnection(entity, direction)) {
+                } else if (!SignalWireBlock.directionHasConnection(entity, direction)) {
 //                    System.out.println("Self not connected");
-                }
-                else if (info != null && SignalWireBlock.directionHasConnection(entity, direction)) {
+                } else if (info != null && SignalWireBlock.directionHasConnection(entity, direction)) {
                     if (info.getSignalValue() == null && entity.getSignalValue() == null) return;
                     if ((info.getSignalValue() != null && entity.getSignalValue() != null) &&
-                    (info.getSignalValue().intValue() == entity.getSignalValue().intValue())) return;
+                        (info.getSignalValue().intValue() == entity.getSignalValue().intValue())) return;
 
                     if (info.getSignalValue() == null) {
                         entity.setNoSignal();
@@ -303,9 +342,9 @@ public class SignalWireBlock extends Block implements EntityBlock {
             if (state.getValue(directionProperties[i])) {
                 BlockPos nearbyPos = pos.relative(directions[i]);
                 SignalWireInformation info = level.getCapability(
-                        RegisterCapabilities.SIGNAL_VALUE,
-                        nearbyPos,
-                        directions[i]
+                    RegisterCapabilities.SIGNAL_VALUE,
+                    nearbyPos,
+                    directions[i]
                 );
 
                 if (info != null) {

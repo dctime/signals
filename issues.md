@@ -127,5 +127,9 @@ item quick swap not working
 
 when card plugged in. Missing wires at input will cause a null pointer exception. (2)
 
+### 2025.5.16
+
+wires should extend neighbor signal wire when self wants to extend (1)
+
 
 
