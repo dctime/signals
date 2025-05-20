@@ -124,3 +124,7 @@ Rotate Const Signal Block when placement
 
 Fixed issue 2025.5.16 (1)
 
+### 2025.5.21
+
+Init Ponder of signal wire block
+

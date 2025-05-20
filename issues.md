@@ -22,8 +22,9 @@ Let the one who is updated to modify its capability, not the one who sends the u
 ### 2025.4.27
 
 The Collision box of the SignalWireBlock is so small that when a wire is connected player will fall between the wires
+(Check CrossCollisionBlock.class)
 
-When placing the ConstSignalBlock, the FACING blockstate is always north. The block should be face to the player when placed.
+When placing the ConstSignalBlock, the FACING blockstate is always north. The block should be face to the player when placed. (x) (Fixed)
 
 ConstSignalBlock requires RF/t
 
