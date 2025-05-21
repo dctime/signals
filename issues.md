@@ -22,7 +22,7 @@ Let the one who is updated to modify its capability, not the one who sends the u
 ### 2025.4.27
 
 The Collision box of the SignalWireBlock is so small that when a wire is connected player will fall between the wires
-(Check CrossCollisionBlock.class)
+(Check CrossCollisionBlock.class) (Move to Issue 2025.5.21)
 
 When placing the ConstSignalBlock, the FACING blockstate is always north. The block should be face to the player when placed. (x) (Fixed)
 
@@ -132,6 +132,12 @@ when card plugged in. Missing wires at input will cause a null pointer exception
 ### 2025.5.16
 
 wires should extend neighbor signal wire when self wants to extend (1)
+
+### 2025.5.21
+
+Remove the collision box of the signal wire and the action box on the real model (1)
+
+Detect the shape not the direction when adjusting connections of the signal wire block
 
 
 

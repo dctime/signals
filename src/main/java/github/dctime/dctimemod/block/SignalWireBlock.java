@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.CubeVoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +41,30 @@ import java.util.List;
 
 
 public class SignalWireBlock extends Block implements EntityBlock {
+    private final VoxelShape BASE = Block.box(
+            8 - (double) WIRE_WIDTH/2,
+            8 - (double) WIRE_WIDTH/2,
+            8 - (double) WIRE_WIDTH/2,
+            8 + (double) WIRE_WIDTH/2,
+            8 + (double) WIRE_WIDTH/2,
+            8 + (double) WIRE_WIDTH/2
+    );
+
+    private final VoxelShape EAST_SHAPE = Block.box(8 + WIRE_WIDTH/2, 8 - WIRE_WIDTH/2,8-WIRE_WIDTH/2,
+            16, 8+WIRE_WIDTH/2, 8+WIRE_WIDTH/2);
+    private final VoxelShape WEST_SHAPE = Block.box(0, 8-WIRE_WIDTH/2 ,8-WIRE_WIDTH/2,
+            8-WIRE_WIDTH/2, 8+WIRE_WIDTH/2, 8+WIRE_WIDTH/2);
+    private final VoxelShape SOUTH_SHAPE = Block.box(8-WIRE_WIDTH/2, 8-WIRE_WIDTH/2 ,8+WIRE_WIDTH/2,
+            8+WIRE_WIDTH/2, 8+WIRE_WIDTH/2, 16);
+    private final VoxelShape NORTH_SHAPE = Block.box(8-WIRE_WIDTH/2, 8-WIRE_WIDTH/2 ,0,
+            8+WIRE_WIDTH/2, 8+WIRE_WIDTH/2, 8-WIRE_WIDTH/2);
+    private final VoxelShape UP_SHAPE = Block.box(8-WIRE_WIDTH/2, 8+WIRE_WIDTH/2 ,8-WIRE_WIDTH/2,
+            8+WIRE_WIDTH/2, 16, 8+WIRE_WIDTH/2);
+    private final VoxelShape DOWN_SHAPE = Block.box(8-WIRE_WIDTH/2, 0 ,8-WIRE_WIDTH/2,
+            8+WIRE_WIDTH/2, 8-WIRE_WIDTH/2, 8+WIRE_WIDTH/2);
+
+    VoxelShape[] shapes = new VoxelShape[2*2*2*2*2*2];
+
     public static HashMap<Direction, BooleanProperty> directionToConnectionProperty;
 
     public SignalWireBlock(Properties properties) {
@@ -61,6 +86,8 @@ public class SignalWireBlock extends Block implements EntityBlock {
         directionToConnectionProperty.put(Direction.WEST, SignalWireBlock.WEST);
         directionToConnectionProperty.put(Direction.UP, SignalWireBlock.UP);
         directionToConnectionProperty.put(Direction.DOWN, SignalWireBlock.DOWN);
+
+        makeShapes();
     }
 
     @Override
@@ -122,32 +149,60 @@ public class SignalWireBlock extends Block implements EntityBlock {
         builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN);
     }
 
-    public static final float WIRE_WIDTH = 2.5f;
+    public static final float WIRE_WIDTH = 4f;
 
-    // collision box
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return Block.box(
-            8 - (double) WIRE_WIDTH / 2,
-            8 - (double) WIRE_WIDTH / 2,
-            8 - (double) WIRE_WIDTH / 2,
-            8 + (double) WIRE_WIDTH / 2,
-            8 + (double) WIRE_WIDTH / 2,
-            8 + (double) WIRE_WIDTH / 2
-        );
+        return Shapes.empty();
+    }
+
+
+    private void makeShapes() {
+        // 000000 north south east west up down
+        for (int i = 0; i < 2*2*2*2*2*2;i++) {
+            VoxelShape shape = Shapes.empty();
+            shape = Shapes.or(shape, BASE);
+            if ((i & 1) == 1)
+                shape = Shapes.or(shape, NORTH_SHAPE);
+            if ((i & 2) == 2)
+                shape = Shapes.or(shape, SOUTH_SHAPE);
+            if ((i & 4) == 4)
+                shape = Shapes.or(shape, EAST_SHAPE);
+            if ((i & 8) == 8)
+                shape = Shapes.or(shape, WEST_SHAPE);
+            if ((i & 16) == 16)
+                shape = Shapes.or(shape, UP_SHAPE);
+            if ((i & 32) == 32)
+                shape = Shapes.or(shape, DOWN_SHAPE);
+            shapes[i] = shape;
+        }
     }
 
     // break box
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return Block.box(
-            8 - (double) WIRE_WIDTH,
-            8 - (double) WIRE_WIDTH,
-            8 - (double) WIRE_WIDTH,
-            8 + (double) WIRE_WIDTH,
-            8 + (double) WIRE_WIDTH,
-            8 + (double) WIRE_WIDTH
-        );
+        int shapeIndex = 0;
+
+        if (state.getValue(NORTH)) {
+            shapeIndex += 1;
+        }
+        if (state.getValue(SOUTH)) {
+            shapeIndex += 2;
+        }
+        if (state.getValue(EAST)) {
+            shapeIndex += 4;
+        }
+        if (state.getValue(WEST)) {
+            shapeIndex += 8;
+        }
+        if (state.getValue(UP)) {
+            shapeIndex += 16;
+        }
+        if (state.getValue(DOWN)) {
+            shapeIndex += 32;
+        }
+
+        return shapes[shapeIndex];
     }
 
     @Override
