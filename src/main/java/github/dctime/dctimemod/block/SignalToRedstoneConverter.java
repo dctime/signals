@@ -78,7 +78,12 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
         Item mainHandItem = player.getMainHandItem().getItem();
         if (mainHandItem == Items.REDSTONE) {
             System.out.println("Player hand has redstone");
-            switchRedstoneOutput(hitResult.getDirection(), level, pos);
+            Direction accessingDirection = getPlayerLookingAtModel(player, state, level, pos);
+            if (accessingDirection == null) {
+                System.out.println("AccessingDirection is null");
+                accessingDirection = hitResult.getDirection();
+            }
+            switchRedstoneOutput(accessingDirection, level, pos);
             return InteractionResult.SUCCESS;
         } else if (mainHandItem == RegisterItems.SIGNAL_DETECTOR.get()) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
@@ -88,11 +93,17 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
             return InteractionResult.SUCCESS;
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Adjusting using empty hand");
-            BooleanProperty targetRedstoneProperty = directionToRedstoneProperty.get(hitResult.getDirection());
+
+            Direction accessingDirection = getPlayerLookingAtModel(player, state, level, pos);
+            if (accessingDirection == null) {
+                System.out.println("AccessingDirection is null");
+                accessingDirection = hitResult.getDirection();
+            }
+            BooleanProperty targetRedstoneProperty = directionToRedstoneProperty.get(accessingDirection);
             if (!player.isCrouching())
-                switchConnectionOutput(hitResult.getDirection(), level, pos, player, targetRedstoneProperty);
+                switchConnectionOutput(accessingDirection, level, pos, player, targetRedstoneProperty);
             else
-                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos, player, targetRedstoneProperty);
+                switchConnectionOutput(accessingDirection.getOpposite(), level, pos, player, targetRedstoneProperty);
             updateWireValue(state, level, pos);
             return InteractionResult.SUCCESS;
         }

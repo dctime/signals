@@ -133,3 +133,5 @@ Fixed Issue 2025.5.21 (1)
 ### 2025.5.22
 
 Fixed Issue 2025.5.21 (2)
+
+SignalToRedstone Converter now fixed as signal wire block does

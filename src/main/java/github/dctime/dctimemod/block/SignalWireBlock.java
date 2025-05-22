@@ -232,7 +232,6 @@ public class SignalWireBlock extends Block implements EntityBlock {
             return InteractionResult.SUCCESS;
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Player hand is empty");
-            // FIXME: getPlayerLookingAtModel include base into it
             Direction accessingDirection = getPlayerLookingAtModel(player, state, level, pos);
             if (accessingDirection == null) {
                 System.out.println("AccessingDirection is null");
@@ -261,7 +260,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
     }
 
 
-    private @Nullable Direction getPlayerLookingAtModel(Player player, BlockState state, BlockGetter world, BlockPos pos) {
+    protected @Nullable Direction getPlayerLookingAtModel(Player player, BlockState state, BlockGetter world, BlockPos pos) {
         Vec3 start = player.getEyePosition(1F);
         Vec3 end = start.add(player.getLookAngle().normalize().scale(getBlockReachDistance(player)));
 
@@ -291,10 +290,6 @@ public class SignalWireBlock extends Block implements EntityBlock {
     protected void switchConnectionOutput(Direction direction, Level level, BlockPos pos, Player player, @Nullable BooleanProperty targetRedstoneProperty) {
         BlockState oldState = level.getBlockState(pos);
         BooleanProperty targetConnectionProperty = directionToConnectionProperty.get(direction);
-
-
-
-
 
         // if the connection is already extended
         boolean isOldConnection = oldState.getValue(targetConnectionProperty);
