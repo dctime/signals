@@ -149,6 +149,8 @@ Detect the shape not the direction when adjusting connections of the signal wire
 
 **Add GUI Texture**
 
+**Ponder not checking if create mod installed**
+
 
 
 
