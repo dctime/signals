@@ -13,7 +13,7 @@ Signal Wire needs collision block and needs a way to detect which multipart it c
 
 ### 2025.4.24
 
-Signal Wire break box isnt the same as the model (make the break box bigger than the unconnected one to make it)
+Signal Wire break box isnt the same as the model (make the break box bigger than the unconnected one to make it) (Fixed)
 
 ### 2025.4.25
 
@@ -26,7 +26,7 @@ The Collision box of the SignalWireBlock is so small that when a wire is connect
 
 When placing the ConstSignalBlock, the FACING blockstate is always north. The block should be face to the player when placed. (x) (Fixed)
 
-ConstSignalBlock requires RF/t
+ConstSignalBlock requires RF/t (x)
 
 Nearby wires not updated when break (4)
 
@@ -93,7 +93,7 @@ Placing Blocks on operation signal block will cause serious error. (10)
 
 Using redstone dust will got ghost redstone dust placed (1)
 
-Turning off functionality if not the same amount of input and output sides counter can be cached.
+**Turning off functionality if not the same amount of input and output sides counter can be cached.**
 
 Const Signal Block output side should be bigger so that play knows where the output is. (3)
 
@@ -101,14 +101,14 @@ Let the stick detect if the operation block is functioning (4)
 
 BlockItem rendering (5)
 
-Wires item not 3D
+**Wires item not 3D**
 
 ### 2025.5.9
 
-Add GUI to signal opeartion block and change the operation by the card inserted into.
+Add GUI to signal opeartion block and change the operation by the card inserted into. (Fixed)
 
 The card defines how many input and output ports is required, the operation and holds constant if necessary. 
-No idea how to implement it.
+No idea how to implement it. (Fixed)
 
 Signal Operation block needs screen (3)
 
@@ -118,10 +118,10 @@ Signal Operation Block doesn't store cards when leaving the game (5)
 
 Check it operation block valid by the card insert into (6)
 
-Create a configurator to modify the connections and ports of the wire block and operation block
-because modifying the operator block requires empty hand while you have to hold item in order to open the gui
+**Create a configurator to modify the connections and ports of the wire block and operation block
+because modifying the operator block requires empty hand while you have to hold item in order to open the gui**
 
-Screen tooltip not working
+**Screen tooltip not working**
 
 ### 2025.5.10
 
@@ -138,6 +138,16 @@ wires should extend neighbor signal wire when self wants to extend (1)
 Remove the collision box of the signal wire and the action box on the real model (1)
 
 Detect the shape not the direction when adjusting connections of the signal wire block (2)
+
+### 2025.5.23
+
+**Wire can be break by water**
+
+**Item Drops seem too big**
+
+**GUI quick swap bugged**
+
+**Add GUI Texture**
 
 
 
