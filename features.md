@@ -130,3 +130,6 @@ Init Ponder of signal wire block
 
 Fixed Issue 2025.5.21 (1)
 
+### 2025.5.22
+
+Fixed Issue 2025.5.21 (2)

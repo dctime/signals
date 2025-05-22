@@ -1,5 +1,6 @@
 package github.dctime.dctimemod.block;
 
+import com.mojang.datafixers.util.Pair;
 import github.dctime.dctimemod.RegisterBlockEntities;
 import github.dctime.dctimemod.RegisterCapabilities;
 import github.dctime.dctimemod.RegisterItems;
@@ -11,6 +12,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,6 +31,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.CubeVoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -64,7 +68,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
             8+WIRE_WIDTH/2, 8-WIRE_WIDTH/2, 8+WIRE_WIDTH/2);
 
     VoxelShape[] shapes = new VoxelShape[2*2*2*2*2*2];
-
+    public static HashMap<VoxelShape, Direction> voxelShapeDirectionPair;
     public static HashMap<Direction, BooleanProperty> directionToConnectionProperty;
 
     public SignalWireBlock(Properties properties) {
@@ -79,6 +83,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
         );
 
         directionToConnectionProperty = new HashMap<>();
+        voxelShapeDirectionPair = new HashMap<>();
 
         directionToConnectionProperty.put(Direction.NORTH, SignalWireBlock.NORTH);
         directionToConnectionProperty.put(Direction.SOUTH, SignalWireBlock.SOUTH);
@@ -86,6 +91,14 @@ public class SignalWireBlock extends Block implements EntityBlock {
         directionToConnectionProperty.put(Direction.WEST, SignalWireBlock.WEST);
         directionToConnectionProperty.put(Direction.UP, SignalWireBlock.UP);
         directionToConnectionProperty.put(Direction.DOWN, SignalWireBlock.DOWN);
+
+        voxelShapeDirectionPair.put(NORTH_SHAPE, Direction.NORTH);
+        voxelShapeDirectionPair.put(SOUTH_SHAPE, Direction.SOUTH);
+        voxelShapeDirectionPair.put(EAST_SHAPE, Direction.EAST);
+        voxelShapeDirectionPair.put(WEST_SHAPE, Direction.WEST);
+        voxelShapeDirectionPair.put(UP_SHAPE, Direction.UP);
+        voxelShapeDirectionPair.put(DOWN_SHAPE, Direction.DOWN);
+        voxelShapeDirectionPair.put(BASE, null);
 
         makeShapes();
     }
@@ -219,10 +232,18 @@ public class SignalWireBlock extends Block implements EntityBlock {
             return InteractionResult.SUCCESS;
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Player hand is empty");
-            if (!player.isCrouching())
-                switchConnectionOutput(hitResult.getDirection(), level, pos, null);
-            else
-                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos, null);
+            // FIXME: getPlayerLookingAtModel include base into it
+            Direction accessingDirection = getPlayerLookingAtModel(player, state, level, pos);
+            if (accessingDirection == null) {
+                System.out.println("AccessingDirection is null");
+                accessingDirection = hitResult.getDirection();
+            }
+            if (!player.isCrouching()) {
+                switchConnectionOutput(accessingDirection, level, pos, player, null);
+            }
+            else {
+                switchConnectionOutput(accessingDirection.getOpposite(), level, pos, player, null);
+            }
         }
 
         // changing the wire configuration may cause wire connection change
@@ -231,9 +252,49 @@ public class SignalWireBlock extends Block implements EntityBlock {
         return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
-    protected void switchConnectionOutput(Direction direction, Level level, BlockPos pos, @Nullable BooleanProperty targetRedstoneProperty) {
+    public float getBlockReachDistance(Player player) {
+        AttributeInstance attribute = player.getAttribute(Attributes.BLOCK_INTERACTION_RANGE);
+        if (attribute == null) {
+            return (float) Attributes.BLOCK_INTERACTION_RANGE.value().getDefaultValue();
+        }
+        return (float) attribute.getValue();
+    }
+
+
+    private @Nullable Direction getPlayerLookingAtModel(Player player, BlockState state, BlockGetter world, BlockPos pos) {
+        Vec3 start = player.getEyePosition(1F);
+        Vec3 end = start.add(player.getLookAngle().normalize().scale(getBlockReachDistance(player)));
+
+        double minDistance = Double.MAX_VALUE;
+        VoxelShape targetVoxel = Shapes.empty();
+
+        for (VoxelShape shape : voxelShapeDirectionPair.keySet()) {
+            double d = getDistanceBetweenEyeAndVoxelShape(state, world, pos, start, end, shape);
+            if (d < minDistance) {
+                targetVoxel = shape;
+                minDistance = d;
+            }
+        }
+
+        if (targetVoxel.isEmpty()) return null;
+        return voxelShapeDirectionPair.get(targetVoxel);
+    }
+
+    private double getDistanceBetweenEyeAndVoxelShape(BlockState state, BlockGetter world, BlockPos pos, Vec3 start, Vec3 end, VoxelShape shape) {
+        BlockHitResult blockRayTraceResult = world.clipWithInteractionOverride(start, end, pos, shape, state);
+        if (blockRayTraceResult == null) {
+            return Double.MAX_VALUE;
+        }
+        return blockRayTraceResult.getLocation().distanceTo(start);
+    }
+
+    protected void switchConnectionOutput(Direction direction, Level level, BlockPos pos, Player player, @Nullable BooleanProperty targetRedstoneProperty) {
         BlockState oldState = level.getBlockState(pos);
         BooleanProperty targetConnectionProperty = directionToConnectionProperty.get(direction);
+
+
+
+
 
         // if the connection is already extended
         boolean isOldConnection = oldState.getValue(targetConnectionProperty);
@@ -287,6 +348,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
         }
 
     }
+
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {

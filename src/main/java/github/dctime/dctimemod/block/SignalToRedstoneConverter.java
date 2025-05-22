@@ -90,9 +90,9 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
             System.out.println("Adjusting using empty hand");
             BooleanProperty targetRedstoneProperty = directionToRedstoneProperty.get(hitResult.getDirection());
             if (!player.isCrouching())
-                switchConnectionOutput(hitResult.getDirection(), level, pos, targetRedstoneProperty);
+                switchConnectionOutput(hitResult.getDirection(), level, pos, player, targetRedstoneProperty);
             else
-                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos, targetRedstoneProperty);
+                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos, player, targetRedstoneProperty);
             updateWireValue(state, level, pos);
             return InteractionResult.SUCCESS;
         }

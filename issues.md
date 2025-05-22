@@ -137,7 +137,7 @@ wires should extend neighbor signal wire when self wants to extend (1)
 
 Remove the collision box of the signal wire and the action box on the real model (1)
 
-Detect the shape not the direction when adjusting connections of the signal wire block
+Detect the shape not the direction when adjusting connections of the signal wire block (2)
 
 
 
