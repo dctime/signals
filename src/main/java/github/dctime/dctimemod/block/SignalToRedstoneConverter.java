@@ -41,6 +41,7 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
                 .setValue(SignalWireBlock.WEST, false)
                 .setValue(SignalWireBlock.UP, false)
                 .setValue(SignalWireBlock.DOWN, false)
+                .setValue(SignalWireBlock.WATERLOGGED, false)
         );
 
         directionToRedstoneProperty = new HashMap<>();

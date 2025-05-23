@@ -17,19 +17,24 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -44,7 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class SignalWireBlock extends Block implements EntityBlock {
+public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
     private final VoxelShape BASE = Block.box(
             8 - (double) WIRE_WIDTH/2,
             8 - (double) WIRE_WIDTH/2,
@@ -80,6 +85,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
             .setValue(WEST, false)
             .setValue(UP, false)
             .setValue(DOWN, false)
+            .setValue(WATERLOGGED, false)
         );
 
         directionToConnectionProperty = new HashMap<>();
@@ -114,6 +120,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
     public static final BooleanProperty WEST = BooleanProperty.create("signal_wire_west");
     public static final BooleanProperty UP = BooleanProperty.create("signal_wire_up");
     public static final BooleanProperty DOWN = BooleanProperty.create("signal_wire_down");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public static boolean directionGotConnection(SignalWireBlockEntity entity, @Nullable Direction direction) {
         switch (direction) {
@@ -159,7 +166,7 @@ public class SignalWireBlock extends Block implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN);
+        builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN, WATERLOGGED);
     }
 
     public static final float WIRE_WIDTH = 4f;
@@ -468,5 +475,21 @@ public class SignalWireBlock extends Block implements EntityBlock {
         }
         // for signal block nearby case
         level.updateNeighborsAt(pos, this);
+    }
+
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+        return !(Boolean)state.getValue(WATERLOGGED);
+    }
+
+    @Override
+    protected FluidState getFluidState(BlockState state) {
+        return (Boolean)state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
+        return super.getStateForPlacement(context).setValue(WATERLOGGED,fluidstate.getType() == Fluids.WATER);
     }
 }

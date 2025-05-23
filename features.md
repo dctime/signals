@@ -135,3 +135,7 @@ Fixed Issue 2025.5.21 (1)
 Fixed Issue 2025.5.21 (2)
 
 SignalToRedstone Converter now fixed as signal wire block does
+
+### 2025.5.23
+
+Fixed 2025.5.23 (1) Now wires can be waterlogged

@@ -141,7 +141,7 @@ Detect the shape not the direction when adjusting connections of the signal wire
 
 ### 2025.5.23
 
-**Wire can be break by water**
+Wire can be break by water (1)
 
 **Item Drops seem too big**
 
