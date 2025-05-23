@@ -1,6 +1,7 @@
 package github.dctime.dctimemod.block;
 
 import github.dctime.dctimemod.RegisterBlockEntities;
+import github.dctime.dctimemod.menu.FlawlessExchangerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;

@@ -1,8 +1,8 @@
 package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.block.ConstSignalMenu;
-import github.dctime.dctimemod.block.FlawlessExchangerMenu;
-import github.dctime.dctimemod.block.SignalOperationMenu;
+import github.dctime.dctimemod.menu.ConstSignalMenu;
+import github.dctime.dctimemod.menu.FlawlessExchangerMenu;
+import github.dctime.dctimemod.menu.SignalOperationMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;

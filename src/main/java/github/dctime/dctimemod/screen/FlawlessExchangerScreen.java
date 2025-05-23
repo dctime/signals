@@ -1,15 +1,16 @@
-package github.dctime.dctimemod.block;
+package github.dctime.dctimemod.screen;
 
 
+import github.dctime.dctimemod.menu.FlawlessExchangerMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 
-public class SignalOperationScreen extends AbstractContainerScreen<SignalOperationMenu> {
+public class FlawlessExchangerScreen extends AbstractContainerScreen<FlawlessExchangerMenu> {
 
-    public SignalOperationScreen(SignalOperationMenu menu, Inventory playerInventory, Component title) {
+    public FlawlessExchangerScreen(FlawlessExchangerMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
     }
 
@@ -21,6 +22,8 @@ public class SignalOperationScreen extends AbstractContainerScreen<SignalOperati
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
+        graphics.drawString(getMinecraft().font, menu.getProcessTime() + "", leftPos+(int)(imageWidth*0.1), topPos, 0xFFFFFF);
+        graphics.fill((int) (leftPos+titleLabelX+imageWidth*0.9), (int)(topPos+titleLabelY+imageHeight*0.1), (int)(leftPos+titleLabelX+imageWidth*0.95), (int)(topPos+inventoryLabelY-imageWidth*0.01), 0xFFFF0000);
     }
 
     @Override

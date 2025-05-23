@@ -1,13 +1,12 @@
-package github.dctime.dctimemod.block;
+package github.dctime.dctimemod.menu;
 
 import github.dctime.dctimemod.RegisterBlocks;
 import github.dctime.dctimemod.RegisterMenuTypes;
+import github.dctime.dctimemod.block.ConstSignalBlockEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 public class ConstSignalMenu extends AbstractContainerMenu {

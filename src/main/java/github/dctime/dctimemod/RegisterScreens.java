@@ -1,8 +1,8 @@
 package github.dctime.dctimemod;
 
-import github.dctime.dctimemod.block.ConstSignalScreen;
-import github.dctime.dctimemod.block.FlawlessExchangerScreen;
-import github.dctime.dctimemod.block.SignalOperationScreen;
+import github.dctime.dctimemod.screen.ConstSignalScreen;
+import github.dctime.dctimemod.screen.FlawlessExchangerScreen;
+import github.dctime.dctimemod.screen.SignalOperationScreen;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;

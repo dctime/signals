@@ -1,4 +1,4 @@
-package github.dctime.dctimemod;
+package github.dctime.dctimemod.compatability.create;
 
 import net.createmod.ponder.foundation.PonderIndex;
 

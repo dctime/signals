@@ -1,16 +1,12 @@
-package github.dctime.dctimemod;
+package github.dctime.dctimemod.compatability.create;
 
 
-import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
-import com.tterrag.registrate.util.entry.ItemEntry;
-import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
+import github.dctime.dctimemod.DCtimeMod;
+import github.dctime.dctimemod.RegisterBlocks;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class DCtimeModPonders {

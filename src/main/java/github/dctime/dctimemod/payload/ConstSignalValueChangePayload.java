@@ -1,12 +1,9 @@
 package github.dctime.dctimemod.payload;
 
-import com.mojang.datafixers.kinds.Const;
 import github.dctime.dctimemod.block.ConstSignalBlock;
 import github.dctime.dctimemod.block.ConstSignalBlockEntity;
-import github.dctime.dctimemod.block.ConstSignalMenu;
+import github.dctime.dctimemod.menu.ConstSignalMenu;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;

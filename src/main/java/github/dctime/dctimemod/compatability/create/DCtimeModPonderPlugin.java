@@ -1,6 +1,7 @@
-package github.dctime.dctimemod;
+package github.dctime.dctimemod.compatability.create;
 
 import com.simibubi.create.foundation.ponder.PonderWorldBlockEntityFix;
+import github.dctime.dctimemod.DCtimeMod;
 import net.createmod.ponder.api.level.PonderLevel;
 import net.createmod.ponder.api.registration.*;
 import net.minecraft.resources.ResourceLocation;

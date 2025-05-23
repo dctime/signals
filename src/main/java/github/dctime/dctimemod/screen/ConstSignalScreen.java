@@ -1,12 +1,12 @@
-package github.dctime.dctimemod.block;
+package github.dctime.dctimemod.screen;
 
-import com.mojang.blaze3d.platform.InputConstants;
+import github.dctime.dctimemod.block.ConstSignalBlockEntity;
+import github.dctime.dctimemod.menu.ConstSignalMenu;
 import github.dctime.dctimemod.payload.ConstSignalValueChangePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;

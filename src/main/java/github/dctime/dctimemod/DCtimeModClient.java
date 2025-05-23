@@ -1,5 +1,6 @@
 package github.dctime.dctimemod;
 
+import github.dctime.dctimemod.compatability.create.CreateDependencies;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
