@@ -149,7 +149,7 @@ Wire can be break by water (1)
 
 **Add GUI Texture**
 
-**Ponder not checking if create mod installed**
+Ponder not checked if create mod installed (5)
 
 
 

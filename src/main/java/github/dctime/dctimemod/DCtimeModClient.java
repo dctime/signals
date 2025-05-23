@@ -1,8 +1,8 @@
 package github.dctime.dctimemod;
 
-import net.createmod.ponder.foundation.PonderIndex;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -13,7 +13,9 @@ public class DCtimeModClient {
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        PonderIndex.addPlugin(new DCtimeModPonderPlugin());
+        if (ModList.get().isLoaded("create")) {
+            CreateDependencies.addDependencies();
+        }
     }
 }
 
