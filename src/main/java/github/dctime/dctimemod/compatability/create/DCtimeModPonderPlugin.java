@@ -1,6 +1,5 @@
 package github.dctime.dctimemod.compatability.create;
 
-import com.simibubi.create.foundation.ponder.PonderWorldBlockEntityFix;
 import github.dctime.dctimemod.DCtimeMod;
 import net.createmod.ponder.api.level.PonderLevel;
 import net.createmod.ponder.api.registration.*;
@@ -25,11 +24,6 @@ public class DCtimeModPonderPlugin implements PonderPlugin {
     @Override
     public void registerSharedText(SharedTextRegistrationHelper helper) {
         // helper.registerSharedText("rpm8", "8 RPM");
-    }
-
-    @Override
-    public void onPonderLevelRestore(PonderLevel ponderLevel) {
-        PonderWorldBlockEntityFix.fixControllerBlockEntities(ponderLevel);
     }
 
     @Override

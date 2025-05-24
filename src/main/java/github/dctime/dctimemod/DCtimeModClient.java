@@ -14,7 +14,7 @@ public class DCtimeModClient {
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        if (ModList.get().isLoaded("create")) {
+        if (ModList.get().isLoaded("ponder")) {
             CreateDependencies.addDependencies();
         }
     }

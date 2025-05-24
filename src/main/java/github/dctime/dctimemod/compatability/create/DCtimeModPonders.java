@@ -1,7 +1,6 @@
 package github.dctime.dctimemod.compatability.create;
 
 
-import com.tterrag.registrate.util.entry.RegistryEntry;
 import github.dctime.dctimemod.DCtimeMod;
 import github.dctime.dctimemod.RegisterBlocks;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
@@ -13,9 +12,8 @@ public class DCtimeModPonders {
     public static final ResourceLocation SIGNALS = ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signals");
 
     public static void registerTags(PonderTagRegistrationHelper<ResourceLocation> helper) {
-        PonderTagRegistrationHelper<RegistryEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
 
-        HELPER.registerTag(SIGNALS)
+        helper.registerTag(SIGNALS)
                 .addToIndex()
                 .item(RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get(), true, false)
                 .title("Signal Blocks")

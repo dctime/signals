@@ -141,3 +141,7 @@ SignalToRedstone Converter now fixed as signal wire block does
 Fixed 2025.5.23 (1) Now wires can be waterlogged
 
 Fixed Issue Ponder not checked if create mod installed 2025.5.23 (5)
+
+### 2025.5.24
+
+Fixed Issue 2025.5.24 (1)
