@@ -145,3 +145,7 @@ Fixed Issue Ponder not checked if create mod installed 2025.5.23 (5)
 ### 2025.5.24
 
 Fixed Issue 2025.5.24 (1)
+
+### 2025.5.26
+
+Fixed Issue 2025.5.23 (4)

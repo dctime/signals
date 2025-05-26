@@ -147,7 +147,7 @@ Wire can be break by water (1)
 
 **GUI quick swap bugged**
 
-**Add GUI Texture**
+Add GUI Texture (4)
 
 Ponder not checked if create mod installed (5)
 

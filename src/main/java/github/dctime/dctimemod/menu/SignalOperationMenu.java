@@ -32,7 +32,7 @@ public class SignalOperationMenu extends AbstractContainerMenu {
         this.data = data;
 
         addDataSlots(this.data);
-        addSlot(new SlotItemHandler(cardHandler, 0, 0, 0));
+        addSlot(new SlotItemHandler(cardHandler, 0, 80, 37));
 
         int rows = 3;
         int i = (rows - 4) * 18;
