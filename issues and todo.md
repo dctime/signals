@@ -121,7 +121,7 @@ Check it operation block valid by the card insert into (6)
 **Create a configurator to modify the connections and ports of the wire block and operation block
 because modifying the operator block requires empty hand while you have to hold item in order to open the gui**
 
-**Screen tooltip not working**
+Screen tooltip not working (8)
 
 ### 2025.5.10
 
@@ -145,7 +145,7 @@ Wire can be break by water (1)
 
 **Item Drops seem too big**
 
-**GUI quick swap bugged**
+GUI quick swap bugged (3)
 
 Add GUI Texture (4)
 
@@ -154,6 +154,12 @@ Ponder not checked if create mod installed (5)
 ### 2025.5.24
 
 Use ponder library instead of full create library (1)
+
+### 2025.5.27
+
+**Add ponder tutorial to signal wire block**
+
+**change texture of signal to redstone converter**
 
 
 

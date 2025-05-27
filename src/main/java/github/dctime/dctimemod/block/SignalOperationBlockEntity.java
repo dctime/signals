@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class SignalOperationBlockEntity extends BlockEntity {
     public static class CardItemStackHandler extends ItemStackHandler {
@@ -34,6 +35,14 @@ public class SignalOperationBlockEntity extends BlockEntity {
         public int getSlotLimit(int slot) {
             return 1;
         }
+
+        // server side check SignalOperationMenu CardSlotItemHandler for client side
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return stack.getItem() instanceof SignalOperationBaseCardItem;
+        }
+
+
     }
 
     public static final int DATA_SIZE = 0;
