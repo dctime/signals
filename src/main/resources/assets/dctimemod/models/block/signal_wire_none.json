@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "dctimemod:block/signal_wire"
+		"1": "dctimemod:block/signal_wire",
+		"particle": "dctimemod:block/signal_wire"
 	},
 	"elements": [
 		{

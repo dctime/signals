@@ -163,7 +163,7 @@ Use ponder library instead of full create library (1)
 
 setting redstone output with a redstone dust will place redstone on the ground for a while (3)
 
-**signal wires break particle missing texture**
+signal wires break particle missing texture (4)
 
 **Jade show signal wire value**
 
