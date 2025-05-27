@@ -46,7 +46,7 @@ public class DataGen {
         //item models
         generator.addProvider(
                 event.includeClient(),
-                new ItemModelProvider(output, existingFileHelper)
+                new DCtimeItemModelProvider(output, existingFileHelper)
         );
         // language provider
         event.createProvider(DCtimeLanguageProvider::new);

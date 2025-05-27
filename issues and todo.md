@@ -101,7 +101,7 @@ Let the stick detect if the operation block is functioning (4)
 
 BlockItem rendering (5)
 
-**Wires item not 3D**
+Wires item not 3D (6)
 
 ### 2025.5.9
 
@@ -143,7 +143,7 @@ Detect the shape not the direction when adjusting connections of the signal wire
 
 Wire can be break by water (1)
 
-**Item Drops seem too big**
+Item Drops seem too big (2)
 
 GUI quick swap bugged (3)
 
@@ -166,6 +166,10 @@ setting redstone output with a redstone dust will place redstone on the ground f
 signal wires break particle missing texture (4)
 
 **Jade show signal wire value**
+
+### 2025.5.28
+
+**Click the model part while it isnt extended with make it extend which should remove the connection of the part behind**
 
 
 

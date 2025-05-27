@@ -8,8 +8,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.Objects;
 
-public class ItemModelProvider extends net.neoforged.neoforge.client.model.generators.ItemModelProvider {
-    public ItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+public class DCtimeItemModelProvider extends net.neoforged.neoforge.client.model.generators.ItemModelProvider {
+    public DCtimeItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, DCtimeMod.MODID, existingFileHelper);
     }
 
@@ -20,6 +20,7 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
         multiModelBlock(RegisterBlocks.SINGAL_WIRE.get(), "signal_wire_none");
         multiModelBlock(RegisterBlocks.SIGNAL_OPERATION_BLOCK.get(), "operation_block_none");
         multiModelBlock(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER.get(), "signal_wire_none");
+//        withExistingParent(getBlockKey(RegisterBlocks.SINGAL_WIRE.get()), mcLoc("item/generated")).texture("layer0", modLoc("block/signal_wire"));
         basicItem(RegisterItems.SIGNAL_DETECTOR.get());
         basicItem(RegisterItems.AND_CARD.get());
         basicItem(RegisterItems.OR_CARD.get());
