@@ -73,7 +73,7 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) {
-            return super.useWithoutItem(state, level, pos, player, hitResult);
+            return InteractionResult.SUCCESS;
         }
 
         Item mainHandItem = player.getMainHandItem().getItem();
@@ -85,13 +85,13 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
                 accessingDirection = hitResult.getDirection();
             }
             switchRedstoneOutput(accessingDirection, level, pos);
-            return InteractionResult.SUCCESS;
+            return InteractionResult.CONSUME;
         } else if (mainHandItem == RegisterItems.SIGNAL_DETECTOR.get()) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
             Integer signalValue = entity.getSignalValue();
             if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), true);
             else player.displayClientMessage(Component.literal("Signal Value: " + signalValue), true);
-            return InteractionResult.SUCCESS;
+            return InteractionResult.CONSUME;
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Adjusting using empty hand");
 
@@ -106,7 +106,7 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
             else
                 switchConnectionOutput(accessingDirection.getOpposite(), level, pos, player, targetRedstoneProperty);
             updateWireValue(state, level, pos);
-            return InteractionResult.SUCCESS;
+            return InteractionResult.CONSUME;
         }
 
         return InteractionResult.PASS;

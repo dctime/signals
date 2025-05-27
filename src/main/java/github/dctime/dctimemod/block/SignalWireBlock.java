@@ -227,7 +227,7 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (level.isClientSide()) return super.useWithoutItem(state, level, pos, player, hitResult);
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
         //server
 
         if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
@@ -236,7 +236,7 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
             if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), true);
             else player.displayClientMessage(Component.literal("Signal Value: " + signalValue), true);
 
-            return InteractionResult.SUCCESS;
+            return InteractionResult.CONSUME;
         } else if (player.getMainHandItem().isEmpty()) {
             System.out.println("Player hand is empty");
             Direction accessingDirection = getPlayerLookingAtModel(player, state, level, pos);
@@ -255,7 +255,7 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
         // changing the wire configuration may cause wire connection change
         updateWireValue(state, level, pos);
 
-        return super.useWithoutItem(state, level, pos, player, hitResult);
+        return InteractionResult.CONSUME;
     }
 
     public float getBlockReachDistance(Player player) {

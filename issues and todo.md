@@ -161,6 +161,11 @@ Use ponder library instead of full create library (1)
 
 **change texture of signal to redstone converter**
 
+setting redstone output with a redstone dust will place redstone on the ground for a while (3)
+
+**signal wires break particle missing texture**
+
+**Jade show signal wire value**
 
 
 
