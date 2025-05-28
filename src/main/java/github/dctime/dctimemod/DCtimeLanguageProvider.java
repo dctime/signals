@@ -16,7 +16,7 @@ public class DCtimeLanguageProvider extends LanguageProvider {
         this.add("itemGroup." + DCtimeMod.MODID + ".dctimemodtab", "DCtime Mod");
 
         // ponder text
-        if (ModList.get().isLoaded("create")) {
+        if (ModList.get().isLoaded("ponder")) {
             CreateDependencies.dependenciesDataGen(this);
         }
     }
