@@ -169,7 +169,7 @@ signal wires break particle missing texture (4)
 
 ### 2025.5.28
 
-**Click the model part while it isnt extended with make it extend which should remove the connection of the part behind**
+Click the model part while it isnt extended with make it extend which should remove the connection of the part behind (1)
 
 
 

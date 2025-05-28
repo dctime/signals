@@ -51,41 +51,41 @@ import java.util.List;
 
 public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
     private final VoxelShape BASE = Block.box(
-            8 - (double) WIRE_WIDTH/2,
-            8 - (double) WIRE_WIDTH/2,
-            8 - (double) WIRE_WIDTH/2,
-            8 + (double) WIRE_WIDTH/2,
-            8 + (double) WIRE_WIDTH/2,
-            8 + (double) WIRE_WIDTH/2
+            8 - (double) WIRE_WIDTH / 2,
+            8 - (double) WIRE_WIDTH / 2,
+            8 - (double) WIRE_WIDTH / 2,
+            8 + (double) WIRE_WIDTH / 2,
+            8 + (double) WIRE_WIDTH / 2,
+            8 + (double) WIRE_WIDTH / 2
     );
 
-    private final VoxelShape EAST_SHAPE = Block.box(8 + WIRE_WIDTH/2, 8 - WIRE_WIDTH/2,8-WIRE_WIDTH/2,
-            16, 8+WIRE_WIDTH/2, 8+WIRE_WIDTH/2);
-    private final VoxelShape WEST_SHAPE = Block.box(0, 8-WIRE_WIDTH/2 ,8-WIRE_WIDTH/2,
-            8-WIRE_WIDTH/2, 8+WIRE_WIDTH/2, 8+WIRE_WIDTH/2);
-    private final VoxelShape SOUTH_SHAPE = Block.box(8-WIRE_WIDTH/2, 8-WIRE_WIDTH/2 ,8+WIRE_WIDTH/2,
-            8+WIRE_WIDTH/2, 8+WIRE_WIDTH/2, 16);
-    private final VoxelShape NORTH_SHAPE = Block.box(8-WIRE_WIDTH/2, 8-WIRE_WIDTH/2 ,0,
-            8+WIRE_WIDTH/2, 8+WIRE_WIDTH/2, 8-WIRE_WIDTH/2);
-    private final VoxelShape UP_SHAPE = Block.box(8-WIRE_WIDTH/2, 8+WIRE_WIDTH/2 ,8-WIRE_WIDTH/2,
-            8+WIRE_WIDTH/2, 16, 8+WIRE_WIDTH/2);
-    private final VoxelShape DOWN_SHAPE = Block.box(8-WIRE_WIDTH/2, 0 ,8-WIRE_WIDTH/2,
-            8+WIRE_WIDTH/2, 8-WIRE_WIDTH/2, 8+WIRE_WIDTH/2);
+    private final VoxelShape EAST_SHAPE = Block.box(8 + WIRE_WIDTH / 2, 8 - WIRE_WIDTH / 2, 8 - WIRE_WIDTH / 2,
+            16, 8 + WIRE_WIDTH / 2, 8 + WIRE_WIDTH / 2);
+    private final VoxelShape WEST_SHAPE = Block.box(0, 8 - WIRE_WIDTH / 2, 8 - WIRE_WIDTH / 2,
+            8 - WIRE_WIDTH / 2, 8 + WIRE_WIDTH / 2, 8 + WIRE_WIDTH / 2);
+    private final VoxelShape SOUTH_SHAPE = Block.box(8 - WIRE_WIDTH / 2, 8 - WIRE_WIDTH / 2, 8 + WIRE_WIDTH / 2,
+            8 + WIRE_WIDTH / 2, 8 + WIRE_WIDTH / 2, 16);
+    private final VoxelShape NORTH_SHAPE = Block.box(8 - WIRE_WIDTH / 2, 8 - WIRE_WIDTH / 2, 0,
+            8 + WIRE_WIDTH / 2, 8 + WIRE_WIDTH / 2, 8 - WIRE_WIDTH / 2);
+    private final VoxelShape UP_SHAPE = Block.box(8 - WIRE_WIDTH / 2, 8 + WIRE_WIDTH / 2, 8 - WIRE_WIDTH / 2,
+            8 + WIRE_WIDTH / 2, 16, 8 + WIRE_WIDTH / 2);
+    private final VoxelShape DOWN_SHAPE = Block.box(8 - WIRE_WIDTH / 2, 0, 8 - WIRE_WIDTH / 2,
+            8 + WIRE_WIDTH / 2, 8 - WIRE_WIDTH / 2, 8 + WIRE_WIDTH / 2);
 
-    VoxelShape[] shapes = new VoxelShape[2*2*2*2*2*2];
+    VoxelShape[] shapes = new VoxelShape[2 * 2 * 2 * 2 * 2 * 2];
     public static HashMap<VoxelShape, Direction> voxelShapeDirectionPair;
     public static HashMap<Direction, BooleanProperty> directionToConnectionProperty;
 
     public SignalWireBlock(Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
-            .setValue(NORTH, false)
-            .setValue(SOUTH, false)
-            .setValue(EAST, false)
-            .setValue(WEST, false)
-            .setValue(UP, false)
-            .setValue(DOWN, false)
-            .setValue(WATERLOGGED, false)
+                .setValue(NORTH, false)
+                .setValue(SOUTH, false)
+                .setValue(EAST, false)
+                .setValue(WEST, false)
+                .setValue(UP, false)
+                .setValue(DOWN, false)
+                .setValue(WATERLOGGED, false)
         );
 
         directionToConnectionProperty = new HashMap<>();
@@ -179,7 +179,7 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
 
     private void makeShapes() {
         // 000000 north south east west up down
-        for (int i = 0; i < 2*2*2*2*2*2;i++) {
+        for (int i = 0; i < 2 * 2 * 2 * 2 * 2 * 2; i++) {
             VoxelShape shape = Shapes.empty();
             shape = Shapes.or(shape, BASE);
             if ((i & 1) == 1)
@@ -246,8 +246,7 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
             }
             if (!player.isCrouching()) {
                 switchConnectionOutput(accessingDirection, level, pos, player, null);
-            }
-            else {
+            } else {
                 switchConnectionOutput(accessingDirection.getOpposite(), level, pos, player, null);
             }
         }
@@ -275,6 +274,16 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
         VoxelShape targetVoxel = Shapes.empty();
 
         for (VoxelShape shape : voxelShapeDirectionPair.keySet()) {
+            // TODO: Turn direction into property
+            Direction direction = voxelShapeDirectionPair.get(shape);
+            if (direction != null) { // if voxel is BASE
+                BooleanProperty checkProperty = directionToConnectionProperty.get(direction);
+                boolean hasConnection = state.getValue(checkProperty);
+
+                // dont check voxels that doesnt have connection
+                if (!hasConnection) continue;
+            }
+
             double d = getDistanceBetweenEyeAndVoxelShape(state, world, pos, start, end, shape);
             if (d < minDistance) {
                 targetVoxel = shape;
@@ -307,44 +316,44 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
         if (!isOldConnection) {
             if (targetRedstoneProperty == null) {
                 level.setBlockAndUpdate(pos, oldState
-                    .setValue(targetConnectionProperty, true)
+                        .setValue(targetConnectionProperty, true)
                 );
             } else {
                 level.setBlockAndUpdate(pos, oldState
-                    .setValue(targetConnectionProperty, true)
-                    .setValue(targetRedstoneProperty, false)
+                        .setValue(targetConnectionProperty, true)
+                        .setValue(targetRedstoneProperty, false)
                 );
             }
 
             // extend neighbor too
             if (level.getBlockState(effectNeighborPos).getBlock() instanceof SignalWireBlock neighborBlock) {
                 level.setBlockAndUpdate(
-                    effectNeighborPos,
-                    level.getBlockState(effectNeighborPos).setValue(
-                        effectNeighborConnectionProperty, true
-                    )
+                        effectNeighborPos,
+                        level.getBlockState(effectNeighborPos).setValue(
+                                effectNeighborConnectionProperty, true
+                        )
                 );
             }
 
         } else {
             if (targetRedstoneProperty == null) {
                 level.setBlockAndUpdate(pos, oldState
-                    .setValue(targetConnectionProperty, false)
+                        .setValue(targetConnectionProperty, false)
                 );
             } else {
                 level.setBlockAndUpdate(pos, oldState
-                    .setValue(targetConnectionProperty, false)
-                    .setValue(targetRedstoneProperty, false)
+                        .setValue(targetConnectionProperty, false)
+                        .setValue(targetRedstoneProperty, false)
                 );
             }
 
             // remove neighbor connection
             if (level.getBlockState(effectNeighborPos).getBlock() instanceof SignalWireBlock neighborBlock) {
                 level.setBlockAndUpdate(
-                    effectNeighborPos,
-                    level.getBlockState(effectNeighborPos).setValue(
-                        effectNeighborConnectionProperty, false
-                    )
+                        effectNeighborPos,
+                        level.getBlockState(effectNeighborPos).setValue(
+                                effectNeighborConnectionProperty, false
+                        )
                 );
             }
         }
@@ -412,7 +421,7 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
                 } else if (info != null && SignalWireBlock.directionHasConnection(entity, direction)) {
                     if (info.getSignalValue() == null && entity.getSignalValue() == null) return;
                     if ((info.getSignalValue() != null && entity.getSignalValue() != null) &&
-                        (info.getSignalValue().intValue() == entity.getSignalValue().intValue())) return;
+                            (info.getSignalValue().intValue() == entity.getSignalValue().intValue())) return;
 
                     if (info.getSignalValue() == null) {
                         entity.setNoSignal();
@@ -461,9 +470,9 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
             if (state.getValue(directionProperties[i])) {
                 BlockPos nearbyPos = pos.relative(directions[i]);
                 SignalWireInformation info = level.getCapability(
-                    RegisterCapabilities.SIGNAL_VALUE,
-                    nearbyPos,
-                    directions[i]
+                        RegisterCapabilities.SIGNAL_VALUE,
+                        nearbyPos,
+                        directions[i]
                 );
 
                 if (info != null) {
@@ -479,17 +488,17 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
 
     @Override
     protected boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
-        return !(Boolean)state.getValue(WATERLOGGED);
+        return !(Boolean) state.getValue(WATERLOGGED);
     }
 
     @Override
     protected FluidState getFluidState(BlockState state) {
-        return (Boolean)state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return (Boolean) state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-        return super.getStateForPlacement(context).setValue(WATERLOGGED,fluidstate.getType() == Fluids.WATER);
+        return super.getStateForPlacement(context).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 }
