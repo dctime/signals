@@ -157,7 +157,7 @@ Use ponder library instead of full create library (1)
 
 ### 2025.5.27
 
-**Add ponder tutorial to signal wire block**
+Add ponder tutorial to signal wire block (1)
 
 **change texture of signal to redstone converter**
 
@@ -170,6 +170,16 @@ signal wires break particle missing texture (4)
 ### 2025.5.28
 
 Click the model part while it isnt extended with make it extend which should remove the connection of the part behind (1)
+
+### 2025.6.1
+
+Const signal block doesn't store its output when the game is closed
+
+Add ponder tutorial to Signal Operation Block
+
+Add ponder tutorial to Redstone Converter wire
+
+Add ponder tutorial to operation cards
 
 
 

@@ -165,3 +165,7 @@ Fixed Issue 2025.5.8 (6) 2025.5.23 (2)
 Fixed Issue 2025.5.28 (1)
 
 Ponder Text register integration
+
+### 2025.6.1
+
+2025.5.27 (1) Add ponder to signal wire and detector and const signal
