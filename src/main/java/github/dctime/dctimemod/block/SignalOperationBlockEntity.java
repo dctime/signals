@@ -85,6 +85,7 @@ public class SignalOperationBlockEntity extends BlockEntity {
         tag.putInt("outputValue", outputValue);
         tag.put("items", ((CardItemStackHandler) handler).serializeNBT(registries));
 //        System.out.println("Output Value Loaded from loadAdditional: " + outputValue);
+        setChanged();
 
 
     }

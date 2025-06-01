@@ -173,13 +173,13 @@ Click the model part while it isnt extended with make it extend which should rem
 
 ### 2025.6.1
 
-Const signal block doesn't store its output when the game is closed
+Const signal block doesn't store its output when the game is closed (1)
 
-Add ponder tutorial to Signal Operation Block
+**Add ponder tutorial to Signal Operation Block**
 
-Add ponder tutorial to Redstone Converter wire
+**Add ponder tutorial to Redstone Converter wire**
 
-Add ponder tutorial to operation cards
+**Add ponder tutorial to operation cards**
 
 
 

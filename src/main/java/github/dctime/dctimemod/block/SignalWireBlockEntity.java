@@ -57,6 +57,8 @@ public class SignalWireBlockEntity extends BlockEntity {
             tag.putBoolean("noSignal", false);
             tag.putInt("signalValue", this.information.getSignalValue());
         }
+
+        setChanged();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {

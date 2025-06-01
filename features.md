@@ -169,3 +169,5 @@ Ponder Text register integration
 ### 2025.6.1
 
 2025.5.27 (1) Add ponder to signal wire and detector and const signal
+
+2025.6.1 (1) Add setChanged() to all the blocks that store nbt data (doc BlockEntities)

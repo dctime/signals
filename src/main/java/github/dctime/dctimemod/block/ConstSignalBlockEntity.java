@@ -46,6 +46,8 @@ public class ConstSignalBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putInt("outputSignalValue", this.data.get(OUTPUT_SIGNAL_VALUE_INDEX));
+
+        setChanged();
     }
 
     @Override
