@@ -181,3 +181,5 @@ Ponder Text register integration
 2025.6.1 (5) Jade show operation block output value
 
 Change Mod ID to dctimesignals and MOD Name to Signals
+
+2025.6.1 (2) Add ponder tutorial to Signal Operation Block

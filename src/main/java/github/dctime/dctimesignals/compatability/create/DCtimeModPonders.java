@@ -23,7 +23,8 @@ public class DCtimeModPonders {
         helper.addToTag(SIGNALS)
                 .add(RegisterBlocks.SINGAL_WIRE.getId())
                 .add(RegisterBlocks.CONSTANT_SIGNAL_BLOCK.getId())
-                .add(RegisterItems.SIGNAL_DETECTOR.getId());
+                .add(RegisterItems.SIGNAL_DETECTOR.getId())
+                .add(RegisterBlocks.SIGNAL_OPERATION_BLOCK.getId());
 
     }
 
@@ -40,7 +41,7 @@ public class DCtimeModPonders {
         HELPER.addStoryBoard(RegisterItems.SIGNAL_DETECTOR, "signal_wire_signal_characteristics", DCtimeModPonderScenes::signalWireCharacteristics, SIGNALS);
         HELPER.addStoryBoard(RegisterItems.SIGNAL_DETECTOR, "signal_wire_high_value_first", DCtimeModPonderScenes::signalWireHighValueFirst, SIGNALS);
 
-
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_OPERATION_BLOCK, "operation_block_tutorial", DCtimeModPonderScenes::operationBlockTutorial, SIGNALS);
 
     }
 }
