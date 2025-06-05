@@ -25,6 +25,7 @@ public class RegisterCreativeModeTab {
                 output.accept(RegisterItems.AND_CARD);
                 output.accept(RegisterItems.OR_CARD);
                 output.accept(RegisterItems.NOT_CARD);
+                output.accept(RegisterItems.SIGNAL_CONFIGURATOR);
             })
             .build()
     );

@@ -92,8 +92,7 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
             if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), true);
             else player.displayClientMessage(Component.literal("Signal Value: " + signalValue), true);
             return InteractionResult.CONSUME;
-        } else if (player.getMainHandItem().isEmpty()) {
-            System.out.println("Adjusting using empty hand");
+        } else if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_CONFIGURATOR.get()) {
 
             Direction accessingDirection = getPlayerLookingAtModel(player, state, level, pos);
             if (accessingDirection == null) {
@@ -101,10 +100,7 @@ public class SignalToRedstoneConverter extends SignalWireBlock {
                 accessingDirection = hitResult.getDirection();
             }
             BooleanProperty targetRedstoneProperty = directionToRedstoneProperty.get(accessingDirection);
-            if (!player.isCrouching())
-                switchConnectionOutput(accessingDirection, level, pos, player, targetRedstoneProperty);
-            else
-                switchConnectionOutput(accessingDirection.getOpposite(), level, pos, player, targetRedstoneProperty);
+            switchConnectionOutput(accessingDirection, level, pos, player, targetRedstoneProperty);
             updateWireValue(state, level, pos);
             return InteractionResult.CONSUME;
         }

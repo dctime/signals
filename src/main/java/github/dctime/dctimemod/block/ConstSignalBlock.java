@@ -31,6 +31,23 @@ public class ConstSignalBlock extends Block implements EntityBlock {
         super(properties);
     }
 
+    private final Direction[] directions = {
+            Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST
+    };
+
+    private void setToNextDirection(BlockState state, Level level, BlockPos pos) {
+        Direction currentDirection = state.getValue(OUTPUT_DIRECTION);
+        for (int i = 0; i < 6; i++) {
+            if (currentDirection == directions[i]) {
+                if (i == 5) {
+                    level.setBlockAndUpdate(pos, state.setValue(OUTPUT_DIRECTION, directions[0]));
+                } else {
+                    level.setBlockAndUpdate(pos, state.setValue(OUTPUT_DIRECTION, directions[i+1]));
+                }
+            }
+        }
+    }
+
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
@@ -81,6 +98,11 @@ public class ConstSignalBlock extends Block implements EntityBlock {
             if (entity == null) return InteractionResult.FAIL;
             player.displayClientMessage(Component.literal("Const Output Signal Value: " + entity.getOutputSignalValue()), true);
 
+            return InteractionResult.SUCCESS;
+        }
+
+        if (!level.isClientSide && player.getMainHandItem().getItem() == RegisterItems.SIGNAL_CONFIGURATOR.get()) {
+            setToNextDirection(state, level, pos);
             return InteractionResult.SUCCESS;
         }
 

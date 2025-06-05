@@ -190,12 +190,8 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 
             return InteractionResult.SUCCESS;
         }
-        if (player.getMainHandItem().isEmpty()) {
-//            System.out.println("Player hand is empty");
-            if (!player.isCrouching())
-                switchConnectionOutput(hitResult.getDirection(), level, pos);
-            else
-                switchConnectionOutput(hitResult.getDirection().getOpposite(), level, pos);
+        if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_CONFIGURATOR.get()) {
+            switchConnectionOutput(hitResult.getDirection(), level, pos);
 
             return InteractionResult.SUCCESS;
         }

@@ -25,6 +25,7 @@ public class DCtimeItemModelProvider extends net.neoforged.neoforge.client.model
         basicItem(RegisterItems.AND_CARD.get());
         basicItem(RegisterItems.OR_CARD.get());
         basicItem(RegisterItems.NOT_CARD.get());
+        basicItem(RegisterItems.SIGNAL_CONFIGURATOR.get());
     }
 
     private String getBlockKey(Block block) {

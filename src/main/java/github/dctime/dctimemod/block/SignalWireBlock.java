@@ -237,18 +237,13 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
             else player.displayClientMessage(Component.literal("Signal Value: " + signalValue), true);
 
             return InteractionResult.CONSUME;
-        } else if (player.getMainHandItem().isEmpty()) {
-            System.out.println("Player hand is empty");
+        } else if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_CONFIGURATOR.get()) {
             Direction accessingDirection = getPlayerLookingAtModel(player, state, level, pos);
             if (accessingDirection == null) {
                 System.out.println("AccessingDirection is null");
                 accessingDirection = hitResult.getDirection();
             }
-            if (!player.isCrouching()) {
-                switchConnectionOutput(accessingDirection, level, pos, player, null);
-            } else {
-                switchConnectionOutput(accessingDirection.getOpposite(), level, pos, player, null);
-            }
+            switchConnectionOutput(accessingDirection, level, pos, player, null);
         }
 
         // changing the wire configuration may cause wire connection change

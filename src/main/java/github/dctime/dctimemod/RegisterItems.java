@@ -16,6 +16,12 @@ public class RegisterItems {
         new Item.Properties() // The properties to use.
     );
 
+    public static final DeferredItem<Item> SIGNAL_CONFIGURATOR = ITEMS.registerItem(
+            "signal_configurator",
+            Item::new, // The factory that the properties will be passed into.
+            new Item.Properties() // The properties to use.
+    );
+
     public static final DeferredItem<Item> AND_CARD = ITEMS.registerItem(
         "and_card",
         AndCardItem::new, // The factory that the properties will be passed into.
