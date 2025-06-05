@@ -17,6 +17,7 @@ public class DCtimeMod {
         RegisterBlockEntities.BLOCK_ENTITY_TYPES.register(modBus);
         RegisterMenuTypes.MENUS.register(modBus);
         RegisterItems.ITEMS.register(modBus);
+
     }
 
 }
