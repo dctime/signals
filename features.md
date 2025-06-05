@@ -177,3 +177,5 @@ Ponder Text register integration
 2025.5.9 (7) Added Configurator Item
 
 2025.5.27 (5) Display signal wire value in Jade
+
+2025.6.1 (5) Jade show operation block output value

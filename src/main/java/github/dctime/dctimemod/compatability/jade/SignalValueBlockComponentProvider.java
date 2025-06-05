@@ -14,8 +14,8 @@ import snownee.jade.api.config.IPluginConfig;
 
 import java.util.function.BiConsumer;
 
-public enum SignalValueBlockComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
-    INSTANCE;
+public class SignalValueBlockComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
+    public static final SignalValueBlockComponentProvider INSTANCE = new SignalValueBlockComponentProvider();
 
     public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_jade");
     public static final String signalValueTranslationKey = "tooltip." + DCtimeMod.MODID + ".jade_signal_value";
@@ -53,5 +53,7 @@ public enum SignalValueBlockComponentProvider implements IBlockComponentProvider
         // Register translations for Jade
         langConsumer.accept(signalValueTranslationKey, "Signal Value: %d");
         langConsumer.accept(noSignalValueTranslationKey, "No Signal");
+        langConsumer.accept("config.jade.plugin_dctimemod.signal_jade",
+                "Show signal value for Signal Wires in Jade");
     }
 }

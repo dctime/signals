@@ -96,7 +96,7 @@ public class ConstSignalBlock extends Block implements EntityBlock {
         if (!level.isClientSide && player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
             ConstSignalBlockEntity entity = (ConstSignalBlockEntity) level.getBlockEntity(pos);
             if (entity == null) return InteractionResult.FAIL;
-            player.displayClientMessage(Component.literal("Const Output Signal Value: " + entity.getOutputSignalValue()), true);
+            player.displayClientMessage(Component.literal("Const Output Signal Value: " + entity.getOutputSignalValue()), false);
 
             return InteractionResult.SUCCESS;
         }

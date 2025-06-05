@@ -178,12 +178,12 @@ public class SignalOperationBlock extends Block implements EntityBlock {
                 Item item = entity.getItems().getStackInSlot(SignalOperationBlockEntity.CARD_SLOT_INDEX).getItem();
                 if (item instanceof SignalOperationBaseCardItem cardItem) {
                     if (!checkIfSideModesValid(state, cardItem)) {
-                        player.displayClientMessage(Component.literal("Operation Signal Block not Valid").setStyle(Component.literal("").getStyle().withColor(0xFF0000)), true);
+                        player.displayClientMessage(Component.literal("Operation Signal Block not Valid").setStyle(Component.literal("").getStyle().withColor(0xFF0000)), false);
                     } else {
-                        player.displayClientMessage(Component.literal("Output Signal Value: " + entity.getOutputValue()), true);
+                        player.displayClientMessage(Component.literal("Output Signal Value: " + entity.getOutputValue()), false);
                     }
                 } else {
-                    player.displayClientMessage(Component.literal("Operation Block must insert a card"), true);
+                    player.displayClientMessage(Component.literal("Operation Block must insert a card"), false);
                 }
 
             }
@@ -335,6 +335,5 @@ public class SignalOperationBlock extends Block implements EntityBlock {
                 entity.getItems());
         },
             Component.translatable("menu.title.dctimemod.signal_operation_menu"));
-
     }
 }

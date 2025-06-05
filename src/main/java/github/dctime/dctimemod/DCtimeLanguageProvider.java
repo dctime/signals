@@ -19,6 +19,7 @@ public class DCtimeLanguageProvider extends LanguageProvider {
         this.addBlock(RegisterBlocks.SINGAL_WIRE, "Signal Wire");
         this.addBlock(RegisterBlocks.CONSTANT_SIGNAL_BLOCK, "Const Signal Block");
         this.addBlock(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER, "Signal to Redstone Converter");
+        this.addBlock(RegisterBlocks.SIGNAL_OPERATION_BLOCK, "Signal Operation Block");
 
 
         // ponder text

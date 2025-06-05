@@ -181,6 +181,8 @@ Const signal block doesn't store its output when the game is closed (1)
 
 **Add ponder tutorial to operation cards**
 
+Jade show operation block output value (5)
+
 
 
 

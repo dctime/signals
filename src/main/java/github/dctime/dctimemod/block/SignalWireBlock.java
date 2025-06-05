@@ -233,8 +233,8 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
         if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
             SignalWireBlockEntity entity = ((SignalWireBlockEntity) level.getBlockEntity(pos));
             Integer signalValue = entity.getSignalValue();
-            if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), true);
-            else player.displayClientMessage(Component.literal("Signal Value: " + signalValue), true);
+            if (signalValue == null) player.displayClientMessage(Component.literal("No Signal"), false);
+            else player.displayClientMessage(Component.literal("Signal Value: " + signalValue), false);
 
             return InteractionResult.CONSUME;
         } else if (player.getMainHandItem().getItem() == RegisterItems.SIGNAL_CONFIGURATOR.get()) {
