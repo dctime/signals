@@ -165,7 +165,7 @@ setting redstone output with a redstone dust will place redstone on the ground f
 
 signal wires break particle missing texture (4)
 
-**Jade show signal wire value**
+Jade show signal wire value (5)
 
 ### 2025.5.28
 

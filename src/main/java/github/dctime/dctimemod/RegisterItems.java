@@ -37,4 +37,8 @@ public class RegisterItems {
         NotCardItem::new, // The factory that the properties will be passed into.
         new Item.Properties() // The properties to use.
     );
+
+
+
+
 }

@@ -1,6 +1,8 @@
 package github.dctime.dctimemod;
 
 import github.dctime.dctimemod.compatability.create.CreateDependencies;
+import github.dctime.dctimemod.compatability.jade.DCtimeJadePlugin;
+import github.dctime.dctimemod.compatability.jade.SignalValueBlockComponentProvider;
 import net.minecraft.data.PackOutput;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -14,10 +16,18 @@ public class DCtimeLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         this.addBlock(RegisterBlocks.BUILD_HELPER_BLOCK, "Build Helper Block");
         this.add("itemGroup." + DCtimeMod.MODID + ".dctimemodtab", "DCtime Mod");
+        this.addBlock(RegisterBlocks.SINGAL_WIRE, "Signal Wire");
+        this.addBlock(RegisterBlocks.CONSTANT_SIGNAL_BLOCK, "Const Signal Block");
+        this.addBlock(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER, "Signal to Redstone Converter");
+
 
         // ponder text
         if (ModList.get().isLoaded("ponder")) {
             CreateDependencies.dependenciesDataGen(this);
+        }
+
+        if (ModList.get().isLoaded("jade")) {
+            DCtimeJadePlugin.dependenciesDataGen(this::add);
         }
     }
 }
