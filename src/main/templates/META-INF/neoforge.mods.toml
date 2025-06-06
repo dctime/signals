@@ -86,9 +86,16 @@ description='''${mod_description}'''
     side="BOTH"
 
 [[dependencies.${mod_id}]]
-modId="create"
+modId="ponder"
 type="optional"
 versionRange="[6.0.4,6.1.0)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="jade"
+type="optional"
+versionRange="[15.10.0, 15.10.0)"
 ordering="NONE"
 side="BOTH"
 
