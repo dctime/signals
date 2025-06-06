@@ -7,7 +7,11 @@ import github.dctime.dctimesignals.RegisterItems;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
+
+import java.util.List;
 
 public class DCtimeModPonders {
     public static final ResourceLocation SIGNALS = ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signals");
@@ -42,6 +46,18 @@ public class DCtimeModPonders {
         HELPER.addStoryBoard(RegisterItems.SIGNAL_DETECTOR, "signal_wire_high_value_first", DCtimeModPonderScenes::signalWireHighValueFirst, SIGNALS);
 
         HELPER.addStoryBoard(RegisterBlocks.SIGNAL_OPERATION_BLOCK, "operation_block_tutorial", DCtimeModPonderScenes::operationBlockTutorial, SIGNALS);
+
+        List<DeferredItem<Item>> cards = List.of(
+          RegisterItems.AND_CARD,
+          RegisterItems.NOT_CARD,
+          RegisterItems.OR_CARD
+        );
+
+        for (DeferredItem<Item> card : cards) {
+            HELPER.addStoryBoard(card, "operation_block_tutorial", DCtimeModPonderScenes::operationBlockTutorial, SIGNALS);
+        }
+
+        HELPER.addStoryBoard(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER, "signal_to_redstone", DCtimeModPonderScenes::signalToRedstone, SIGNALS);
 
     }
 }

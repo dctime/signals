@@ -177,9 +177,9 @@ Const signal block doesn't store its output when the game is closed (1)
 
 Add ponder tutorial to Signal Operation Block (2)
 
-**Add ponder tutorial to Redstone Converter wire**
+Add ponder tutorial to Redstone Converter wire (3)
 
-**Add ponder tutorial to operation cards**
+Add ponder tutorial to operation cards (4)
 
 Jade show operation block output value (5)
 
