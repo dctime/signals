@@ -39,6 +39,7 @@ public class DCtimeModPonders {
         HELPER.addStoryBoard(RegisterBlocks.SINGAL_WIRE, "signal_wire_signal_characteristics", DCtimeModPonderScenes::signalWireCharacteristics, SIGNALS);
         HELPER.addStoryBoard(RegisterBlocks.SINGAL_WIRE, "signal_wire_high_value_first", DCtimeModPonderScenes::signalWireHighValueFirst, SIGNALS);
 
+        HELPER.addStoryBoard(RegisterBlocks.CONSTANT_SIGNAL_BLOCK, "const_signal_block_tutorial", DCtimeModPonderScenes::constSignalBlockTutorial, SIGNALS);
         HELPER.addStoryBoard(RegisterBlocks.CONSTANT_SIGNAL_BLOCK, "signal_wire_signal_characteristics", DCtimeModPonderScenes::signalWireCharacteristics, SIGNALS);
         HELPER.addStoryBoard(RegisterBlocks.CONSTANT_SIGNAL_BLOCK, "signal_wire_high_value_first", DCtimeModPonderScenes::signalWireHighValueFirst, SIGNALS);
 
@@ -58,6 +59,5 @@ public class DCtimeModPonders {
         }
 
         HELPER.addStoryBoard(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER, "signal_to_redstone", DCtimeModPonderScenes::signalToRedstone, SIGNALS);
-
     }
 }

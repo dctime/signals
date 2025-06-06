@@ -183,7 +183,11 @@ Add ponder tutorial to operation cards (4)
 
 Jade show operation block output value (5)
 
-**update signal wire ponder cuz configurator added**
+update signal wire ponder cuz configurator added (6)  
+
+### 2025.6.6
+
+Add ponder tutorial to Const Signal Block (1)
 
 
 

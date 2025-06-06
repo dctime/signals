@@ -187,3 +187,7 @@ Change Mod ID to dctimesignals and MOD Name to Signals
 ### 2025.6.6
 
 2025.6.1 (3) (4) Add ponder tutorial to Redstone Converter wire and operation cards
+
+2025.6.6 (1) Add ponder tutorial to Const Signal Block
+
+2025.6.1 (6) Update signal wire ponder cuz configurator added

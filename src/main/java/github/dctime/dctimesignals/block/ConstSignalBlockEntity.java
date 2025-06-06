@@ -20,7 +20,7 @@ public class ConstSignalBlockEntity extends BlockEntity {
 
     public ConstSignalBlockEntity(BlockPos pos, BlockState blockState) {
         super(RegisterBlockEntities.CONST_SIGNAL_BLOCK_ENTITY.get(), pos, blockState);
-        data.set(OUTPUT_SIGNAL_VALUE_INDEX, 30);
+        data.set(OUTPUT_SIGNAL_VALUE_INDEX, 15);
     }
 
     public int getOutputSignalValue() {

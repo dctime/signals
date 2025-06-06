@@ -3,6 +3,7 @@ package github.dctime.dctimesignals.compatability.create;
 import github.dctime.dctimesignals.RegisterBlockItems;
 import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterItems;
+import github.dctime.dctimesignals.block.ConstSignalBlock;
 import github.dctime.dctimesignals.block.SignalOperationBlock;
 import github.dctime.dctimesignals.block.SignalToRedstoneConverter;
 import github.dctime.dctimesignals.block.SignalWireBlock;
@@ -48,7 +49,7 @@ public class DCtimeModPonderScenes {
         AABB wireClickSurface = new AABB(wireConnectionSurface, wireConnectionSurface);
         AABB wireClickSurfaceExpanded = wireClickSurface.inflate(1 / 10f, 1 / 10f, 1 / 128f);
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight, wireClickSurfaceExpanded, 40);
-        scene.overlay().showControls(wireConnectionSurface, Pointing.UP, 20).rightClick();
+        scene.overlay().showControls(wireConnectionSurface, Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_CONFIGURATOR.toStack());
         scene.idle(20);
         scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.NORTH, true), false);
         scene.idle(20);
@@ -58,7 +59,7 @@ public class DCtimeModPonderScenes {
         AABB wireClickSurface2 = new AABB(wireConnectionSurface2, wireConnectionSurface2);
         AABB wireClickSurfaceExpanded2 = wireClickSurface2.inflate(1 / 128f, 1 / 10f, 1 / 10f);
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight2, wireClickSurfaceExpanded2, 60);
-        scene.overlay().showControls(wireConnectionSurface2, Pointing.UP, 20).rightClick();
+        scene.overlay().showControls(wireConnectionSurface2, Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_CONFIGURATOR.toStack());
         scene.idle(20);
         scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.NORTH, true).setValue(SignalWireBlock.WEST, true), false);
         scene.world().replaceBlocks(util.select().position(1, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true), false);
@@ -76,7 +77,7 @@ public class DCtimeModPonderScenes {
         AABB wireClickSurface3 = new AABB(wireConnectionSurface3, wireConnectionSurface3);
         AABB wireClickSurfaceExpanded3 = wireClickSurface3.inflate(1 / 10f, 1 / 10f, 1 / 6f);
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight3, wireClickSurfaceExpanded3, 40);
-        scene.overlay().showControls(wireConnectionSurface3, Pointing.UP, 20).rightClick();
+        scene.overlay().showControls(wireConnectionSurface3, Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_CONFIGURATOR.toStack());
         scene.idle(20);
         scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true), false);
         scene.idle(20);
@@ -86,7 +87,7 @@ public class DCtimeModPonderScenes {
         AABB wireClickSurface4 = new AABB(wireConnectionSurface4, wireConnectionSurface4);
         AABB wireClickSurfaceExpanded4 = wireClickSurface4.inflate(1 / 3f, 1 / 10f, 1 / 10f);
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight4, wireClickSurfaceExpanded4, 40);
-        scene.overlay().showControls(wireConnectionSurface4, Pointing.UP, 20).rightClick();
+        scene.overlay().showControls(wireConnectionSurface4, Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_CONFIGURATOR.toStack());
         scene.idle(20);
         scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState(), false);
         scene.world().replaceBlocks(util.select().position(1, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState(), false);
@@ -99,7 +100,6 @@ public class DCtimeModPonderScenes {
 
         scene.markAsFinished();
     }
-
     public static void signalWireCharacteristics(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("signal_wire_signal_characteristics", "Characteristics of signals");
         scene.showBasePlate();
@@ -301,7 +301,6 @@ public class DCtimeModPonderScenes {
 
         scene.markAsFinished();
     }
-
     public static void signalWireHighValueFirst(SceneBuilder scene, SceneBuildingUtil util) {
         Selection sourceHigh = util.select().position(3, 1, 3);
         Selection sourceLow = util.select().position(1, 1, 3);
@@ -584,7 +583,6 @@ public class DCtimeModPonderScenes {
 
         scene.markAsFinished();
     }
-
     public static void operationBlockTutorial(SceneBuilder scene, SceneBuildingUtil util) {
         BlockPos operationBlockPos = util.grid().at(2, 1, 2);
         BlockPos outputWirePos = util.grid().at(2, 1, 1);
@@ -908,7 +906,6 @@ public class DCtimeModPonderScenes {
         scene.idle(40);
         scene.markAsFinished();
     }
-
     public static void signalToRedstone(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("signal_to_redstone", "Signal to Redstone Tutorial");
         scene.showBasePlate();
@@ -998,4 +995,81 @@ public class DCtimeModPonderScenes {
 
         scene.markAsFinished();
     }
+    public static void constSignalBlockTutorial(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("const_signal_block_tutorial", "Const Signal Block Tutorial");
+        scene.showBasePlate();
+
+        BlockPos constSignalBlockPos = util.grid().at(2, 1, 2);
+
+        for (int x = 0; x < 5; x++) {
+            for (int z = 0; z < 5; z++) {
+                scene.world().showSection(util.select().position(x, 1, z), Direction.DOWN);
+            }
+        }
+
+        scene.world().modifyBlock(constSignalBlockPos, (blockState ->
+            blockState.setValue(ConstSignalBlock.OUTPUT_DIRECTION,
+                Direction.UP
+            )), false);
+
+        scene.idle(40);
+
+        scene.overlay().showText(20).colored(PonderPalette.WHITE)
+            .text("Const Signal Block is a block that outputs a constant signal value")
+            .pointAt(constSignalBlockPos.getCenter());
+
+        scene.idle(40);
+
+        scene.overlay().showText(20).colored(PonderPalette.WHITE)
+            .text("It has a output port that can be rotated using a signal configurator")
+            .pointAt(constSignalBlockPos.getCenter());
+
+        scene.idle(40);
+
+        scene.overlay().showControls(constSignalBlockPos.getCenter(), Pointing.DOWN, 5)
+            .rightClick()
+            .withItem(RegisterItems.SIGNAL_CONFIGURATOR.get().getDefaultInstance());
+
+        scene.world().modifyBlock(constSignalBlockPos, (blockState ->
+                blockState.setValue(ConstSignalBlock.OUTPUT_DIRECTION,
+                    Direction.DOWN
+                )), false);
+
+        scene.idle(10);
+
+        scene.overlay().showControls(constSignalBlockPos.getCenter(), Pointing.DOWN, 5)
+            .rightClick()
+            .withItem(RegisterItems.SIGNAL_CONFIGURATOR.get().getDefaultInstance());
+
+        scene.world().modifyBlock(constSignalBlockPos, (blockState ->
+            blockState.setValue(ConstSignalBlock.OUTPUT_DIRECTION,
+                Direction.NORTH
+            )), false);
+
+        scene.idle(40);
+
+        scene.overlay().showText(20).colored(PonderPalette.WHITE)
+            .text("In order to change the value it output, right click it without holding the configurator to open the GUI")
+            .pointAt(constSignalBlockPos.getCenter());
+
+        scene.overlay().showControls(constSignalBlockPos.getCenter(), Pointing.DOWN, 20)
+            .rightClick();
+
+        scene.idle(40);
+
+        scene.overlay().showText(20).colored(PonderPalette.WHITE)
+            .text("Type the desired signal value in the text box and close the GUI using esc to set the value")
+            .independent();
+
+        scene.idle(40);
+
+        scene.overlay().showText(20).colored(PonderPalette.WHITE)
+            .text("If the text is not a valid integer, it will not change the value")
+            .independent();
+
+        scene.idle(40);
+
+        scene.markAsFinished();
+    }
+
 }
