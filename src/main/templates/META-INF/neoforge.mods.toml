@@ -88,14 +88,14 @@ description='''${mod_description}'''
 [[dependencies.${mod_id}]]
 modId="ponder"
 type="optional"
-versionRange="[6.0.4,6.1.0)"
+versionRange="[1.0.46,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.${mod_id}]]
 modId="jade"
 type="optional"
-versionRange="[15.10.0, 15.10.0)"
+versionRange="[15.10.0,)"
 ordering="NONE"
 side="BOTH"
 
