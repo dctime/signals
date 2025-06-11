@@ -67,4 +67,13 @@ public class RegisterBlocks {
                     .sound(SoundType.METAL)
                     .noOcclusion()
     );
+
+    public static final DeferredBlock<Block> REDSTONE_TO_SIGNAL_CONVERTER = BLOCKS.registerBlock(
+            "redstone_to_signal_converter",
+            RedstoneToSignalConverterBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+    );
 }

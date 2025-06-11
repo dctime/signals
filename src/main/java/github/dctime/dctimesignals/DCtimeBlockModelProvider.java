@@ -24,6 +24,7 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         constSignalModel();
         signalToRedstoneModel();
         operationSignalModel();
+        redstoneToSignalModel();
     }
 
     private void signalWireModel() {
@@ -341,6 +342,24 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
                 return ConfiguredModel.builder()
                     .modelFile(models().cubeAll("build_helper_block_non_destroy_mode", modLoc("block/build_helper_block_non_destroy_mode"))).build();
             }
+        });
+    }
+    private void redstoneToSignalModel() {
+        ModelFile restoneToSignalModel = models().orientableVertical(
+                "const_signal_block",
+                modLoc("block/const_signal_block_side"),
+                modLoc("block/const_signal_block_front")
+        );
+        Block redstoneToSignalBlock = RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER.get();
+
+        Function<BlockState, ModelFile> redstoneToSignalModelFunc = (Function)(($) -> restoneToSignalModel);
+        this.getVariantBuilder(redstoneToSignalBlock).forAllStates((state) -> {
+            Direction dir = (Direction)state.getValue(ConstSignalBlock.OUTPUT_DIRECTION);
+            return ConfiguredModel.builder()
+                    .modelFile((ModelFile)redstoneToSignalModelFunc.apply(state))
+                    .rotationX(dir == Direction.DOWN ? 180 : (dir.getAxis().isHorizontal() ? 90 : 0))
+                    .rotationY(dir.getAxis().isVertical() ? 0 : ((int)dir.toYRot() + 180) % 360)
+                    .build();
         });
     }
 }

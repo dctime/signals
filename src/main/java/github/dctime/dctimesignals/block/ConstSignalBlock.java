@@ -24,67 +24,9 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class ConstSignalBlock extends Block implements EntityBlock {
-    public static final EnumProperty<Direction> OUTPUT_DIRECTION = DirectionProperty.create("output_direction", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);
-
+public class ConstSignalBlock extends SignalOutputBlock implements EntityBlock {
     public ConstSignalBlock(Properties properties) {
         super(properties);
-    }
-
-    private final Direction[] directions = {
-            Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST
-    };
-
-    private void setToNextDirection(BlockState state, Level level, BlockPos pos) {
-        Direction currentDirection = state.getValue(OUTPUT_DIRECTION);
-        for (int i = 0; i < 6; i++) {
-            if (currentDirection == directions[i]) {
-                if (i == 5) {
-                    level.setBlockAndUpdate(pos, state.setValue(OUTPUT_DIRECTION, directions[0]));
-                } else {
-                    level.setBlockAndUpdate(pos, state.setValue(OUTPUT_DIRECTION, directions[i+1]));
-                }
-            }
-        }
-    }
-
-
-    @Override
-    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
-        if (!oldState.is(this)) {
-            level.invalidateCapabilities(pos);
-        }
-
-        if (level.isClientSide()) return;
-
-        if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity)
-        detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputSignalValue());
-
-    }
-
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, true);
-        if (!state.is(newState.getBlock())) {
-            level.invalidateCapabilities(pos);
-        }
-
-        if (level.isClientSide()) return;
-        detectSignalWireAndUpdate(state, level, pos, true, true, 0);
-    }
-
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return (BlockState)this.defaultBlockState().setValue(OUTPUT_DIRECTION, context.getNearestLookingDirection().getOpposite());
-    }
-
-    @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
-
-        if (level.isClientSide()) return;
-        if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity) {
-            detectSignalWireAndUpdate(state, level, pos, false, false, entity.getOutputSignalValue());
-        }
     }
 
     public void updateFromGui(ConstSignalBlockEntity entity, int value) {
@@ -128,34 +70,14 @@ public class ConstSignalBlock extends Block implements EntityBlock {
                 Component.translatable("menu.title.dctimemod.const_signal_block_menu"));
     }
 
-    public void detectSignalWireAndUpdate(BlockState state, Level level, BlockPos pos, boolean forcefully, boolean noSignal, int signalValue) {
-        Direction direction = state.getValue(OUTPUT_DIRECTION);
-        BlockPos targetPos = pos.relative(direction);
-
-//        System.out.println("pos: x: " + pos.getX() + ", y: " + pos.getY() + ", z:" + pos.getZ());
-//        System.out.println("targetPos: x: " + targetPos.getX() + ", y: " + targetPos.getY() + ", z:" + targetPos.getZ());
-
-        SignalWireInformation targetInfo = level.getCapability(RegisterCapabilities.SIGNAL_VALUE, targetPos, direction);
-        if (targetInfo == null) return;
-//        System.out.println("got signal wire");
-        // higher signal value dominates lower signal value
-        // onBreak set to 0 forcefully to prevent edge case that the wire remains the signal the signal block sends
-        if (targetInfo.getSignalValue() != null) {
-            if (targetInfo.getSignalValue() >= signalValue && !forcefully) return;
-        }
-//        System.out.println("signal value changed");
-        if (noSignal) {targetInfo.setNoSignal();}
-        else targetInfo.setSignalValue(signalValue);
-
-
-        level.updateNeighborsAt(targetPos, level.getBlockState(targetPos).getBlock());
-    }
-
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(OUTPUT_DIRECTION);
+    @Nullable
+    Integer getSignalValue(BlockState state, Level level, BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof ConstSignalBlockEntity entity) {
+            return entity.getOutputSignalValue();
+        }
+        return null;
     }
-
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {

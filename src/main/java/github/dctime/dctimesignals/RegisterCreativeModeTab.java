@@ -21,6 +21,7 @@ public class RegisterCreativeModeTab {
                 output.accept(RegisterBlockItems.CONSTANT_SIGNAL_BLOCK_ITEM);
                 output.accept(RegisterBlockItems.SINGAL_TO_REDSTONE_CONVERTER);
                 output.accept(RegisterBlockItems.SIGNAL_OPERATION_BLOCK);
+                output.accept(RegisterBlockItems.REDSTONE_TO_SIGNAL_CONVERTER);
                 output.accept(RegisterItems.SIGNAL_DETECTOR);
                 output.accept(RegisterItems.AND_CARD);
                 output.accept(RegisterItems.OR_CARD);
