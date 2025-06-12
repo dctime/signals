@@ -189,6 +189,10 @@ update signal wire ponder cuz configurator added (6)
 
 Add ponder tutorial to Const Signal Block (1)
 
+### 2025.6.13
+
+**Jade integration for redstone to signal converter**
+
 
 
 
