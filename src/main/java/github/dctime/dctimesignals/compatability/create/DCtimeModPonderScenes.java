@@ -3,10 +3,7 @@ package github.dctime.dctimesignals.compatability.create;
 import github.dctime.dctimesignals.RegisterBlockItems;
 import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterItems;
-import github.dctime.dctimesignals.block.ConstSignalBlock;
-import github.dctime.dctimesignals.block.SignalOperationBlock;
-import github.dctime.dctimesignals.block.SignalToRedstoneConverter;
-import github.dctime.dctimesignals.block.SignalWireBlock;
+import github.dctime.dctimesignals.block.*;
 import net.createmod.catnip.math.Pointing;
 import net.createmod.ponder.Ponder;
 import net.createmod.ponder.api.PonderPalette;
@@ -26,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 public class DCtimeModPonderScenes {
 
     public static void signalWireConnection(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("signal_wire_connection", "Setup the connections of signal wires");
+        scene.title("signal_wire_connection", "Connecting Signal Wires");
         scene.showBasePlate();
         scene.idle(10);
 
@@ -36,7 +33,7 @@ public class DCtimeModPonderScenes {
         scene.addKeyframe();
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("When signal wire is not connect to other blocks, it has no signal.")
+            .text("A signal wire by itself doesn't carry any signal.")
             .pointAt(wirePos.getCenter());
         scene.idle(40);
         scene.addKeyframe();
@@ -66,7 +63,7 @@ public class DCtimeModPonderScenes {
         scene.idle(20);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Right click the side of the signal wire with an empty hand to connect the wires")
+            .text("Right-click a side of the wire with the Signal Configurator to connect wires together.")
             .pointAt(wireConnectionSurface2);
         scene.idle(40);
 
@@ -94,7 +91,7 @@ public class DCtimeModPonderScenes {
         scene.idle(20);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Right click the connection of the wire with empty hand to disconnect the wire")
+            .text("Right-click the connection of the wire with an empty hand to disconnect the wire.")
             .pointAt(wireConnectionSurface2);
         scene.idle(40);
 
@@ -126,20 +123,19 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("Signal is a state that a wire holds just like a redstone dust on the ground can hold redstone signal. It can be represented as an integer. This signal isn't related to real world signals.");
+                .text("A signal is a state stored by a wire, similar to how redstone dust holds a redstone signal. It is represented as an integer and is not related to real-world electrical signals.");
 
         scene.idle(20);
         scene.overlay().showControls(wireSelection2.getCenter(), Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_DETECTOR.get().getDefaultInstance());
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Right click the wire with signal detector to detect the signal it holds.")
+            .text("Right-click the wire with a Signal Detector to read its current signal value.")
             .pointAt(wireSelection2.getCenter());
         scene.idle(30);
 
-
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Connected wires will always have the same signal when stable")
+            .text("Connected wires will always share the same signal value when the network is stable")
             .pointAt(wireSelection2.getCenter());
         Object highlightConnectionWires = new Object();
         Vec3 wirePos2Center = wirePos2.getCenter();
@@ -149,7 +145,7 @@ public class DCtimeModPonderScenes {
         scene.idle(30);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Because the wires does not connect to a signal source in this case, it will prints out \"No Signal\"")
+            .text("Because the wires are not connected to a signal source in this case, they will display \"No Signal\"")
             .pointAt(wireSelection2.getCenter());
 
         scene.idle(30);
@@ -160,7 +156,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Now the wires are connected to the signal source.")
+            .text("Now the wires are properly connected to the signal source.")
             .pointAt(wireSelection1.getCenter());
         scene.world().replaceBlocks(util.select().position(wirePos1.below()), Blocks.RED_WOOL.defaultBlockState(), true);
         scene.world().replaceBlocks(util.select().position(wirePos2.below()), Blocks.RED_WOOL.defaultBlockState(), true);
@@ -170,7 +166,7 @@ public class DCtimeModPonderScenes {
         scene.overlay().showControls(wireSelection2.getCenter(), Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_DETECTOR.get().getDefaultInstance());
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("If the signal source exports signal value 30, then the wires would say \"Signal Value: 30\" when right clicking with a signal detector")
+            .text("If the signal source outputs a signal value of 30, the wires will display \"Signal Value: 30\" when right-clicked with a signal detector.")
             .pointAt(wireSelection2.getCenter());
         scene.idle(30);
 
@@ -178,7 +174,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("Now we represent signal 30 as red wool while no signal as white wool");
+            .text("Now, red wool represents signal 30, while white wool represents no signal.");
 
         scene.idle(30);
 
@@ -186,14 +182,14 @@ public class DCtimeModPonderScenes {
         scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.SOUTH, true), false);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("When we try to disconnect the wires")
+            .text("Now, let's try disconnecting the wires")
             .pointAt(wireSelection2.getCenter().add(0.5f, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The disconnected wires will become \"No Signal\"")
+            .text("Disconnected wires will display \"No Signal\"")
             .pointAt(wireSelection3.getCenter().add(0.5f, 0, 0));
         scene.world().replaceBlocks(util.select().position(wirePos2.below()), Blocks.WHITE_WOOL.defaultBlockState(), true);
         scene.world().replaceBlocks(util.select().position(wirePos3.below()), Blocks.WHITE_WOOL.defaultBlockState(), true);
@@ -202,7 +198,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("What happened in just a few ticks?");
+            .text("What just happened in those few ticks?");
         scene.world().replaceBlocks(util.select().position(wirePos2.below()), Blocks.RED_WOOL.defaultBlockState(), true);
         scene.world().replaceBlocks(util.select().position(wirePos3.below()), Blocks.RED_WOOL.defaultBlockState(), true);
 
@@ -212,7 +208,7 @@ public class DCtimeModPonderScenes {
         scene.world().replaceBlocks(util.select().position(wirePos2.below()), Blocks.WHITE_WOOL.defaultBlockState(), true);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The two wires which got disconnected with each other will try to tell other neighbor wires that the signal we hold might be \"No Signal\"")
+            .text("When two wires are disconnected, they notify neighboring wires that their signal might now be \"No Signal\"")
             .pointAt(wireSelection1.getCenter());
 
         scene.idle(30);
@@ -229,14 +225,14 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("Now these two got updated because the wires got updated is connected to them");
+            .text("These two blocks were updated because their connected wires changed");
 
         scene.idle(30);
 
         scene.world().replaceBlocks(util.select().position(wirePos1.below()), Blocks.RED_WOOL.defaultBlockState(), true);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The signal source would try to update the connected wire to its emitted signal value, causing the wire to be 30")
+            .text("The signal source attempts to update the connected wire to its emitted signal value, setting the wire to 30")
             .pointAt(wirePos1.getCenter());
 
         scene.idle(30);
@@ -245,7 +241,7 @@ public class DCtimeModPonderScenes {
         scene.world().replaceBlocks(util.select().position(wirePos3.below()), Blocks.WHITE_WOOL.defaultBlockState(), true);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("This wire got the command to set itself to no signal. While the connected wire is already set to no signal, the update chain stops")
+            .text("This wire received a command to set itself to no signal. Since the connected wire was already at no signal, the update chain stopped.")
             .pointAt(wirePos3.getCenter());
 
         scene.idle(30);
@@ -257,14 +253,14 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("For the left part, the wire tries to send signal value 30 to its connected neighbor.")
+            .text("On the left, the wire attempts to send a signal value of 30 to its connected neighbor.")
             .pointAt(wirePos1.getCenter());
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("There is no more neighbors connected that is below 30 or hold no signal so the update chain ends")
+            .text("There are no more connected neighbors with a signal below 30 or holding no signal, so the update chain ends")
             .pointAt(wirePos1.getCenter());
 
         scene.idle(30);
@@ -273,28 +269,28 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.RED)
-            .text("This process should took only some ticks depends on the wire length")
+            .text("This process only takes a few ticks, depending on the wire length")
             .pointAt(wirePos1.getCenter());
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.RED)
-            .text("But we knows that the wire hold \"No signal\" for a few ticks then get back to signal value 30")
+            .text("But we know that the wire holds \"No Signal\" for a few ticks, then returns to signal value 30")
             .pointAt(wirePos1.getCenter());
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.RED)
-            .text("This means that the wire might \"drop\" which may cause issues in your signal network")
+            .text("This means the wire might \"drop\" its signal temporarily, which could cause issues in your signal network")
             .pointAt(wirePos1.getCenter());
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.RED)
-            .text("Most of the signal related blocks should have ignore \"No Signal\" but just in case")
+            .text("Most signal-related blocks should ignore \"No Signal\", but just in case...")
             .pointAt(wirePos1.getCenter());
 
         scene.idle(30);
@@ -330,25 +326,25 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("When two sources want to overwrite the wires value, Higher signal value overwrites lower signal value");
+            .text("When two sources try to set the wire's value, the higher signal always wins over the lower one.");
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("In this scene, two sources high value source marked as red wool and low value source marked as yellow wool outputs to two different circuits");
+            .text("In this scene, the high value source is marked with red wool and the low value source with yellow wool, each outputting to different circuits");
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("When the circuit is stable, wires that connected to each other will have the same value");
+            .text("When the circuit is stable, all connected wires will share the same signal value");
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("The net which is connected to high value source would be high while low value source would be low");
+            .text("The network connected to the high value source will be high, while the one connected to the low value source will remain low");
 
         scene.world().replaceBlocks(util.select().position(wirePos1.below()), Blocks.RED_WOOL.defaultBlockState(), true);
         scene.world().replaceBlocks(util.select().position(wirePos2.below()), Blocks.RED_WOOL.defaultBlockState(), true);
@@ -362,14 +358,14 @@ public class DCtimeModPonderScenes {
         scene.world().replaceBlocks(wireSelection3, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.SOUTH, true).setValue(SignalWireBlock.EAST, true), false);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("When we connect the wires together...")
+            .text("Let's see what happens when we connect the wires together...")
             .pointAt(wireSelection2.getCenter().add(-0.5f, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The connected wires would reset its wire value to \"No Signal\" then telling its connected neighbors to update itself to \"No Signal\"")
+            .text("When wires are connected, their value resets to \"No Signal\" and all connected neighbors are updated accordingly.")
             .pointAt(wireSelection2.getCenter().add(-0.5f, 0, 0));
         scene.world().replaceBlocks(util.select().position(wirePos2.below()), Blocks.WHITE_WOOL.defaultBlockState(), true);
         scene.world().replaceBlocks(util.select().position(wirePos3.below()), Blocks.WHITE_WOOL.defaultBlockState(), true);
@@ -387,7 +383,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("For the left part the wire reset its wire value to \"No Signal\" then telling its connected neighbors to update itself to \"No Signal\" when received the command")
+            .text("On the left, the wire reset its value to \"No Signal\" and instructed its connected neighbors to do the same when it received the command")
             .pointAt(wireSelection1.getCenter().add(0, 0, 0));
 
         AABB updateBlockBox2 = new AABB(sourceHighPos.getCenter().add(-0.5f, -0.5f, -0.5f), sourceHighPos.getCenter().add(0.5f, 0.5f, 0.5f));
@@ -400,7 +396,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("This wire is already set to \"No Signal\" so the update chain ends")
+            .text("This wire is already at \"No Signal\", so the update chain ends here.")
             .pointAt(wireSelection2.getCenter().add(0, 0, 0));
 
         scene.idle(30);
@@ -409,28 +405,28 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Now for the right part.")
+            .text("Let's focus on the right side now.")
             .pointAt(sourceLowPos.getCenter().add(0, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The source would try to overwrite the connected wire value to its value")
+            .text("The source will attempt to set the connected wire to its own value")
             .pointAt(sourceLowPos.getCenter().add(0, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("It cannot overwrite the wire when the signal value the wire holds is larger than the value it overwrites")
+            .text("It cannot overwrite the wire if the wire already holds a higher signal value than the one being set")
             .pointAt(sourceLowPos.getCenter().add(0, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("In this case the wire holds \"No Signal\" that the source can overwrite the value and tell the wire to update it's connected neighbors")
+            .text("In this case, the wire holds \"No Signal\", so the source can overwrite the value and tell the wire to update its connected neighbors")
             .pointAt(sourceLowPos.getCenter().add(0, 0, 0));
 
         AABB updateBlockBox5 = new AABB(wirePos3.getCenter().add(-0.5f, -0.5f, -0.5f), wirePos3.getCenter().add(0.5f, 0.5f, 0.5f));
@@ -442,7 +438,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The wire updated itself to low value and telling it's neighbor to update itself to low value")
+            .text("The wire updated itself to a low value and instructed its neighbor to do the same")
             .pointAt(wirePos3.getCenter().add(0, 0, 0));
         scene.world().replaceBlocks(util.select().position(wirePos3.below()), Blocks.YELLOW_WOOL.defaultBlockState(), true);
 
@@ -457,7 +453,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent(10)
-            .text("Fast forward a bit");
+            .text("Let's fast forward a bit...");
 
         AABB updateBlockBox8 = new AABB(wirePos1.getCenter().add(-0.5f, -0.5f, -0.5f), wirePos1.getCenter().add(0.5f, 0.5f, 0.5f));
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.RED, highlightUpdatedBlocks, updateBlockBox8, 20);
@@ -480,28 +476,28 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("This wire got a command to overwrite to low value but it holds high value.")
+            .text("This wire received a command to set its value lower, but it already holds a higher value.")
             .pointAt(wirePos1.getCenter().add(0, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Hence, the wire doesn't overwrite itself and stop the updating chain")
+            .text("Therefore, the wire does not overwrite itself and stops the update chain")
             .pointAt(wirePos1.getCenter().add(0, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("This wire got a command to overwrite to high value and it holds low value.")
+            .text("This wire received a command to update to a higher value while it currently holds a lower value.")
             .pointAt(wirePos2.getCenter().add(0, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Hence it updates itself and tell connected neighbors to update to high value")
+            .text("Therefore, it updates itself and instructs connected neighbors to update to the higher value")
             .pointAt(wirePos2.getCenter().add(0, 0, 0));
         AABB updateBlockBox12 = new AABB(wirePos3.getCenter().add(-0.5f, -0.5f, -0.5f), wirePos3.getCenter().add(0.5f, 0.5f, 0.5f));
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.RED, highlightUpdatedBlocks, updateBlockBox12, 100);
@@ -516,14 +512,14 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("This wire got a command to overwrite to high value but it already holds high. Stops the updating chain")
+            .text("This wire received a command to update to a high value, but it already holds that value, so the update chain stops here")
             .pointAt(wirePos1.getCenter().add(0, 0, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("This wire got a command to overwrite to high value and it holds low value. Update and tell neighbors")
+            .text("This wire received a command to update to a higher value while it currently holds a lower value. It updates itself and tells its neighbors to update as well")
             .pointAt(wirePos3.getCenter().add(0, 0, 0));
 
         AABB updateBlockBox14 = new AABB(sourceLow.getCenter().add(-0.5f, -0.5f, -0.5f), sourceLow.getCenter().add(0.5f, 0.5f, 0.5f));
@@ -541,7 +537,7 @@ public class DCtimeModPonderScenes {
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.OUTPUT, highlightUpdatedBlocks, updateBlockBox17, 50);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Source tries to overwrite the output port's wire")
+            .text("The source attempts to overwrite the output port's wire")
             .pointAt(sourceLow.getCenter().add(0, 0, 0));
 
         scene.idle(30);
@@ -563,21 +559,21 @@ public class DCtimeModPonderScenes {
         scene.overlay().showText(20)
             .independent(10)
             .colored(PonderPalette.RED)
-            .text("We can see that when there are two output source trying to output to the same net");
+            .text("We can see that when there are two output sources trying to output to the same network");
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .independent(10)
             .colored(PonderPalette.RED)
-            .text("The net holds the highest signal value of all the sources");
+            .text("The network always holds the highest signal value from all connected sources");
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .independent(10)
             .colored(PonderPalette.RED)
-            .text("And when the circuit is unstable, the value of the wire might bounce up and down which may cause unwanted behaviour");
+            .text("And when the circuit is unstable, the wire's value may fluctuate, potentially causing unintended behavior");
 
         scene.idle(30);
 
@@ -607,7 +603,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Operation block is a block that can perform operations on the signal it receives")
+            .text("The Operation Block can perform various operations on the signal it receives")
             .pointAt(operationBlockPos.getCenter());
         scene.idle(40);
 
@@ -630,7 +626,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Right click the operation block with a signal configurator to configure the side mode")
+            .text("Right-click the Operation Block with a Signal Configurator to set the side mode")
             .pointAt(operationBlockPos.getCenter());
 
         scene.idle(40);
@@ -638,14 +634,14 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The side can be set to INPUT, INPUT2, and OUTPUT")
+            .text("You can set the side to INPUT, INPUT2, or OUTPUT")
             .pointAt(operationBlockPosNorth);
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("INPUT port has a white arrow like texture pointing into the block")
+            .text("The INPUT port is indicated by a white arrow texture pointing into the block")
             .pointAt(operationBlockPosNorth);
 
         scene.idle(40);
@@ -663,7 +659,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("INPUT2 port has a blue arrow like texture pointing into the block")
+            .text("The INPUT2 port is indicated by a blue arrow texture pointing into the block")
             .pointAt(operationBlockPosNorth);
 
         scene.idle(40);
@@ -681,14 +677,14 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("OUTPUT port has a white arrow like texture pointing out of the block")
+            .text("The OUTPUT port is shown by a white arrow texture pointing out of the block")
             .pointAt(operationBlockPosNorth);
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Now we set east side to INPUT")
+            .text("Now let's set the east side to INPUT")
             .pointAt(operationBlockPosEast);
 
         scene.world().modifyBlock(operationBlockPos, (blockState ->
@@ -702,7 +698,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("And west side to INPUT2")
+            .text("And set the west side to INPUT2")
             .pointAt(operationBlockPosWest);
 
         scene.world().modifyBlock(operationBlockPos, (blockState ->
@@ -726,21 +722,21 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("When we connected the output port")
+            .text("After connecting the output port")
             .pointAt(outputWirePos.getCenter());
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Because it has an internal buffer in it that stores the last signal calculated")
+            .text("Because it contains an internal buffer that stores the most recently calculated signal value")
             .pointAt(operationBlockPos.getCenter());
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("and it stores signal value 0 in default")
+            .text("By default, it stores a signal value of 0")
             .pointAt(operationBlockPos.getCenter());
 
         scene.idle(40);
@@ -751,7 +747,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("so the output wire would say \"Signal Value: 0\" when right clicked with a signal detector")
+            .text("The output wire will display \"Signal Value: 0\" when right-clicked with a signal detector")
             .pointAt(outputWirePos.getCenter());
 
         scene.world().setBlock(outputWirePos.below(), Blocks.BLACK_WOOL.defaultBlockState(), true);
@@ -764,7 +760,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("By the way the operation block would say \"Output Signal Value: 0\" when right clicked with a signal detector")
+            .text("When right-clicked with a signal detector, the operation block will display \"Output Signal Value: 0\"")
             .pointAt(operationBlockPos.getCenter());
 
         scene.idle(40);
@@ -773,7 +769,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Now when we connects the input ports to the wires")
+            .text("Now let's connect the input ports to the wires")
             .pointAt(operationBlockPos.getCenter());
 
         scene.world().modifyBlock(inputWirePos, (blockState ->
@@ -796,7 +792,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent()
-            .text("The output still remains 0 because we did not insert a operation card");
+            .text("The output remains 0 because no operation card has been inserted yet");
 
         scene.world().setBlock(inputWirePos.below(), Blocks.RED_WOOL.defaultBlockState(), true);
         scene.world().setBlock(inputWirePos2.below(), Blocks.YELLOW_WOOL.defaultBlockState(), true);
@@ -805,7 +801,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The block has a GUI attached to it. Right click to open the GUI")
+            .text("This block has a GUI. Right-click to open it.")
             .pointAt(operationBlockPos.getCenter());
 
         scene.idle(40);
@@ -815,7 +811,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("There is a slot in it. Insert a card into it")
+            .text("Insert a card into the slot to configure the operation")
             .pointAt(operationBlockPos.getCenter());
 
         scene.idle(40);
@@ -823,13 +819,13 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent()
-            .text("There are a lot of types of cards with different operations and different input/output ports");
+            .text("There are many types of cards, each offering different operations and supporting various input and output port configurations");
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .independent()
-            .text("Some behaves different when the number of input/output ports are different");
+            .text("Some cards behave differently depending on the number of input or output ports");
 
         scene.idle(40);
 
@@ -839,7 +835,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Now the output wire should have the value of the operation result")
+            .text("The output wire now reflects the result of the operation")
             .pointAt(outputWirePos.getCenter());
 
         scene.world().setBlock(outputWirePos.below(), Blocks.ORANGE_WOOL.defaultBlockState(), true);
@@ -849,7 +845,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("If we disconnect the input wire to the source")
+            .text("If we disconnect the input wire from the source")
             .pointAt(inputWirePos.getCenter());
 
         scene.world().modifyBlock(inputWirePos, (blockState ->
@@ -864,7 +860,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("The output wire would still hold the last calculated value")
+            .text("The output wire will retain the last calculated value even after disconnecting the input")
             .pointAt(outputWirePos.getCenter());
 
         scene.world().setBlock(inputWirePos.below(), Blocks.WHITE_WOOL.defaultBlockState(), true);
@@ -873,41 +869,41 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .independent()
-            .text("This is because the block was unable to do the operation with \"No Signal\" which stop updating the output");
+            .text("This is because the block could not perform the operation with \"No Signal\", so it stopped updating the output");
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .independent()
             .colored(PonderPalette.RED)
-            .text("From the ponder of signal wire, we know that the wire would hold \"No Signal\" for a few ticks when the input network got modified");
+            .text("As shown earlier (Signal Wire's Ponder), the signal wire may temporarily hold \"No Signal\" for a few ticks when the input network is modified");
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .independent()
             .colored(PonderPalette.RED)
-            .text("The operation block ignores \"No Signal\" and would not update the output wire to \"No Signal\" which makes it safe");
+            .text("The operation block ignores \"No Signal\" and will not update the output wire to \"No Signal\", making it safe");
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .independent()
             .colored(PonderPalette.RED)
-            .text("But if there are two sources connected to the same input network then the lower signal value that only exist for a few ticks");
+            .text("But if two sources are connected to the same input network, a lower signal value may briefly appear for a few ticks");
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .independent()
             .colored(PonderPalette.RED)
-            .text("WILL pass through the operation block and cause the output wire to hold a unexpected value than it should be for a few ticks");
+            .text("This WILL pass through the operation block and cause the output wire to temporarily hold an unexpected value for a few ticks");
 
         scene.idle(40);
         scene.markAsFinished();
     }
     public static void signalToRedstone(SceneBuilder scene, SceneBuildingUtil util) {
-        scene.title("signal_to_redstone", "Signal to Redstone Tutorial");
+        scene.title("signal_to_redstone", "Signal to Redstone Converter Tutorial");
         scene.showBasePlate();
 
         BlockPos wirePos = util.grid().at(2, 1, 2);
@@ -926,7 +922,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Signal to Redstone Converter look identical to a signal wire but with more functionalities")
+            .text("The Signal to Redstone Converter looks just like a signal wire, but offers additional features")
             .pointAt(wirePos.getCenter());
         scene.idle(40);
 
@@ -946,14 +942,14 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Right click it with a signal configurator to configure the side mode")
+            .text("Right-click it with a Signal Configurator to connect or disconnect the wires")
             .pointAt(wirePos.getCenter());
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("What it is different from a signal wire is that it can convert the signal value to redstone power")
+            .text("Unlike a signal wire, it can convert the signal value into redstone power")
             .independent();
 
         scene.idle(40);
@@ -971,14 +967,14 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Now if the wire holds 0 to 15 signal value, it would output 0 to 15 redstone power")
+            .text("If the wire holds a signal value from 0 to 15, it will output the same redstone power level")
             .pointAt(wirePos.getCenter());
 
         scene.idle(40);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("And signal below 0 would output 0 redstone power and signal above 15 would output 15 redstone power")
+            .text("Signals below 0 output 0 redstone power; signals above 15 output 15 redstone power")
             .pointAt(wirePos.getCenter());
 
         scene.idle(40);
@@ -1021,7 +1017,7 @@ public class DCtimeModPonderScenes {
         scene.idle(40);
 
         scene.overlay().showText(20).colored(PonderPalette.WHITE)
-            .text("It has a output port that can be rotated using a signal configurator")
+            .text("It has an output port that can be rotated using a Signal Configurator")
             .pointAt(constSignalBlockPos.getCenter());
 
         scene.idle(40);
@@ -1058,13 +1054,13 @@ public class DCtimeModPonderScenes {
         scene.idle(40);
 
         scene.overlay().showText(20).colored(PonderPalette.WHITE)
-            .text("Type the desired signal value in the text box and close the GUI using esc to set the value")
+            .text("Enter the desired signal value in the text box, then press ESC to apply the new value")
             .independent();
 
         scene.idle(40);
 
         scene.overlay().showText(20).colored(PonderPalette.WHITE)
-            .text("If the text is not a valid integer, it will not change the value")
+            .text("If the entered text is not a valid integer, the value will remain unchanged")
             .independent();
 
         scene.idle(40);
@@ -1072,4 +1068,94 @@ public class DCtimeModPonderScenes {
         scene.markAsFinished();
     }
 
+    public static void redstoneToSignal(SceneBuilder scene, SceneBuildingUtil util) {
+        Object highlightUpdatedBlocks = new Object();
+        BlockPos chestPos = util.grid().at(4, 1, 2);
+        BlockPos poweredBlockPos = util.grid().at(2, 1, 3);
+        BlockPos undirectedRedstoneWirePos = util.grid().at(1, 1, 2);
+        AABB chestInputBox = new AABB(chestPos.getCenter().add(-1.5f, -0.5f, -0.5f), chestPos.getCenter().add(0.5f, 0.5, 0.5f));
+        AABB powerBlockBox = new AABB(poweredBlockPos.getCenter().add(2.5f, 1.5f, 1.5f), poweredBlockPos.getCenter().add(-0.5f, -0.5f, -0.5f));
+        AABB undirectRedstoneWireBox = new AABB(undirectedRedstoneWirePos.getCenter().add(-1.5f, -0.5f, -1.5f), undirectedRedstoneWirePos.getCenter().add(0.5f, 0.5f, 0.5f));
+        scene.title("redstone_to_signal", "Redstone to Signal Converter Tutorial");
+        scene.showBasePlate();
+
+        BlockPos rtsBlockPos = util.grid().at(2, 1, 2);
+
+        scene.world().showSection(util.select().position(rtsBlockPos), Direction.DOWN);
+        scene.world().modifyBlock(rtsBlockPos, (blockState ->
+                blockState.setValue(RedstoneToSignalConverterBlock.OUTPUT_DIRECTION,
+                        Direction.WEST
+                )), false);
+        scene.idle(40);
+        scene.overlay().showText(20)
+            .colored(PonderPalette.WHITE)
+            .text("Redstone to Signal Converter is a block that converts redstone power into a signal value")
+            .pointAt(rtsBlockPos.getCenter());
+        scene.idle(40);
+        scene.overlay().showText(20)
+            .colored(PonderPalette.WHITE)
+            .text("It has an output port that can be rotated using a Signal Configurator")
+            .pointAt(rtsBlockPos.getCenter());
+        scene.idle(40);
+        scene.addKeyframe();
+        scene.overlay().showControls(rtsBlockPos.getCenter(), Pointing.DOWN, 5)
+            .rightClick()
+            .withItem(RegisterItems.SIGNAL_CONFIGURATOR.get().getDefaultInstance());
+        scene.world().modifyBlock(rtsBlockPos, (blockState ->
+            blockState.setValue(RedstoneToSignalConverterBlock.OUTPUT_DIRECTION,
+                Direction.UP
+            )), false);
+        scene.idle(40);
+        scene.overlay().showText(20)
+            .colored(PonderPalette.WHITE)
+            .text("It supports all directions except receiving redstone input on the signal output side")
+            .pointAt(rtsBlockPos.getCenter());
+        for (int x = 0; x < 5; x++) {
+            for (int z = 0; z < 5; z++) {
+                for (int y = 1; y <= 2; y++) {
+                    scene.world().showSection(util.select().position(x, y, z), Direction.DOWN);
+                    scene.idle(1);
+                }
+            }
+        }
+        scene.idle(40);
+        // text
+        scene.overlay().showText(20)
+            .colored(PonderPalette.WHITE)
+            .text("It supports all vanilla Minecraft redstone input methods")
+            .pointAt(rtsBlockPos.getCenter());
+
+        scene.idle(40);
+        scene.overlay().showText(20)
+            .colored(PonderPalette.WHITE)
+            .text("For example, direct redstone input")
+            .pointAt(chestInputBox.getCenter());
+        scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, highlightUpdatedBlocks, chestInputBox, 30);
+        scene.idle(40);
+        scene.overlay().showText(20)
+                .colored(PonderPalette.WHITE)
+                .text("A neighboring block that is powered by redstone")
+                .pointAt(powerBlockBox.getCenter());
+        scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, highlightUpdatedBlocks, powerBlockBox, 30);
+        scene.idle(40);
+        scene.overlay().showText(20)
+            .colored(PonderPalette.WHITE)
+            .text("By the way, undirected redstone wire does not function as an input")
+            .pointAt(undirectRedstoneWireBox.getCenter());
+        scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, highlightUpdatedBlocks, undirectRedstoneWireBox, 30);
+        scene.idle(40);
+        scene.addKeyframe();
+        scene.overlay().showText(20)
+            .colored(PonderPalette.WHITE)
+            .text("If there is no redstone signal input, the converter will output a signal value of 0")
+            .pointAt(rtsBlockPos.getCenter());
+        scene.idle(40);
+        scene.overlay().showText(20)
+            .colored(PonderPalette.WHITE)
+            .text("If there is any redstone signal input, it will output the highest redstone power as the signal value")
+            .pointAt(rtsBlockPos.getCenter());
+        scene.idle(40);
+
+        scene.markAsFinished();
+    }
 }

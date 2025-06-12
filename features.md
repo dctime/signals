@@ -197,3 +197,7 @@ Change Mod ID to dctimesignals and MOD Name to Signals
 Implement RedstoneToSignalConverterBlock to convert redstone signals to custom signal wire output
 
 Add Redstone to Signal Converter block and update related models and language entries
+
+### 2025.6.13
+
+Add redstone to signal converter tutorial and improve existing scene texts
