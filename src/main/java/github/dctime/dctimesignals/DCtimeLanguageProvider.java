@@ -19,6 +19,7 @@ public class DCtimeLanguageProvider extends LanguageProvider {
         this.addBlock(RegisterBlocks.CONSTANT_SIGNAL_BLOCK, "Const Signal Block");
         this.addBlock(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER, "Signal to Redstone Converter");
         this.addBlock(RegisterBlocks.SIGNAL_OPERATION_BLOCK, "Signal Operation Block");
+        this.addBlock(RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER, "Redstone to Signal Converter");
         this.addItem(RegisterItems.SIGNAL_DETECTOR, "Signal Detector");
         this.addItem(RegisterItems.AND_CARD, "And Card");
         this.addItem(RegisterItems.NOT_CARD, "Not Card");

@@ -1,8 +1,12 @@
 package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.RegisterCapabilities;
+import github.dctime.dctimesignals.RegisterItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -10,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 abstract class SignalOutputBlock extends Block {
@@ -22,6 +27,26 @@ abstract class SignalOutputBlock extends Block {
     protected final Direction[] directions = {
             Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST
     };
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide && player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
+            Integer value = getSignalValue(state, level, pos);
+            if (value == null)
+                player.displayClientMessage(Component.literal("No Output Signal"), false);
+            else
+                player.displayClientMessage(Component.literal("Output Signal Value: " + value), false);
+
+            return InteractionResult.SUCCESS;
+        }
+
+        if (!level.isClientSide && player.getMainHandItem().getItem() == RegisterItems.SIGNAL_CONFIGURATOR.get()) {
+            setToNextDirection(state, level, pos);
+            return InteractionResult.SUCCESS;
+        }
+
+        return InteractionResult.FAIL;
+    }
 
     protected void setToNextDirection(BlockState state, Level level, BlockPos pos) {
         Direction currentDirection = state.getValue(OUTPUT_DIRECTION);

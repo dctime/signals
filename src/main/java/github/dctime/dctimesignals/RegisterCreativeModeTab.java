@@ -14,7 +14,6 @@ public class RegisterCreativeModeTab {
         "dctimesignalstab", ()->CreativeModeTab.builder()
             .title(Component.translatable("itemGroup." + DCtimeMod.MODID + ".dctimesignalstab"))
             .icon(()->RegisterBlockItems.BUILD_HELPER_BLOCK_ITEM.get().getDefaultInstance())
-            .withSearchBar()
             .displayItems((params, output)->{
                 output.accept(RegisterBlockItems.BUILD_HELPER_BLOCK_ITEM);
                 output.accept(RegisterBlockItems.SIGNAL_WIRE);

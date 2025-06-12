@@ -346,8 +346,8 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
     }
     private void redstoneToSignalModel() {
         ModelFile restoneToSignalModel = models().orientableVertical(
-                "const_signal_block",
-                modLoc("block/const_signal_block_side"),
+                "redstone_to_signal_converter",
+                modLoc("block/redstone_to_signal_block_side"),
                 modLoc("block/const_signal_block_front")
         );
         Block redstoneToSignalBlock = RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER.get();

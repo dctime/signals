@@ -35,17 +35,9 @@ public class ConstSignalBlock extends SignalOutputBlock implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide && player.getMainHandItem().getItem() == RegisterItems.SIGNAL_DETECTOR.get()) {
-            ConstSignalBlockEntity entity = (ConstSignalBlockEntity) level.getBlockEntity(pos);
-            if (entity == null) return InteractionResult.FAIL;
-            player.displayClientMessage(Component.literal("Const Output Signal Value: " + entity.getOutputSignalValue()), false);
-
-            return InteractionResult.SUCCESS;
-        }
-
-        if (!level.isClientSide && player.getMainHandItem().getItem() == RegisterItems.SIGNAL_CONFIGURATOR.get()) {
-            setToNextDirection(state, level, pos);
-            return InteractionResult.SUCCESS;
+        InteractionResult result = super.useWithoutItem(state, level, pos, player, hitResult);
+        if (result == InteractionResult.SUCCESS) {
+            return result;
         }
 
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {

@@ -17,6 +17,7 @@ public class DCtimeItemModelProvider extends net.neoforged.neoforge.client.model
     protected void registerModels() {
         multiModelBlock(RegisterBlocks.BUILD_HELPER_BLOCK.get(), "build_helper_block_non_destroy_mode");
         multiModelBlock(RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get(), "const_signal_block");
+        multiModelBlock(RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER.get(), "redstone_to_signal_converter");
         multiModelBlock(RegisterBlocks.SINGAL_WIRE.get(), "signal_wire_none");
         multiModelBlock(RegisterBlocks.SIGNAL_OPERATION_BLOCK.get(), "operation_block_none");
         multiModelBlock(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER.get(), "signal_wire_none");
