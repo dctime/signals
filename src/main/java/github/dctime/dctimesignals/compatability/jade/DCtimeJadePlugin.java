@@ -2,6 +2,7 @@ package github.dctime.dctimesignals.compatability.jade;
 
 import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.block.ConstSignalBlock;
+import github.dctime.dctimesignals.block.RedstoneToSignalConverterBlock;
 import github.dctime.dctimesignals.block.SignalOperationBlock;
 import github.dctime.dctimesignals.block.SignalWireBlock;
 import snownee.jade.api.IWailaClientRegistration;
@@ -19,6 +20,7 @@ public class DCtimeJadePlugin implements IWailaPlugin {
         registration.registerBlockDataProvider(SignalValueBlockComponentProvider.INSTANCE, SignalWireBlock.class);
         registration.registerBlockDataProvider(OutputSignalValueBlockComponentProvider.INSTANCE, ConstSignalBlock.class);
         registration.registerBlockDataProvider(OutputSignalValueBlockComponentProvider.INSTANCE, SignalOperationBlock.class);
+        registration.registerBlockDataProvider(OutputSignalValueBlockComponentProvider.INSTANCE, RedstoneToSignalConverterBlock.class);
     }
 
     @Override
@@ -26,6 +28,7 @@ public class DCtimeJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(SignalValueBlockComponentProvider.INSTANCE, SignalWireBlock.class);
         registration.registerBlockComponent(OutputSignalValueBlockComponentProvider.INSTANCE, ConstSignalBlock.class);
         registration.registerBlockComponent(OutputSignalValueBlockComponentProvider.INSTANCE, SignalOperationBlock.class);
+        registration.registerBlockComponent(OutputSignalValueBlockComponentProvider.INSTANCE, RedstoneToSignalConverterBlock.class);
     }
 
     public static void dependenciesDataGen(BiConsumer<String, String> langConsumer) {

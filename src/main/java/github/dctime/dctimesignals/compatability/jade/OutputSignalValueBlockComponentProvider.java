@@ -2,6 +2,7 @@ package github.dctime.dctimesignals.compatability.jade;
 
 import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.block.ConstSignalBlockEntity;
+import github.dctime.dctimesignals.block.RedstoneToSignalConverterBlockEntity;
 import github.dctime.dctimesignals.block.SignalOperationBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -42,6 +43,11 @@ public class OutputSignalValueBlockComponentProvider implements IBlockComponentP
 
         if (blockAccessor.getBlockEntity() instanceof SignalOperationBlockEntity entity) {
             int value = entity.getOutputValue();
+            compoundTag.putInt("outputSignalValue", value);
+        }
+
+        if (blockAccessor.getBlockEntity() instanceof RedstoneToSignalConverterBlockEntity entity) {
+            int value = entity.getReceivedSignal();
             compoundTag.putInt("outputSignalValue", value);
         }
     }
