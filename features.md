@@ -201,3 +201,5 @@ Add Redstone to Signal Converter block and update related models and language en
 ### 2025.6.13
 
 Add redstone to signal converter tutorial and improve existing scene texts
+
+Add RedstoneToSignalConverterBlockEntity to load value when startup

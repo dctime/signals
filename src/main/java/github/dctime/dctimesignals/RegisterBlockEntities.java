@@ -1,9 +1,6 @@
 package github.dctime.dctimesignals;
 
-import github.dctime.dctimesignals.block.ConstSignalBlockEntity;
-import github.dctime.dctimesignals.block.FlawlessExchangerBlockEntity;
-import github.dctime.dctimesignals.block.SignalOperationBlockEntity;
-import github.dctime.dctimesignals.block.SignalWireBlockEntity;
+import github.dctime.dctimesignals.block.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -45,6 +42,14 @@ public class RegisterBlockEntities {
             SignalOperationBlockEntity::new,
             RegisterBlocks.SIGNAL_OPERATION_BLOCK.get()
         ).build(null)
+    );
+
+    public static final Supplier<BlockEntityType<RedstoneToSignalConverterBlockEntity>> REDSTONE_TO_SIGNAL_CONVERTER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "redstone_to_signal_converter_block_entity",
+            ()-> BlockEntityType.Builder.of(
+                    RedstoneToSignalConverterBlockEntity::new,
+                    RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER.get()
+            ).build(null)
     );
 
 }

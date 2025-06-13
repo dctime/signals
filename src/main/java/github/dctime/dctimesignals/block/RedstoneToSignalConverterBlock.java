@@ -4,16 +4,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class RedstoneToSignalConverterBlock extends SignalOutputBlock{
+public class RedstoneToSignalConverterBlock extends SignalOutputBlock implements EntityBlock {
     public RedstoneToSignalConverterBlock(Properties properties) {
         super(properties);
     }
-
-    private int receivedSignal = 0;
 
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
@@ -28,21 +28,14 @@ public class RedstoneToSignalConverterBlock extends SignalOutputBlock{
     }
 
     private void receiveSignalFromOutside(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-//        Direction outputDirection = state.getValue(OUTPUT_DIRECTION);
-//
-//        int tempReceivedSignal = 0;
-//        for (Direction direction : directions) {
-//            if (state.getValue(SignalOutputBlock.OUTPUT_DIRECTION) == direction) continue;
-//            int temp = level.getSignal(pos.relative(direction), direction.getOpposite());
-//            if (temp > tempReceivedSignal) {
-//                tempReceivedSignal = temp;
-//            }
-//        }
+        if (level.isClientSide()) return;
 
         int tempReceivedSignal = calculateTargetStrength(level, pos);
         System.out.println("RedstoneToSignal: " + tempReceivedSignal);
-        receivedSignal = tempReceivedSignal;
-        detectSignalWireAndUpdate(state, level, pos, true, false, receivedSignal);
+        if (level.getBlockEntity(pos) instanceof RedstoneToSignalConverterBlockEntity blockEntity) {
+            blockEntity.setReceivedSignal(tempReceivedSignal);
+            detectSignalWireAndUpdate(state, level, pos, true, false, blockEntity.getReceivedSignal());
+        }
     }
 
     private int calculateTargetStrength(Level level, BlockPos pos) {
@@ -71,6 +64,13 @@ public class RedstoneToSignalConverterBlock extends SignalOutputBlock{
 
     @Override
     @Nullable Integer getSignalValue(BlockState state, Level level, BlockPos pos) {
-        return receivedSignal;
+        if (level.getBlockEntity(pos) instanceof RedstoneToSignalConverterBlockEntity entity)
+            return entity.getReceivedSignal();
+        return null;
+    }
+
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new RedstoneToSignalConverterBlockEntity(blockPos, blockState);
     }
 }
