@@ -205,3 +205,7 @@ Add redstone to signal converter tutorial and improve existing scene texts
 Add RedstoneToSignalConverterBlockEntity to load value when startup
 
 2025.6.13 (1) RedstoneToSignalConverterBlock Jade Implementation 
+
+### 2025.6.14
+
+Dimension Type and Dimension Datagen
