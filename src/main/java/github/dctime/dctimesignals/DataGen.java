@@ -1,6 +1,9 @@
 package github.dctime.dctimesignals;
 
+import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.registries.Registries;
@@ -9,10 +12,13 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.worldgen.SurfaceRuleData;
+import net.minecraft.data.worldgen.features.CaveFeatures;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.block.Blocks;
@@ -20,8 +26,11 @@ import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
-import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -44,6 +53,8 @@ public class DataGen {
     );
     protected static final NoiseSettings OVERWORLD_NOISE_SETTINGS = NoiseSettings.create(-64, 384, 1, 2);
     public static final ResourceKey<Biome> SINGAL_WORLD_BIOME = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world_biome"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SIGNAL_DRIPSTONE_CLUSTER = ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_dripstone_cluster"));
+    public static final ResourceKey<PlacedFeature> SIGNAL_DRIPSTONE_CLUSTER_PLACED = ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_dripstone_cluster"));
 
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {
@@ -91,7 +102,7 @@ public class DataGen {
                     new RegistrySetBuilder().add(
                             Registries.DIMENSION_TYPE,
                             bootstrapContext -> {
-                                bootstrapContext.register(SIGNAL_WORLD_TYPE, new DimensionType(OptionalLong.empty(), true, false, false, true, (double)1.0F, true, false, -64, 384, 384, BlockTags.INFINIBURN_OVERWORLD, BuiltinDimensionTypes.OVERWORLD_EFFECTS, 1.0F, new DimensionType.MonsterSettings(false, true, UniformInt.of(0, 7), 0)));
+                                bootstrapContext.register(SIGNAL_WORLD_TYPE, new DimensionType(OptionalLong.empty(), true, false, false, true, (double)1.0F, true, false, -64, 384, 384, BlockTags.INFINIBURN_OVERWORLD, BuiltinDimensionTypes.OVERWORLD_EFFECTS, 0.0f, new DimensionType.MonsterSettings(false, true, UniformInt.of(0, 7), 0)));
                             }
                     ).add(
                             Registries.LEVEL_STEM,
@@ -140,16 +151,46 @@ public class DataGen {
                     ).add(
                             Registries.BIOME,
                             bootstrapContext -> {
+                                Holder.Reference<PlacedFeature> feature = bootstrapContext.lookup(Registries.PLACED_FEATURE).getOrThrow(SIGNAL_DRIPSTONE_CLUSTER_PLACED);
                                 bootstrapContext.register(SINGAL_WORLD_BIOME, new Biome.BiomeBuilder()
                                         .hasPrecipitation(true)
                                         .temperature(0.8F)
                                         .temperatureAdjustment(Biome.TemperatureModifier.NONE)
                                         .downfall(0.4F)
                                         .specialEffects(new BiomeSpecialEffects.Builder().skyColor(16761261).fogColor(16761261).waterColor(16761261).waterFogColor(16761261).grassColorOverride(16761261).foliageColorOverride(16761261).ambientParticle(new AmbientParticleSettings(DustParticleOptions.REDSTONE, 0.01f)).build())
-                                        .generationSettings(BiomeGenerationSettings.EMPTY)
+                                        .generationSettings(new BiomeGenerationSettings(ImmutableMap.of(), List.of(HolderSet.direct(feature))))
                                         .mobSpawnSettings(MobSpawnSettings.EMPTY)
                                         .build()
                                 );
+                            }
+                    ).add(
+                            Registries.CONFIGURED_FEATURE,
+                            bootstrapContext -> {
+                                FeatureUtils.register(
+                                        bootstrapContext,
+                                        SIGNAL_DRIPSTONE_CLUSTER,
+                                        Feature.DRIPSTONE_CLUSTER,
+                                        new DripstoneClusterConfiguration(
+                                                12,
+                                                UniformInt.of(3, 6),
+                                                UniformInt.of(2, 8),
+                                                1,
+                                                3,
+                                                UniformInt.of(2, 4),
+                                                UniformFloat.of(0.3F, 0.7F),
+                                                ClampedNormalFloat.of(0.1F, 0.3F, 0.1F, 0.9F),
+                                                0.1F,
+                                                3,
+                                                8
+                                        )
+                                );
+                            }
+                    ).add(
+                            Registries.PLACED_FEATURE,
+                            bootstrapContext -> {
+                                HolderGetter<ConfiguredFeature<?, ?>> holdergetter = bootstrapContext.lookup(Registries.CONFIGURED_FEATURE);
+                                Holder<ConfiguredFeature<?, ?>> holder = holdergetter.getOrThrow(CaveFeatures.DRIPSTONE_CLUSTER);
+                                PlacementUtils.register(bootstrapContext, SIGNAL_DRIPSTONE_CLUSTER_PLACED, holder, new PlacementModifier[]{CountPlacement.of(UniformInt.of(48, 96)), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()});
                             }
                     ),
                     Set.of(DCtimeMod.MODID)

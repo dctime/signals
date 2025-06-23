@@ -213,3 +213,7 @@ Dimension Type and Dimension Datagen
 ### 2025.6.19
 
 Biome Datagen
+
+### 2025.6.23
+
+Add signal dripstone cluster feature and biome generation settings
