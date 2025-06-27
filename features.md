@@ -217,3 +217,7 @@ Biome Datagen
 ### 2025.6.23
 
 Add signal dripstone cluster feature and biome generation settings
+
+### 2025.6.28
+
+Add signal world biome and configured features for dripstone and redstone ore
