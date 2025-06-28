@@ -1,6 +1,7 @@
 package github.dctime.dctimesignals.feature;
 
 import com.mojang.serialization.Codec;
+import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.configuration.SignalBlockingMaterialChunkConfiguration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -32,7 +33,7 @@ public class SignalBlockingMaterialChunkFeature extends Feature<SignalBlockingMa
                 for (int z = -random.nextIntBetweenInclusive(0, 8); z <= random.nextIntBetweenInclusive(0, 8); z++) {
                     BlockPos pos = originPos.offset(x, y, z);
                     if (level.getBlockState(pos).is(Blocks.STONE)) {
-                        level.setBlock(pos, Blocks.DIRT.defaultBlockState(), 3);
+                        level.setBlock(pos, RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK.get().defaultBlockState(), 3);
                     }
                 }
             }

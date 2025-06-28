@@ -1,10 +1,7 @@
 package github.dctime.dctimesignals;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.*;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
@@ -36,6 +33,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(modid=DCtimeMod.MODID, bus= EventBusSubscriber.Bus.MOD)
 public class DataGen {
@@ -52,7 +50,14 @@ public class DataGen {
     public static void onGatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+
+        // tags
+        event.getGenerator().addProvider(
+                event.includeServer(),
+                new DCtimeBlockTagsProvider(output, lookupProvider, existingFileHelper)
+        );
 
         // block loot tables
         event.createProvider(((packOutput, completableFuture) -> new LootTableProvider(

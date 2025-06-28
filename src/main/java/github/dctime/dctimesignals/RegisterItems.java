@@ -37,6 +37,11 @@ public class RegisterItems {
         NotCardItem::new, // The factory that the properties will be passed into.
         new Item.Properties() // The properties to use.
     );
+    public static final DeferredItem<Item> SIGNAL_BLOCKING_MATERIAL = ITEMS.registerItem(
+        "signal_blocking_material",
+        Item::new, // The factory that the properties will be passed into.
+        new Item.Properties() // The properties to use.
+    );
 
 
 

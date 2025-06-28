@@ -25,6 +25,7 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         signalToRedstoneModel();
         operationSignalModel();
         redstoneToSignalModel();
+        simpleBlock(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK.get());
     }
 
     private void signalWireModel() {

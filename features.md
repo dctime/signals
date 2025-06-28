@@ -225,3 +225,7 @@ Add signal world biome and configured features for dripstone and redstone ore
 ### 2025.6.28
 
 Add signal blocking material chunk feature and its configuration
+
+### 2025.6.29
+
+Add signal blocking material block and its associated features

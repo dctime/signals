@@ -21,11 +21,13 @@ public class RegisterCreativeModeTab {
                 output.accept(RegisterBlockItems.SINGAL_TO_REDSTONE_CONVERTER);
                 output.accept(RegisterBlockItems.SIGNAL_OPERATION_BLOCK);
                 output.accept(RegisterBlockItems.REDSTONE_TO_SIGNAL_CONVERTER);
+                output.accept(RegisterBlockItems.SIGNAL_BLOCKING_MATERIAL_BLOCK);
                 output.accept(RegisterItems.SIGNAL_DETECTOR);
                 output.accept(RegisterItems.AND_CARD);
                 output.accept(RegisterItems.OR_CARD);
                 output.accept(RegisterItems.NOT_CARD);
                 output.accept(RegisterItems.SIGNAL_CONFIGURATOR);
+                output.accept(RegisterItems.SIGNAL_BLOCKING_MATERIAL);
             })
             .build()
     );

@@ -2,6 +2,7 @@ package github.dctime.dctimesignals;
 
 import github.dctime.dctimesignals.block.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -75,5 +76,10 @@ public class RegisterBlocks {
                     .destroyTime(1.0f)
                     .explosionResistance(100.0f)
                     .sound(SoundType.METAL)
+    );
+
+    public static final DeferredBlock<Block> SIGNAL_BLOCKING_MATERIAL_BLOCK = BLOCKS.registerSimpleBlock(
+            "signal_blocking_material_block",
+            BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
     );
 }
