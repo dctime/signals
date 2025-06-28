@@ -149,13 +149,14 @@ public class DataGen {
                             bootstrapContext -> {
                                 Holder.Reference<PlacedFeature> dripstoneFeature = bootstrapContext.lookup(Registries.PLACED_FEATURE).getOrThrow(DataGenPlacedFeature.SIGNAL_DRIPSTONE_CLUSTER_PLACED);
                                 Holder.Reference<PlacedFeature> redstoneFeature = bootstrapContext.lookup(Registries.PLACED_FEATURE).getOrThrow(DataGenPlacedFeature.SIGNAL_REDSTONE_ORE_PLACED);
+                                Holder.Reference<PlacedFeature> blockingChunkFeature = bootstrapContext.lookup(Registries.PLACED_FEATURE).getOrThrow(DataGenPlacedFeature.SIGNAL_BLOCKING_MATERIAL_CHUNK_PLACED);
                                 bootstrapContext.register(SINGAL_WORLD_BIOME, new Biome.BiomeBuilder()
                                         .hasPrecipitation(true)
                                         .temperature(0.8F)
                                         .temperatureAdjustment(Biome.TemperatureModifier.NONE)
                                         .downfall(0.4F)
                                         .specialEffects(new BiomeSpecialEffects.Builder().skyColor(16761261).fogColor(16761261).waterColor(16761261).waterFogColor(16761261).grassColorOverride(16761261).foliageColorOverride(16761261).ambientParticle(new AmbientParticleSettings(DustParticleOptions.REDSTONE, 0.01f)).build())
-                                        .generationSettings(new BiomeGenerationSettings(ImmutableMap.of(), List.of(HolderSet.direct(List.of(dripstoneFeature, redstoneFeature)))))
+                                        .generationSettings(new BiomeGenerationSettings(ImmutableMap.of(), List.of(HolderSet.direct(List.of(dripstoneFeature, redstoneFeature, blockingChunkFeature)))))
                                         .mobSpawnSettings(MobSpawnSettings.EMPTY)
                                         .build()
                                 );

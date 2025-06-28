@@ -1,5 +1,6 @@
 package github.dctime.dctimesignals;
 
+import github.dctime.dctimesignals.configuration.SignalBlockingMaterialChunkConfiguration;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -22,6 +23,8 @@ public class DataGenConfiguredFeature {
             ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world_redstone_ore"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> SIGNAL_DRIPSTONE_CLUSTER =
             ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_dripstone_cluster"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SIGNAL_BLOCKING_CHUNK =
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_blocking_material_chunk"));
 
     public static void registerSignalConfiguredFeature(RegistrySetBuilder builder) {
         // Register your configured features here
@@ -29,6 +32,7 @@ public class DataGenConfiguredFeature {
         builder.add(Registries.CONFIGURED_FEATURE, bootStrap -> {
             registerSignalRedstoneOre(bootStrap);
             registerSignalDripstone(bootStrap);
+            registerSignalBlockingChunk(bootStrap);
         });
     }
 
@@ -64,6 +68,14 @@ public class DataGenConfiguredFeature {
                         8
                 )
         );
+    }
 
+    private static void registerSignalBlockingChunk(BootstrapContext<ConfiguredFeature<?,?>> context) {
+        FeatureUtils.register(
+                context,
+                SIGNAL_BLOCKING_CHUNK,
+                RegisterFeatures.SIGNAL_BLOCKING_MATERIAL_CHUNK.get(),
+                new SignalBlockingMaterialChunkConfiguration()
+        );
     }
 }

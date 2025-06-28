@@ -18,12 +18,16 @@ public class DataGenPlacedFeature {
             ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_dripstone_cluster"));
     public static final ResourceKey<PlacedFeature> SIGNAL_REDSTONE_ORE_PLACED =
             ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world_redstone_ore"));
+    public static final ResourceKey<PlacedFeature> SIGNAL_BLOCKING_MATERIAL_CHUNK_PLACED =
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_blocking_material_chunk"));
+
     public static void registerSignalPlacedFeature(RegistrySetBuilder builder) {
         // Register your configured features here
         // Example: builder.add(RegistryKeys.CONFIGURED_FEATURE, MyConfiguredFeatures.MY_ORE);
         builder.add(Registries.PLACED_FEATURE, bootStrap -> {
             registerSignalDripstonePlace(bootStrap);
             registerSignalRedstoneOrePlace(bootStrap);
+            registerSignalBlockingChunkPlace(bootStrap);
         });
     }
 
@@ -37,5 +41,11 @@ public class DataGenPlacedFeature {
         HolderGetter<ConfiguredFeature<?, ?>> holdergetter = context.lookup(Registries.CONFIGURED_FEATURE);
         Holder<ConfiguredFeature<?, ?>> holder = holdergetter.getOrThrow(DataGenConfiguredFeature.SIGNAL_REDSTONE_ORE);
         PlacementUtils.register(context, SIGNAL_REDSTONE_ORE_PLACED, holder, new PlacementModifier[]{CountPlacement.of(UniformInt.of(96, 192)), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()});
+    }
+
+    public static void registerSignalBlockingChunkPlace(BootstrapContext<PlacedFeature> context) {
+        HolderGetter<ConfiguredFeature<?, ?>> holdergetter = context.lookup(Registries.CONFIGURED_FEATURE);
+        Holder<ConfiguredFeature<?, ?>> holder = holdergetter.getOrThrow(DataGenConfiguredFeature.SIGNAL_BLOCKING_CHUNK);
+        PlacementUtils.register(context, SIGNAL_BLOCKING_MATERIAL_CHUNK_PLACED, holder, new PlacementModifier[]{CountPlacement.of(UniformInt.of(48, 96)), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()});
     }
 }
