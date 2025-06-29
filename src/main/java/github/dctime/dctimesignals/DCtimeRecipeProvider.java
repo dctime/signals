@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class DCtimeRecipeProvider extends RecipeProvider {
-    public static final ResourceKey<Level> SIGNAL_WORLD = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world"));
+
 
     public DCtimeRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);

@@ -82,4 +82,14 @@ public class RegisterBlocks {
             "signal_blocking_material_block",
             BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
     );
+
+    public static final DeferredBlock<Block> SINGAL_WORLD_PORTAL = BLOCKS.registerBlock(
+            "signal_world_portal",
+            SignalWorldPortalBlock::new,
+            BlockBehaviour.Properties.of()
+                    .noCollission()
+                    .instabreak()
+                    .noOcclusion()
+                    .sound(SoundType.GLASS)
+    );
 }

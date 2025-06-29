@@ -231,3 +231,5 @@ Add signal blocking material chunk feature and its configuration
 Add signal blocking material block and its associated features
 
 Add DCtimeRecipeProvider for signal world crafting recipes
+
+Add Signal World Portal block and associated functionality

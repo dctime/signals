@@ -40,7 +40,6 @@ import java.util.concurrent.CompletableFuture;
 public class DataGen {
     public static final ResourceKey<DimensionType> SIGNAL_WORLD_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world"));
     public static final ResourceKey<LevelStem> SIGNAL_WORLD = ResourceKey.create(Registries.LEVEL_STEM, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world"));
-    public static final ResourceKey<Level> SIGNAL_WORLD_DIM = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world"));
     public static final ResourceKey<NoiseGeneratorSettings> SIGNAL_WORLD_NOISE_GENERATOR_SETTINGS = ResourceKey.create(
             Registries.NOISE_SETTINGS, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world")
     );
