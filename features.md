@@ -233,3 +233,5 @@ Add signal blocking material block and its associated features
 Add DCtimeRecipeProvider for signal world crafting recipes
 
 Add Signal World Portal block and associated functionality
+
+Enhance Signal World Portal block to support bi-directional travel and update portal creation logic

@@ -1,9 +1,11 @@
 package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.DCtimeLevel;
+import github.dctime.dctimesignals.RegisterBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -28,23 +30,40 @@ public class SignalWorldPortalBlock extends Block implements Portal {
 
     @Override
     public @Nullable DimensionTransition getPortalDestination(ServerLevel serverLevel, Entity entity, BlockPos blockPos) {
-        ResourceKey<Level> targetLevelResource = DCtimeLevel.SIGNAL_WORLD;
+        ResourceKey<Level> targetLevelResource;
+        if (serverLevel.dimension() == Level.OVERWORLD) {
+            targetLevelResource = DCtimeLevel.SIGNAL_WORLD;
+        } else if (serverLevel.dimension() == DCtimeLevel.SIGNAL_WORLD) {
+            targetLevelResource = Level.OVERWORLD;
+        } else {
+            targetLevelResource = Level.OVERWORLD;
+        }
+
         ServerLevel targetLevel = serverLevel.getServer().getLevel(targetLevelResource);
         if (targetLevel == null) {
             return null;
         }
 
-        for (int x = -3; x <= 3; x++) {
-            for (int y = -1; y <= 4; y++) {
-                for (int z = -3; z <= 3; z++) {
-                    if (x == -3 || x == 3 || y == -1 || y == 4 || z == -3 || z == 3) {
-                        BlockPos targetPos = blockPos.offset(x, y, z);
-                        targetLevel.setBlockAndUpdate(targetPos, Blocks.STONE.defaultBlockState());
-                    } else {
-                        BlockPos targetPos = blockPos.offset(x, y, z);
-                        targetLevel.setBlockAndUpdate(targetPos, Blocks.AIR.defaultBlockState());
+        if (targetLevelResource == DCtimeLevel.SIGNAL_WORLD) {
+            for (int x = -3; x <= 3; x++) {
+                for (int y = -1; y <= 4; y++) {
+                    for (int z = -3; z <= 3; z++) {
+                        if (x == -3 || x == 3 || y == -1 || y == 4 || z == -3 || z == 3) {
+                            BlockPos targetPos = blockPos.offset(x, y, z);
+                            targetLevel.setBlockAndUpdate(targetPos, Blocks.STONE.defaultBlockState());
+                        } else {
+                            BlockPos targetPos = blockPos.offset(x, y, z);
+                            targetLevel.setBlockAndUpdate(targetPos, Blocks.AIR.defaultBlockState());
+                        }
                     }
                 }
+            }
+
+            targetLevel.setBlockAndUpdate(blockPos, RegisterBlocks.SINGAL_WORLD_PORTAL.get().defaultBlockState());
+
+        } else if (targetLevelResource == Level.OVERWORLD) {
+            if (entity instanceof ServerPlayer serverplayer) {
+                return serverplayer.findRespawnPositionAndUseSpawnBlock(false, DimensionTransition.DO_NOTHING);
             }
         }
 
