@@ -229,3 +229,5 @@ Add signal blocking material chunk feature and its configuration
 ### 2025.6.29
 
 Add signal blocking material block and its associated features
+
+Add DCtimeRecipeProvider for signal world crafting recipes
