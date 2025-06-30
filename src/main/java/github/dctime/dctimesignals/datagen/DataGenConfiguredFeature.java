@@ -1,5 +1,7 @@
-package github.dctime.dctimesignals;
+package github.dctime.dctimesignals.datagen;
 
+import github.dctime.dctimesignals.DCtimeMod;
+import github.dctime.dctimesignals.RegisterFeatures;
 import github.dctime.dctimesignals.configuration.SignalBlockingMaterialChunkConfiguration;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -8,7 +10,6 @@ import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ClampedNormalFloat;
-import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;

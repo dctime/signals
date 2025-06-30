@@ -1,6 +1,7 @@
-package github.dctime.dctimesignals;
+package github.dctime.dctimesignals.datagen;
 
 import com.google.common.collect.ImmutableMap;
+import github.dctime.dctimesignals.*;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.registries.Registries;
@@ -8,20 +9,16 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.data.worldgen.features.CaveFeatures;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.*;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -36,7 +33,7 @@ import java.util.OptionalLong;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid=DCtimeMod.MODID, bus= EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid= DCtimeMod.MODID, bus= EventBusSubscriber.Bus.MOD)
 public class DataGen {
     public static final ResourceKey<DimensionType> SIGNAL_WORLD_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world"));
     public static final ResourceKey<LevelStem> SIGNAL_WORLD = ResourceKey.create(Registries.LEVEL_STEM, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world"));
@@ -100,6 +97,7 @@ public class DataGen {
         DataGenConfiguredFeature.registerSignalConfiguredFeature(registrySetBuilder);
         DataGenPlacedFeature.registerSignalPlacedFeature(registrySetBuilder);
         DataGenStructureTemplatePool.registerStructureTemplatePool(registrySetBuilder);
+        DataGenStructure.registerStructure(registrySetBuilder);
 
         // new dimension types
         generator.addProvider(

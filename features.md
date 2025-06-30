@@ -243,3 +243,5 @@ portal block model and texture
 Improve portal detection logic in Signal World Portal block for enhanced functionality
 
 Add structure template pool for Signal World Portal and update data generation
+
+placeable structure without generation
