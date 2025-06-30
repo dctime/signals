@@ -193,6 +193,22 @@ Add ponder tutorial to Const Signal Block (1)
 
 Jade integration for redstone to signal converter (1)
 
+### 2025.7.1
+
+Portal in cave / y between -10 to 10
+
+one block cannot be crafted
+
+compass to portal
+
+no sleep in new dim
+
+make portal unbreakable
+
+SHIFT to teleport
+
+
+
 
 
 

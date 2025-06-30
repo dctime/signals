@@ -9,8 +9,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
@@ -28,8 +30,9 @@ public class DataGenStructure {
                             new Structure.StructureSettings.Builder(biomeGetter.getOrThrow(BiomeTags.IS_OVERWORLD)).build(),
                             pool,
                             2,
-                            ConstantHeight.of(VerticalAnchor.absolute(100)),
-                            false
+                            UniformHeight.of(VerticalAnchor.absolute(-10), VerticalAnchor.absolute(-20)),
+                            false,
+                            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES
                     )
             );
         });

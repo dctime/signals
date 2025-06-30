@@ -98,6 +98,7 @@ public class DataGen {
         DataGenPlacedFeature.registerSignalPlacedFeature(registrySetBuilder);
         DataGenStructureTemplatePool.registerStructureTemplatePool(registrySetBuilder);
         DataGenStructure.registerStructure(registrySetBuilder);
+        DataGenStructureSet.registerStructureSet(registrySetBuilder);
 
         // new dimension types
         generator.addProvider(
