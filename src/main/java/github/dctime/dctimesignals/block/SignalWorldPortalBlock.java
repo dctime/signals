@@ -45,10 +45,24 @@ public class SignalWorldPortalBlock extends Block implements Portal {
         }
 
         if (targetLevelResource == DCtimeLevel.SIGNAL_WORLD) {
-            for (int x = -3; x <= 3; x++) {
+            boolean portalNearby = false;
+            BlockPos portalPos = null;
+            for (int x = -5; x <= 5; x++) {
+                for (int z = -5; z <= 5; z++) {
+                    for (int y = -5; y <= 6; y++) {
+                       if (targetLevel.getBlockState(blockPos.offset(x, y, z)).is(RegisterBlocks.SINGAL_WORLD_PORTAL.get())) {
+                            portalNearby = true;
+                            portalPos = blockPos.offset(x, y, z);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (portalNearby) return new DimensionTransition(targetLevel, portalPos.getBottomCenter(), new Vec3(0,0, 0), 0, 0, DimensionTransition.PLACE_PORTAL_TICKET);
+            for (int x = -2; x <= 2; x++) {
                 for (int y = -1; y <= 4; y++) {
-                    for (int z = -3; z <= 3; z++) {
-                        if (x == -3 || x == 3 || y == -1 || y == 4 || z == -3 || z == 3) {
+                    for (int z = -2; z <= 2; z++) {
+                        if (x == -2 || x == 2 || y == -1 || y == 4 || z == -2 || z == 2) {
                             BlockPos targetPos = blockPos.offset(x, y, z);
                             targetLevel.setBlockAndUpdate(targetPos, Blocks.STONE.defaultBlockState());
                         } else {
