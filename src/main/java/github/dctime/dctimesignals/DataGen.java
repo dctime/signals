@@ -99,6 +99,7 @@ public class DataGen {
         RegistrySetBuilder registrySetBuilder = new RegistrySetBuilder();
         DataGenConfiguredFeature.registerSignalConfiguredFeature(registrySetBuilder);
         DataGenPlacedFeature.registerSignalPlacedFeature(registrySetBuilder);
+        DataGenStructureTemplatePool.registerStructureTemplatePool(registrySetBuilder);
 
         // new dimension types
         generator.addProvider(

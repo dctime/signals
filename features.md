@@ -241,3 +241,5 @@ Enhance Signal World Portal block to support bi-directional travel and update po
 portal block model and texture
 
 Improve portal detection logic in Signal World Portal block for enhanced functionality
+
+Add structure template pool for Signal World Portal and update data generation
