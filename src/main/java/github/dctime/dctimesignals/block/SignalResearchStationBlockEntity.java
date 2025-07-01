@@ -9,6 +9,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -25,13 +26,35 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         the main control block of the multiblock
     */
 
-    private final SimpleContainerData data = new SimpleContainerData(DATA_SIZE);
+    private final SimpleContainerData inputSignalData = new SimpleContainerData(DATA_SIZE_INPUT_SIGNAL);
+    private final SimpleContainerData outputSignalData = new SimpleContainerData(DATA_SIZE_OUTPUT_SIGNAL);
 
-    public SimpleContainerData getData() {
-        return data;
+    public SimpleContainerData getInputSignalData() {
+        return inputSignalData;
     }
 
-    public static final int DATA_SIZE = 2;
+    public SimpleContainerData getOutputSignalData() {
+        return outputSignalData;
+    }
+
+    public void setInputSignalData(int index, int value) {
+        if (index >= 0 && index < DATA_SIZE_INPUT_SIGNAL) {
+            inputSignalData.set(index, value);
+        } else {
+            System.out.println("Invalid index for input signal data: " + index + ". Must be between 0 and " + (DATA_SIZE_INPUT_SIGNAL - 1));
+        }
+    }
+
+    public void setOutputSignalData(int index, int value) {
+        if (index >= 0 && index < DATA_SIZE_OUTPUT_SIGNAL) {
+            outputSignalData.set(index, value);
+        } else {
+            System.out.println("Invalid index for output signal data: " + index + ". Must be between 0 and " + (DATA_SIZE_OUTPUT_SIGNAL - 1));
+        }
+    }
+
+    public static final int DATA_SIZE_INPUT_SIGNAL = 3;
+    public static final int DATA_SIZE_OUTPUT_SIGNAL = 3;
 
     private Set<BlockPos> signalInputPositions;
     private Set<BlockPos> signalOutputPositions;
@@ -84,6 +107,28 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    public static void tick(Level level, BlockPos pos, BlockState state, SignalResearchStationBlockEntity blockEntity) {
+        if (level.isClientSide()) return;
+
+        int inputPortCounter = 0;
+        for (BlockPos inputPos : blockEntity.getSignalInputPositions()) {
+            if (level.getBlockEntity(inputPos) instanceof SignalResearchStationSignalInputBlockEntity inputEntity) {
+                int inputValue = inputEntity.getStoredSignalValue();
+                blockEntity.setInputSignalData(inputPortCounter, inputValue);
+                inputPortCounter++;
+            }
+        }
+
+        int outputPortCounter = 0;
+        for (BlockPos outputPos : blockEntity.getSignalOutputPositions()) {
+            if (level.getBlockEntity(outputPos) instanceof SignalResearchStationSignalOutputBlockEntity outputEntity) {
+                int outputValue = outputEntity.getOutputValue();
+                blockEntity.setOutputSignalData(outputPortCounter, outputValue);
+                outputPortCounter++;
+            }
+        }
+    }
+
     public void reassembleMultiblock() {
         signalOutputPositions.clear();
         signalInputPositions.clear();
@@ -121,4 +166,5 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         }
 
     }
+
 }

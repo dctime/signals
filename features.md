@@ -257,3 +257,7 @@ Init Signal Research Station blocks
 Add Signal Research Station block and related entities with rendering support
 
 Add Signal Research Menu and Screen with block entity integration
+
+### 2025.7.2
+
+Showing input output signal values on gui

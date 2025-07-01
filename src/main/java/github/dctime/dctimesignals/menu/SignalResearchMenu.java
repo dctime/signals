@@ -3,29 +3,43 @@ package github.dctime.dctimesignals.menu;
 import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterMenuTypes;
 import github.dctime.dctimesignals.block.SignalResearchStationBlockEntity;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
 
 public class SignalResearchMenu extends AbstractContainerMenu {
 
-    private ContainerLevelAccess access;
+    private final ContainerLevelAccess access;
+    private final ContainerData inputSignalData;
+    private final ContainerData outputSignalData;
+
+    public ContainerData getInputSignalData() {
+        return inputSignalData;
+    }
+
+    public ContainerData getOutputSignalData() {
+        return outputSignalData;
+    }
 
     // Server
-    public SignalResearchMenu(int containerId, Inventory playerInv, ContainerLevelAccess access, ContainerData data) {
+    public SignalResearchMenu(int containerId, Inventory playerInv, ContainerLevelAccess access, ContainerData inputSignalData, ContainerData outputSignalData) {
         super(RegisterMenuTypes.SIGNAL_RESEARECH_MENU.get(), containerId);
         this.access = access;
+        this.inputSignalData = inputSignalData;
+        this.outputSignalData = outputSignalData;
 
-        checkContainerDataCount(data, SignalResearchStationBlockEntity.DATA_SIZE);
+        checkContainerDataCount(inputSignalData, SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL);
+        checkContainerDataCount(outputSignalData, SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL);
+
+        addDataSlots(this.inputSignalData);
+        addDataSlots(this.outputSignalData);
+
     }
 
     // Client menu constructor (Registered)
     public SignalResearchMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL, new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE));
+        this(containerId, playerInventory, ContainerLevelAccess.NULL, new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL), new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL));
     }
 
     @Override

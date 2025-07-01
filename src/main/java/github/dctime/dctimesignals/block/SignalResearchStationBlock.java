@@ -1,6 +1,7 @@
 package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.DCtimeMod;
+import github.dctime.dctimesignals.RegisterBlockEntities;
 import github.dctime.dctimesignals.menu.SignalOperationMenu;
 import github.dctime.dctimesignals.menu.SignalResearchMenu;
 import github.dctime.dctimesignals.screen.SignalResearchScreen;
@@ -18,6 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -38,6 +41,12 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(SCREEN_SIDE_FACING);
     }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return type == RegisterBlockEntities.SIGNAL_RESEARCH_STATION_BLOCK_ENTITY.get() ? (BlockEntityTicker<T>) (BlockEntityTicker<SignalResearchStationBlockEntity>)SignalResearchStationBlockEntity::tick : null;
+    }
+
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
@@ -80,7 +89,9 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
                     containerId,
                     playerInventory,
                     ContainerLevelAccess.create(level, pos),
-                    entity.getData());
+                    entity.getInputSignalData(),
+                    entity.getOutputSignalData()
+            );
         },
                 Component.translatable("menu.title." + DCtimeMod.MODID + ".signal_research_menu"));
     }
