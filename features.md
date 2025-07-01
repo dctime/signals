@@ -255,3 +255,5 @@ Updated to 0.0.3
 Init Signal Research Station blocks
 
 Add Signal Research Station block and related entities with rendering support
+
+Add Signal Research Menu and Screen with block entity integration

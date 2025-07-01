@@ -1,10 +1,18 @@
 package github.dctime.dctimesignals.block;
 
+import github.dctime.dctimesignals.DCtimeMod;
+import github.dctime.dctimesignals.menu.SignalOperationMenu;
+import github.dctime.dctimesignals.menu.SignalResearchMenu;
+import github.dctime.dctimesignals.screen.SignalResearchScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -37,6 +45,11 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
             entity.reassembleMultiblock();
         }
 
+        if (player.isCrouching() && !level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.openMenu(state.getMenuProvider(level, pos));
+            return InteractionResult.SUCCESS;
+        }
+
         if (level.isClientSide()) return InteractionResult.SUCCESS;
         if (level.getBlockEntity(pos) instanceof SignalResearchStationBlockEntity entity) {
             player.displayClientMessage(Component.literal("Multiblock Reassembled!"), false);
@@ -56,5 +69,19 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new SignalResearchStationBlockEntity(blockPos, blockState);
+    }
+
+    @Override
+    protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        return new SimpleMenuProvider((containerId, playerInventory, player)-> {
+            SignalResearchStationBlockEntity entity = ((SignalResearchStationBlockEntity) level.getBlockEntity(pos));
+            assert entity != null;
+            return new SignalResearchMenu(
+                    containerId,
+                    playerInventory,
+                    ContainerLevelAccess.create(level, pos),
+                    entity.getData());
+        },
+                Component.translatable("menu.title." + DCtimeMod.MODID + ".signal_research_menu"));
     }
 }

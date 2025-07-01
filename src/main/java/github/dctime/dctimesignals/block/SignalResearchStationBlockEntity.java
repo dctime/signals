@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -23,6 +24,14 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         this block will also control all the parts of the multiblock.
         the main control block of the multiblock
     */
+
+    private final SimpleContainerData data = new SimpleContainerData(DATA_SIZE);
+
+    public SimpleContainerData getData() {
+        return data;
+    }
+
+    public static final int DATA_SIZE = 2;
 
     private Set<BlockPos> signalInputPositions;
     private Set<BlockPos> signalOutputPositions;
