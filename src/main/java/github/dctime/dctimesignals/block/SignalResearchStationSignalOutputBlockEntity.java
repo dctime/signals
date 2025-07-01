@@ -8,37 +8,32 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SignalResearchStationSignalInputBlockEntity extends BlockEntity {
-    public SignalResearchStationSignalInputBlockEntity(BlockPos pos, BlockState blockState) {
-        super(RegisterBlockEntities.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT_BLOCK_ENTITY.get(), pos, blockState);
+public class SignalResearchStationSignalOutputBlockEntity extends BlockEntity {
+    public SignalResearchStationSignalOutputBlockEntity(BlockPos pos, BlockState blockState) {
+        super(RegisterBlockEntities.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT_BLOCK_ENTITY.get(), pos, blockState);
     }
 
-    private int storedSignalValue = 0;
+    private int outputValue = 0;
 
-    public int getStoredSignalValue() {
-        return storedSignalValue;
-    }
-
-    public void setStoredSignalValue(int storedSignalValue) {
-        this.storedSignalValue = storedSignalValue;
+    public int getOutputValue() {
+        return outputValue;
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.storedSignalValue = tag.getInt("storedSignalValue");
+        this.outputValue = tag.getInt("outputValue");
+
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.putInt("storedSignalValue", this.storedSignalValue);
+        tag.putInt("outputValue", this.outputValue);
         setChanged();
     }
-
 
     // Create an update tag here. For block entities with only a few fields, this can just call #saveAdditional.
     @Override

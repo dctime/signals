@@ -60,4 +60,19 @@ public class RegisterBlockEntities {
             ).build(null)
     );
 
+    public static final Supplier<BlockEntityType<SignalResearchStationSignalOutputBlockEntity>> SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "signal_research_station_signal_output_block_entity",
+            ()-> BlockEntityType.Builder.of(
+                    SignalResearchStationSignalOutputBlockEntity::new,
+                    RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT.get()
+            ).build(null)
+    );
+
+    public static final Supplier<BlockEntityType<SignalResearchStationBlockEntity>> SIGNAL_RESEARCH_STATION_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "signal_research_station_block_entity",
+            ()-> BlockEntityType.Builder.of(
+                    SignalResearchStationBlockEntity::new,
+                    RegisterBlocks.SIGNAL_RESEARCH_STATION.get()
+            ).build(null)
+    );
 }

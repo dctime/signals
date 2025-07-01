@@ -1,5 +1,6 @@
 package github.dctime.dctimesignals.payload;
 
+import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.block.ConstSignalBlock;
 import github.dctime.dctimesignals.block.ConstSignalBlockEntity;
 import github.dctime.dctimesignals.menu.ConstSignalMenu;
@@ -11,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record ConstSignalValueChangePayload(int signalValue) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<ConstSignalValueChangePayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("mymod", "my_data"));
+    public static final CustomPacketPayload.Type<ConstSignalValueChangePayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "const_signal_value_change"));
 
     // Each pair of elements defines the stream codec of the element to encode/decode and the getter for the element to encode
     // 'name' will be encoded and decoded as a string

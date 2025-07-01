@@ -253,3 +253,5 @@ Refactor Signal World Portal logic and improve data generation settings
 Updated to 0.0.3
 
 Init Signal Research Station blocks
+
+Add Signal Research Station block and related entities with rendering support
