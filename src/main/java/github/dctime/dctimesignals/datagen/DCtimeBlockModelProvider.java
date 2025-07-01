@@ -1,5 +1,7 @@
-package github.dctime.dctimesignals;
+package github.dctime.dctimesignals.datagen;
 
+import github.dctime.dctimesignals.DCtimeMod;
+import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.block.*;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -27,6 +29,9 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         redstoneToSignalModel();
         simpleBlock(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK.get());
         portalBlockModel();
+        researchStationBlockModel();
+        signalResearchStationOutputBlockModel();
+        signalResearchStationInputBlockModel();
     }
 
     private void signalWireModel() {
@@ -377,6 +382,63 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
             // For example, the following code will rotate the model depending on the horizontal rotation of the block.
             return ConfiguredModel.builder()
                     .modelFile(models().cubeAll("signal_world_portal", modLoc("block/signal_world_portal")).renderType("minecraft:translucent"))
+                    .build();
+        });
+    }
+
+    private void researchStationBlockModel() {
+        ModelFile researchOutputModel = models().orientableVertical(
+                "signal_research_station",
+                modLoc("block/signal_research_station"),
+                modLoc("block/signal_research_station_screen")
+        );
+        Block researchBlock = RegisterBlocks.SIGNAL_RESEARCH_STATION.get();
+
+        Function<BlockState, ModelFile> constModelFunc = (Function) (($) -> researchOutputModel);
+        this.getVariantBuilder(researchBlock).forAllStates((state) -> {
+            Direction dir = (Direction) state.getValue(SignalResearchStationBlock.SCREEN_SIDE_FACING);
+            return ConfiguredModel.builder()
+                    .modelFile((ModelFile) constModelFunc.apply(state))
+                    .rotationX(dir == Direction.DOWN ? 180 : (dir.getAxis().isHorizontal() ? 90 : 0))
+                    .rotationY(dir.getAxis().isVertical() ? 0 : ((int) dir.toYRot() + 180) % 360)
+                    .build();
+        });
+    }
+
+    private void signalResearchStationOutputBlockModel() {
+        ModelFile researchOutputModel = models().orientableVertical(
+                "signal_research_station_output",
+                modLoc("block/signal_research_station"),
+                modLoc("block/const_signal_block_front")
+        );
+        Block researchOutputBlock = RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT.get();
+
+        Function<BlockState, ModelFile> constModelFunc = (Function) (($) -> researchOutputModel);
+        this.getVariantBuilder(researchOutputBlock).forAllStates((state) -> {
+            Direction dir = (Direction) state.getValue(SignalResearchStationSignalOutputBlock.OUTPUT_DIRECTION);
+            return ConfiguredModel.builder()
+                    .modelFile((ModelFile) constModelFunc.apply(state))
+                    .rotationX(dir == Direction.DOWN ? 180 : (dir.getAxis().isHorizontal() ? 90 : 0))
+                    .rotationY(dir.getAxis().isVertical() ? 0 : ((int) dir.toYRot() + 180) % 360)
+                    .build();
+        });
+    }
+
+    private void signalResearchStationInputBlockModel() {
+        ModelFile researchInputModel = models().orientableVertical(
+                "signal_research_station_input",
+                modLoc("block/signal_research_station"),
+                modLoc("block/signal_input")
+        );
+        Block researchInputBlock = RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT.get();
+
+        Function<BlockState, ModelFile> constModelFunc = (Function) (($) -> researchInputModel);
+        this.getVariantBuilder(researchInputBlock).forAllStates((state) -> {
+            Direction dir = (Direction) state.getValue(SignalResearchStationSignalInputBlock.INPUT_SIDE_DIRECTION);
+            return ConfiguredModel.builder()
+                    .modelFile((ModelFile) constModelFunc.apply(state))
+                    .rotationX(dir == Direction.DOWN ? 180 : (dir.getAxis().isHorizontal() ? 90 : 0))
+                    .rotationY(dir.getAxis().isVertical() ? 0 : ((int) dir.toYRot() + 180) % 360)
                     .build();
         });
     }

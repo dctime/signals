@@ -1,5 +1,8 @@
-package github.dctime.dctimesignals;
+package github.dctime.dctimesignals.datagen;
 
+import github.dctime.dctimesignals.DCtimeMod;
+import github.dctime.dctimesignals.RegisterBlocks;
+import github.dctime.dctimesignals.RegisterItems;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;

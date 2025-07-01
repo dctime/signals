@@ -1,10 +1,12 @@
-package github.dctime.dctimesignals;
+package github.dctime.dctimesignals.datagen;
 
+import github.dctime.dctimesignals.RegisterBlockItems;
+import github.dctime.dctimesignals.RegisterBlocks;
+import github.dctime.dctimesignals.RegisterItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.Set;
@@ -29,5 +31,8 @@ public class BlockLootSubProvider extends net.minecraft.data.loot.BlockLootSubPr
         this.add(RegisterBlocks.SIGNAL_OPERATION_BLOCK.get(), this.createSingleItemTable(RegisterBlockItems.SIGNAL_OPERATION_BLOCK));
         this.add(RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER.get(), this.createSingleItemTable(RegisterBlockItems.REDSTONE_TO_SIGNAL_CONVERTER));
         this.add(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK.get(), this.createSingleItemTable(RegisterItems.SIGNAL_BLOCKING_MATERIAL));
+        this.add(RegisterBlocks.SIGNAL_RESEARCH_STATION.get(), LootTable.lootTable());
+        this.add(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT.get(), LootTable.lootTable());
+        this.add(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT.get(), LootTable.lootTable());
     }
 }

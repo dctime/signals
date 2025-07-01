@@ -52,4 +52,12 @@ public class RegisterBlockEntities {
             ).build(null)
     );
 
+    public static final Supplier<BlockEntityType<SignalResearchStationSignalInputBlockEntity>> SIGNAL_RESEARCH_STATION_SIGNAL_INPUT_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "signal_research_station_signal_input_block_entity",
+            ()-> BlockEntityType.Builder.of(
+                    SignalResearchStationSignalInputBlockEntity::new,
+                    RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT.get()
+            ).build(null)
+    );
+
 }

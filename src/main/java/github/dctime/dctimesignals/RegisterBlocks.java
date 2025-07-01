@@ -94,4 +94,34 @@ public class RegisterBlocks {
                     .isValidSpawn(Blocks::never)
                     .forceSolidOn()
     );
+
+    public static final DeferredBlock<Block> SIGNAL_RESEARCH_STATION = BLOCKS.registerBlock(
+            "signal_research_station",
+            SignalResearchStationBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+    );
+
+    public static final DeferredBlock<Block> SIGNAL_RESEARCH_STATION_SIGNAL_INPUT = BLOCKS.registerBlock(
+            "signal_research_station_signal_input",
+            SignalResearchStationSignalInputBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+    );
+
+    public static final DeferredBlock<Block> SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT = BLOCKS.registerBlock(
+            "signal_research_station_signal_output",
+            SignalResearchStationSignalOutputBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+    );
 }

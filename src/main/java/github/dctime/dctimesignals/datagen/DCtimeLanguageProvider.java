@@ -1,5 +1,8 @@
-package github.dctime.dctimesignals;
+package github.dctime.dctimesignals.datagen;
 
+import github.dctime.dctimesignals.DCtimeMod;
+import github.dctime.dctimesignals.RegisterBlocks;
+import github.dctime.dctimesignals.RegisterItems;
 import github.dctime.dctimesignals.compatability.create.CreateDependencies;
 import github.dctime.dctimesignals.compatability.jade.DCtimeJadePlugin;
 import net.minecraft.data.PackOutput;

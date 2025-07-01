@@ -1,6 +1,6 @@
 package github.dctime.dctimesignals.compatability.create;
 
-import github.dctime.dctimesignals.DCtimeLanguageProvider;
+import github.dctime.dctimesignals.datagen.DCtimeLanguageProvider;
 import github.dctime.dctimesignals.DCtimeMod;
 import net.createmod.ponder.foundation.PonderIndex;
 

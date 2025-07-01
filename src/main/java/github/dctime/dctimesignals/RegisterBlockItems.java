@@ -22,4 +22,7 @@ public class RegisterBlockItems {
     public static final DeferredItem<BlockItem> SIGNAL_OPERATION_BLOCK = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_OPERATION_BLOCK);
     public static final DeferredItem<BlockItem> REDSTONE_TO_SIGNAL_CONVERTER = ITEMS.registerSimpleBlockItem(RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER);
     public static final DeferredItem<BlockItem> SIGNAL_BLOCKING_MATERIAL_BLOCK = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK);
+    public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_STATION = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_STATION);
+    public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_STATION_SIGNAL_INPUT = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT);
+    public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT);
 }
