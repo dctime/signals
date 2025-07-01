@@ -1,5 +1,6 @@
 package github.dctime.dctimesignals.block;
 
+import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.RegisterBlockEntities;
 import github.dctime.dctimesignals.RegisterCapabilities;
 import github.dctime.dctimesignals.RegisterItems;
@@ -334,6 +335,6 @@ public class SignalOperationBlock extends Block implements EntityBlock {
                 entity.getData(),
                 entity.getItems());
         },
-            Component.translatable("menu.title.dctimemod.signal_operation_menu"));
+            Component.translatable("menu.title." + DCtimeMod.MODID + ".signal_operation_menu"));
     }
 }

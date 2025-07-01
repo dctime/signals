@@ -245,3 +245,7 @@ Improve portal detection logic in Signal World Portal block for enhanced functio
 Add structure template pool for Signal World Portal and update data generation
 
 placeable structure without generation
+
+### 2025.7.1
+
+Refactor Signal World Portal logic and improve data generation settings

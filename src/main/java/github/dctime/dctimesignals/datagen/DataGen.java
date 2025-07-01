@@ -87,12 +87,6 @@ public class DataGen {
         // language provider
         event.createProvider(DCtimeLanguageProvider::new);
 
-        class NoiseRouterDataGetter extends NoiseRouterData {
-            public static NoiseRouter overworldGetter(HolderGetter<DensityFunction> densityFunctions, HolderGetter<NormalNoise.NoiseParameters> noiseParameters, boolean large, boolean amplified) {
-                return overworld(densityFunctions, noiseParameters, large, amplified);
-            }
-        }
-
         RegistrySetBuilder registrySetBuilder = new RegistrySetBuilder();
         DataGenConfiguredFeature.registerSignalConfiguredFeature(registrySetBuilder);
         DataGenPlacedFeature.registerSignalPlacedFeature(registrySetBuilder);
@@ -109,7 +103,7 @@ public class DataGen {
                     registrySetBuilder.add(
                             Registries.DIMENSION_TYPE,
                             bootstrapContext -> {
-                                bootstrapContext.register(SIGNAL_WORLD_TYPE, new DimensionType(OptionalLong.empty(), true, false, false, true, (double)1.0F, true, false, -64, 384, 384, BlockTags.INFINIBURN_OVERWORLD, BuiltinDimensionTypes.OVERWORLD_EFFECTS, 0.0f, new DimensionType.MonsterSettings(false, true, UniformInt.of(0, 7), 0)));
+                                bootstrapContext.register(SIGNAL_WORLD_TYPE, new DimensionType(OptionalLong.empty(), true, false, false, true, (double)1.0F, false, false, -64, 384, 384, BlockTags.INFINIBURN_OVERWORLD, BuiltinDimensionTypes.OVERWORLD_EFFECTS, 0.0f, new DimensionType.MonsterSettings(false, false, UniformInt.of(0, 7), 0)));
                             }
                     ).add(
                             Registries.LEVEL_STEM,

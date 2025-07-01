@@ -25,6 +25,9 @@ public class DCtimeLanguageProvider extends LanguageProvider {
         this.addItem(RegisterItems.NOT_CARD, "Not Card");
         this.addItem(RegisterItems.OR_CARD, "Or Card");
         this.addItem(RegisterItems.SIGNAL_CONFIGURATOR, "Signal Configurator");
+        this.add("menu.title." + DCtimeMod.MODID + ".signal_operation_menu", "Signal Operation Menu");
+        this.addBlock(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK, "Signal Blocking Material Block");
+        this.addItem(RegisterItems.SIGNAL_BLOCKING_MATERIAL, "Signal Blocking Material");
 
         // ponder text
         if (ModList.get().isLoaded("ponder")) {

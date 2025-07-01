@@ -195,17 +195,23 @@ Jade integration for redstone to signal converter (1)
 
 ### 2025.7.1
 
-Portal in cave / y between -10 to 10
+Portal in cave / y between -10 to 10 (1)
 
-one block cannot be crafted
+one block cannot be crafted (2)
 
-compass to portal
+compass to portal 
 
-no sleep in new dim
+no sleep in new dim (4)
 
-make portal unbreakable
+make portal unbreakable (5)
 
-SHIFT to teleport
+SHIFT to teleport (6)
+
+waterproof (7)
+
+language for items (8)
+
+language for signal operation block menu (9)
 
 
 

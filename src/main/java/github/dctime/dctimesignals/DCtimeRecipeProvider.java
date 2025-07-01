@@ -57,7 +57,7 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "wire_to_converter"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, RegisterBlockItems.SIGNAL_OPERATION_BLOCK.get())
-                .define('B', RegisterBlockItems.SIGNAL_BLOCKING_MATERIAL_BLOCK.get())
+                .define('B', RegisterItems.SIGNAL_BLOCKING_MATERIAL.get())
                 .define('R', Items.REDSTONE)
                 .pattern("BBB")
                 .pattern("BRB")

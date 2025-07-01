@@ -25,7 +25,8 @@ public class SignalWorldPortalBlock extends Block implements Portal {
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        entity.setAsInsidePortal(this, pos);
+        if (entity.isCrouching())
+            entity.setAsInsidePortal(this, pos);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class SignalWorldPortalBlock extends Block implements Portal {
 
         } else if (targetLevelResource == Level.OVERWORLD) {
             if (entity instanceof ServerPlayer serverplayer) {
-                return serverplayer.findRespawnPositionAndUseSpawnBlock(false, DimensionTransition.DO_NOTHING);
+//                return serverplayer.findRespawnPositionAndUseSpawnBlock(false, DimensionTransition.DO_NOTHING);
             }
         }
 

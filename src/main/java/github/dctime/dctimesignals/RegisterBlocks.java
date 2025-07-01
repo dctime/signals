@@ -88,8 +88,10 @@ public class RegisterBlocks {
             SignalWorldPortalBlock::new,
             BlockBehaviour.Properties.of()
                     .noCollission()
-                    .instabreak()
                     .noOcclusion()
-                    .sound(SoundType.GLASS)
+                    .strength(-1.0F, 3600000.0F)
+                    .noLootTable()
+                    .isValidSpawn(Blocks::never)
+                    .forceSolidOn()
     );
 }

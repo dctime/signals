@@ -30,9 +30,8 @@ public class DataGenStructure {
                             new Structure.StructureSettings.Builder(biomeGetter.getOrThrow(BiomeTags.IS_OVERWORLD)).build(),
                             pool,
                             2,
-                            UniformHeight.of(VerticalAnchor.absolute(-10), VerticalAnchor.absolute(-20)),
-                            false,
-                            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES
+                            UniformHeight.of(VerticalAnchor.absolute(-10), VerticalAnchor.absolute(10)),
+                            false
                     )
             );
         });
