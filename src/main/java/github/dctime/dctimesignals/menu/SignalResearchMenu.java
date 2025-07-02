@@ -24,7 +24,7 @@ public class SignalResearchMenu extends AbstractContainerMenu {
 
     // Server
     public SignalResearchMenu(int containerId, Inventory playerInv, ContainerLevelAccess access, ContainerData inputSignalData, ContainerData outputSignalData) {
-        super(RegisterMenuTypes.SIGNAL_RESEARECH_MENU.get(), containerId);
+        super(RegisterMenuTypes.SIGNAL_RESEARCH_MENU.get(), containerId);
         this.access = access;
         this.inputSignalData = inputSignalData;
         this.outputSignalData = outputSignalData;

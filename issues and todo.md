@@ -225,6 +225,12 @@ Add card should not limit values while let the screen decide
 
 Add a research item chamber to reseach signal mod items
 
+research station not synced and stored
+
+### 2025.7.3
+
+use init() to compute screen coord of research station
+
 
 
 

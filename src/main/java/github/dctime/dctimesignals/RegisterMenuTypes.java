@@ -1,9 +1,6 @@
 package github.dctime.dctimesignals;
 
-import github.dctime.dctimesignals.menu.ConstSignalMenu;
-import github.dctime.dctimesignals.menu.FlawlessExchangerMenu;
-import github.dctime.dctimesignals.menu.SignalOperationMenu;
-import github.dctime.dctimesignals.menu.SignalResearchMenu;
+import github.dctime.dctimesignals.menu.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
@@ -23,7 +20,10 @@ public class RegisterMenuTypes {
     public static final Supplier<MenuType<SignalOperationMenu>> SIGNAL_OPERATION_MENU =
         MENUS.register("signal_operation_menu", ()->new MenuType<>(SignalOperationMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
-    public static final Supplier<MenuType<SignalResearchMenu>> SIGNAL_RESEARECH_MENU =
+    public static final Supplier<MenuType<SignalResearchMenu>> SIGNAL_RESEARCH_MENU =
             MENUS.register("signal_research_menu", ()->new MenuType<>(SignalResearchMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
+    public static final Supplier<MenuType<SignalResearchItemChamberMenu>> SIGNAL_RESEARCH_ITEM_CHAMBER_MENU =
+            MENUS.register("signal_research_item_chamber_menu", ()->new MenuType<>(SignalResearchItemChamberMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
 }

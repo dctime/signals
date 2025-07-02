@@ -277,3 +277,7 @@ render outline even not looking at the station block
 auto assemble when enter gui
 
 init research item chamber
+
+### 2025.7.3
+
+init research item chamber gui
