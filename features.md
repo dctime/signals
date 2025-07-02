@@ -261,3 +261,5 @@ Add Signal Research Menu and Screen with block entity integration
 ### 2025.7.2
 
 Showing input output signal values on gui
+
+Signal screen got graph
