@@ -213,6 +213,10 @@ language for items (8)
 
 language for signal operation block menu (9)
 
+### 2025.7.2
+
+Signal Research GUI will break if the value abs is greater than MAX_VALUE/2 cuz minus operation
+
 
 
 

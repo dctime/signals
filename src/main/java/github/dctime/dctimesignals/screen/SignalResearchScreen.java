@@ -77,15 +77,20 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
             int lastY = -1;
             int valueMin = getMinFromQueue(targetQueue);
             int valueMax = getMaxFromQueue(targetQueue);
-            if (valueMax <= 0) {
-                valueMax = -valueMin;
+
+
+            if (Math.abs(valueMin) > Math.abs(valueMax)) {
+                valueMax = Math.abs(valueMin);
+                valueMin = -Math.abs(valueMin);
+            } else if (Math.abs(valueMax) > Math.abs(valueMin)) {
+                valueMin = -Math.abs(valueMax);
+                valueMax = Math.abs(valueMax);
+            } else if (Math.abs(valueMax) == Math.abs(valueMin)) {
+                valueMin = -Math.abs(valueMax);
+                valueMax = Math.abs(valueMax);
             }
 
-            if (valueMin >= 0) {
-                valueMin = -valueMax;
-            }
-
-            if (valueMax == valueMin && valueMax == 0) {
+            if (valueMax == 0) {
                 valueMin = -1;
                 valueMax = 1;
             }

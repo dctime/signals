@@ -263,3 +263,5 @@ Add Signal Research Menu and Screen with block entity integration
 Showing input output signal values on gui
 
 Signal screen got graph
+
+Added plus card

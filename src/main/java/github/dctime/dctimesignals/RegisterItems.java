@@ -3,6 +3,7 @@ package github.dctime.dctimesignals;
 import github.dctime.dctimesignals.item.AndCardItem;
 import github.dctime.dctimesignals.item.NotCardItem;
 import github.dctime.dctimesignals.item.OrCardItem;
+import github.dctime.dctimesignals.item.PlusCardItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -36,6 +37,11 @@ public class RegisterItems {
         "not_card",
         NotCardItem::new, // The factory that the properties will be passed into.
         new Item.Properties() // The properties to use.
+    );
+    public static final DeferredItem<Item> PLUS_CARD = ITEMS.registerItem(
+            "plus_card",
+            PlusCardItem::new, // The factory that the properties will be passed into.
+            new Item.Properties() // The properties to use.
     );
     public static final DeferredItem<Item> SIGNAL_BLOCKING_MATERIAL = ITEMS.registerItem(
         "signal_blocking_material",
