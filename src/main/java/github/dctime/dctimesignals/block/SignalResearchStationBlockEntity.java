@@ -16,9 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class SignalResearchStationBlockEntity extends BlockEntity {
     /*
@@ -60,14 +58,14 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
     public static final int DATA_SIZE_OUTPUT_SIGNAL = 3;
 
 
-    private Set<BlockPos> signalInputPositions;
-    private Set<BlockPos> signalOutputPositions;
+    private List<BlockPos> signalInputPositions;
+    private List<BlockPos> signalOutputPositions;
 
-    public Set<BlockPos> getSignalInputPositions() {
+    public List<BlockPos> getSignalInputPositions() {
         return signalInputPositions;
     }
 
-    public Set<BlockPos> getSignalOutputPositions() {
+    public List<BlockPos> getSignalOutputPositions() {
         return signalOutputPositions;
     }
 
@@ -75,8 +73,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
     public SignalResearchStationBlockEntity(BlockPos pos, BlockState blockState) {
         super(RegisterBlockEntities.SIGNAL_RESEARCH_STATION_BLOCK_ENTITY.get(), pos, blockState);
-        signalInputPositions = new HashSet<>();
-        signalOutputPositions = new HashSet<>();
+        signalInputPositions = new ArrayList<>();
+        signalOutputPositions = new ArrayList<>();
     }
 
     // Read values from the passed CompoundTag here.

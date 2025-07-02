@@ -221,6 +221,11 @@ If inputs/outputs greater than 3, disable assembling (2)
 
 show no port connected when inputs outputs are not connected (x) stuck to 0 instead
 
+Add card should not limit values while let the screen decide
+
+
+
+
 
 
 

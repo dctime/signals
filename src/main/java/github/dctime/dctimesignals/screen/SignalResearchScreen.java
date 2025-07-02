@@ -25,20 +25,29 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
     List<Queue<Integer>> outputSignalQueues;
     private final int maxQueueSize = 100;
 
+
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
-        for (int inputSignalIndex = 0; inputSignalIndex < this.getMenu().getInputSignalData().getCount(); inputSignalIndex++) {
-            int value = this.getMenu().getInputSignalData().get(inputSignalIndex);
-            guiGraphics.drawString(this.font, String.valueOf(value), 10, 10+inputSignalIndex * 20, 0xFFFFFF);
-        }
 
-        for (int outputSignalIndex = 0; outputSignalIndex < this.getMenu().getOutputSignalData().getCount(); outputSignalIndex++) {
-            int value = this.getMenu().getOutputSignalData().get(outputSignalIndex);
-            guiGraphics.drawString(this.font, String.valueOf(value), 100, 10+outputSignalIndex * 20, 0xFFFFFF);
-        }
+        int startX = (this.width - this.imageWidth)/2;
+        int startY = (this.height - this.imageHeight)/2;
+        int graphWidth = (int)(imageWidth*(0.8));
+        int graphHeight = (int)(imageHeight*(0.2));
+        int gapHeight = (int)(imageHeight*(0.1));
 
-        renderSignalGraph(guiGraphics, inputSignalQueues, 100, 300, 100, 50, 10);
-        renderSignalGraph(guiGraphics, outputSignalQueues, 400, 600, 100, 50, 10);
+        renderSignalGraph(guiGraphics, inputSignalQueues, startX-graphWidth/2, startX+graphWidth/2, startY+gapHeight, graphHeight, gapHeight);
+        renderSignalGraph(guiGraphics, outputSignalQueues, startX+imageWidth-graphWidth/2, startX+imageWidth+graphWidth/2, startY+gapHeight, graphHeight, gapHeight);
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        int startX = (this.width - this.imageWidth)/2;
+        int startY = (this.height - this.imageHeight)/2;
+        int graphWidth = (int)(imageWidth*(0.9));
+        int graphHeight = (int)(imageHeight*(0.2));
+        int gapHeight = (int)(imageHeight*(0.1));
+
+        guiGraphics.drawString(this.font, this.title, -graphWidth/2, 0, 4210752, false);
     }
 
     @Override
@@ -111,6 +120,8 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
                 if (lastX == -1 || lastY == -1) {
                     lastX = minX;
                     lastY = (int)(maxY - (double)(value - valueMin) / (valueMax - valueMin) * graphHeight);
+//                    String text = ""+value;
+//                    guiGraphics.drawString(this.font, text, lastX - this.font.width(text)-1, lastY - 5, 0xFFFFFF);
                 } else {
                     int x = (int)(minX + valueIndex * widthBetweenValues);
                     int y = (int)(maxY - (double)(value - valueMin) / (valueMax - valueMin) * graphHeight);
@@ -121,6 +132,13 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
 
                 valueIndex++;
             }
+
+            String text = ""+((ArrayDeque<Integer>)targetQueue).peekLast();
+            guiGraphics.drawString(this.font, text, lastX+1, lastY - 5, 0xFFFFFF);
+
+            // draw center line
+            int zeroY = (int)(maxY - (double)(0 - valueMin) / (valueMax - valueMin) * graphHeight);
+            drawLine(guiGraphics, minX, zeroY, maxX, zeroY, 0x99FF0000, 1.0);
         }
     }
 

@@ -55,18 +55,17 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
             entity.reassembleMultiblock(player);
         }
 
-        if (player.isCrouching() && !level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             serverPlayer.openMenu(state.getMenuProvider(level, pos));
-            return InteractionResult.SUCCESS;
-        }
-
-        if (level.isClientSide()) return InteractionResult.SUCCESS;
-        if (level.getBlockEntity(pos) instanceof SignalResearchStationBlockEntity entity) {
             player.displayClientMessage(Component.literal("Multiblock Reassembled!"), false);
-            int inputsCount = entity.getSignalInputPositions().size();
-            int outputCount = entity.getSignalOutputPositions().size();
-            player.displayClientMessage(Component.literal("Signal Inputs: " + inputsCount), false);
-            player.displayClientMessage(Component.literal("Signal Outputs: " + outputCount), false);
+            if (level.getBlockEntity(pos) instanceof SignalResearchStationBlockEntity entity) {
+                int inputsCount = entity.getSignalInputPositions().size();
+                int outputCount = entity.getSignalOutputPositions().size();
+                player.displayClientMessage(Component.literal("Signal Inputs: " + inputsCount), false);
+                player.displayClientMessage(Component.literal("Signal Outputs: " + outputCount), false);
+
+            }
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.SUCCESS;
     }

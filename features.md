@@ -267,3 +267,11 @@ Signal screen got graph
 Added plus card
 
 If inputs/outputs greater than 3, disable assembling
+
+Pos uses list instead of set
+
+GUI auto scale in different window size
+
+render outline even not looking at the station block
+
+auto assemble when enter gui
