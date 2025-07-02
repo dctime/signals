@@ -223,6 +223,7 @@ show no port connected when inputs outputs are not connected (x) stuck to 0 inst
 
 Add card should not limit values while let the screen decide
 
+Add a research item chamber to reseach signal mod items
 
 
 

@@ -35,8 +35,8 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
         int graphHeight = (int)(imageHeight*(0.2));
         int gapHeight = (int)(imageHeight*(0.1));
 
-        renderSignalGraph(guiGraphics, inputSignalQueues, startX-graphWidth/2, startX+graphWidth/2, startY+gapHeight, graphHeight, gapHeight);
-        renderSignalGraph(guiGraphics, outputSignalQueues, startX+imageWidth-graphWidth/2, startX+imageWidth+graphWidth/2, startY+gapHeight, graphHeight, gapHeight);
+        renderSignalGraph(guiGraphics, inputSignalQueues, startX-graphWidth/2, startX+graphWidth/2, startY+gapHeight, graphHeight, gapHeight, "Signal Read");
+        renderSignalGraph(guiGraphics, outputSignalQueues, startX+imageWidth-graphWidth/2, startX+imageWidth+graphWidth/2, startY+gapHeight, graphHeight, gapHeight, "Signal Export");
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
         }
     }
 
-    private void renderSignalGraph(GuiGraphics guiGraphics, List<Queue<Integer>> listOfQueues, int x1, int x2, int y1, int graphHeight, int spaceBetweenGraph) {
+    private void renderSignalGraph(GuiGraphics guiGraphics, List<Queue<Integer>> listOfQueues, int x1, int x2, int y1, int graphHeight, int spaceBetweenGraph, String graphName) {
         for (int queueIndex = 0; queueIndex < listOfQueues.size(); queueIndex++) {
             int minY = y1+(spaceBetweenGraph+graphHeight)*queueIndex;
             int maxY = y1+graphHeight+(spaceBetweenGraph+graphHeight)*queueIndex;
@@ -115,6 +115,9 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
                 valueMin = -1;
                 valueMax = 1;
             }
+            // draw center line
+            int zeroY = (int)(maxY - (double)(0 - valueMin) / (valueMax - valueMin) * graphHeight);
+            drawLine(guiGraphics, minX, zeroY, maxX, zeroY, 0x99FF0000, 1.0);
 
             for (Integer value : targetQueue) {
                 if (lastX == -1 || lastY == -1) {
@@ -135,11 +138,11 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
 
             String text = ""+((ArrayDeque<Integer>)targetQueue).peekLast();
             guiGraphics.drawString(this.font, text, lastX+1, lastY - 5, 0xFFFFFF);
-
-            // draw center line
-            int zeroY = (int)(maxY - (double)(0 - valueMin) / (valueMax - valueMin) * graphHeight);
-            drawLine(guiGraphics, minX, zeroY, maxX, zeroY, 0x99FF0000, 1.0);
         }
+
+        int endX = x1;
+        int endY = y1+graphHeight+(spaceBetweenGraph+graphHeight)*(listOfQueues.size()-1)+ spaceBetweenGraph/2;
+        guiGraphics.drawString(this.font, graphName, endX, endY, 0xFFFFFF);
     }
 
     private int getMaxFromQueue(Queue<Integer> queue) {
