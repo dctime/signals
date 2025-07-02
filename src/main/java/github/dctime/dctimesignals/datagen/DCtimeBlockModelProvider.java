@@ -32,6 +32,7 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         researchStationBlockModel();
         signalResearchStationOutputBlockModel();
         signalResearchStationInputBlockModel();
+        signalResearchItemChamberBlockModel();
     }
 
     private void signalWireModel() {
@@ -435,6 +436,25 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         Function<BlockState, ModelFile> constModelFunc = (Function) (($) -> researchInputModel);
         this.getVariantBuilder(researchInputBlock).forAllStates((state) -> {
             Direction dir = (Direction) state.getValue(SignalResearchStationSignalInputBlock.INPUT_SIDE_DIRECTION);
+            return ConfiguredModel.builder()
+                    .modelFile((ModelFile) constModelFunc.apply(state))
+                    .rotationX(dir == Direction.DOWN ? 180 : (dir.getAxis().isHorizontal() ? 90 : 0))
+                    .rotationY(dir.getAxis().isVertical() ? 0 : ((int) dir.toYRot() + 180) % 360)
+                    .build();
+        });
+    }
+
+    private void signalResearchItemChamberBlockModel() {
+        ModelFile researchInputModel = models().orientableVertical(
+                "signal_research_item_chamber",
+                modLoc("block/signal_research_station"),
+                modLoc("block/signal_research_item_chamber")
+        );
+        Block researchItemChamber = RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get();
+
+        Function<BlockState, ModelFile> constModelFunc = (Function) (($) -> researchInputModel);
+        this.getVariantBuilder(researchItemChamber).forAllStates((state) -> {
+            Direction dir = (Direction) state.getValue(SignalResearchItemChamberBlock.SCREEN_SIDE_FACING);
             return ConfiguredModel.builder()
                     .modelFile((ModelFile) constModelFunc.apply(state))
                     .rotationX(dir == Direction.DOWN ? 180 : (dir.getAxis().isHorizontal() ? 90 : 0))

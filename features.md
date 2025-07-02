@@ -275,3 +275,5 @@ GUI auto scale in different window size
 render outline even not looking at the station block
 
 auto assemble when enter gui
+
+init research item chamber

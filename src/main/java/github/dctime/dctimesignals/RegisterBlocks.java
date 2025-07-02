@@ -124,4 +124,14 @@ public class RegisterBlocks {
                     .sound(SoundType.METAL)
                     .noOcclusion()
     );
+
+    public static final DeferredBlock<Block> SIGNAL_RESEARCH_ITEM_CHAMBER = BLOCKS.registerBlock(
+            "signal_research_item_chamber",
+            SignalResearchItemChamberBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+    );
 }

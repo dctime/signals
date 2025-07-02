@@ -25,4 +25,5 @@ public class RegisterBlockItems {
     public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_STATION = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_STATION);
     public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_STATION_SIGNAL_INPUT = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT);
     public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT);
+    public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_ITEM_CHAMBER = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER);
 }

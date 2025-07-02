@@ -25,6 +25,7 @@ public class RegisterCreativeModeTab {
                 output.accept(RegisterBlockItems.SIGNAL_RESEARCH_STATION);
                 output.accept(RegisterBlockItems.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT);
                 output.accept(RegisterBlockItems.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT);
+                output.accept(RegisterBlockItems.SIGNAL_RESEARCH_ITEM_CHAMBER);
                 output.accept(RegisterItems.SIGNAL_DETECTOR);
                 output.accept(RegisterItems.AND_CARD);
                 output.accept(RegisterItems.OR_CARD);

@@ -75,4 +75,12 @@ public class RegisterBlockEntities {
                     RegisterBlocks.SIGNAL_RESEARCH_STATION.get()
             ).build(null)
     );
+
+    public static final Supplier<BlockEntityType<SignalResearchItemChamberBlockEntity>> SIGNAL_RESEARCH_ITEM_CHAMBER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "signal_research_item_chamber_block_entity",
+            ()-> BlockEntityType.Builder.of(
+                    SignalResearchItemChamberBlockEntity::new,
+                    RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get()
+            ).build(null)
+    );
 }
