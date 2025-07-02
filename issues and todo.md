@@ -217,6 +217,9 @@ language for signal operation block menu (9)
 
 Signal Research GUI will break if the value abs is greater than MAX_VALUE/2 cuz minus operation
 
+If inputs/outputs greater than 3, disable assembling (2)
+
+show no port connected when inputs outputs are not connected (x) stuck to 0 instead
 
 
 

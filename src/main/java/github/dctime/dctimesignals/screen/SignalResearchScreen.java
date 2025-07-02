@@ -18,10 +18,12 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
     public SignalResearchScreen(SignalResearchMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         inputSignalQueues = List.of(new ArrayDeque<>(), new ArrayDeque<>(), new ArrayDeque<>());
+        outputSignalQueues = List.of(new ArrayDeque<>(), new ArrayDeque<>(), new ArrayDeque<>());
     }
 
     List<Queue<Integer>> inputSignalQueues;
-    private final int maxQueueSize = 10;
+    List<Queue<Integer>> outputSignalQueues;
+    private final int maxQueueSize = 100;
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
@@ -35,7 +37,8 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
             guiGraphics.drawString(this.font, String.valueOf(value), 100, 10+outputSignalIndex * 20, 0xFFFFFF);
         }
 
-        renderSignalGraph(guiGraphics, 100, 298, 100, 50, 10);
+        renderSignalGraph(guiGraphics, inputSignalQueues, 100, 300, 100, 50, 10);
+        renderSignalGraph(guiGraphics, outputSignalQueues, 400, 600, 100, 50, 10);
     }
 
     @Override
@@ -57,17 +60,26 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
             }
             targetQueue.offer(value);
         }
+
+        for (int outputSignalIndex = 0; outputSignalIndex < this.getMenu().getOutputSignalData().getCount(); outputSignalIndex++) {
+            int value = this.getMenu().getOutputSignalData().get(outputSignalIndex);
+            Queue<Integer> targetQueue = outputSignalQueues.get(outputSignalIndex);
+            if (targetQueue.size() >= maxQueueSize) {
+                targetQueue.poll();
+            }
+            targetQueue.offer(value);
+        }
     }
 
-    private void renderSignalGraph(GuiGraphics guiGraphics, int x1, int x2, int y1, int graphHeight, int spaceBetweenGraph) {
-        for (int queueIndex = 0; queueIndex < inputSignalQueues.size(); queueIndex++) {
+    private void renderSignalGraph(GuiGraphics guiGraphics, List<Queue<Integer>> listOfQueues, int x1, int x2, int y1, int graphHeight, int spaceBetweenGraph) {
+        for (int queueIndex = 0; queueIndex < listOfQueues.size(); queueIndex++) {
             int minY = y1+(spaceBetweenGraph+graphHeight)*queueIndex;
             int maxY = y1+graphHeight+(spaceBetweenGraph+graphHeight)*queueIndex;
             int minX = x1;
             int maxX = x2;
             int graphWidth = maxX - minX;
             guiGraphics.fill(minX, minY, maxX, maxY, 0xFF000000);
-            Queue<Integer> targetQueue = inputSignalQueues.get(queueIndex);
+            Queue<Integer> targetQueue = listOfQueues.get(queueIndex);
             int valueIndex = 0;
             int targetQueueSize = targetQueue.size();
 

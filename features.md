@@ -265,3 +265,5 @@ Showing input output signal values on gui
 Signal screen got graph
 
 Added plus card
+
+If inputs/outputs greater than 3, disable assembling

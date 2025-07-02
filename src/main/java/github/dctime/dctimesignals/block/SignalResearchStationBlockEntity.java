@@ -5,9 +5,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -55,6 +58,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
     public static final int DATA_SIZE_INPUT_SIGNAL = 3;
     public static final int DATA_SIZE_OUTPUT_SIGNAL = 3;
+
 
     private Set<BlockPos> signalInputPositions;
     private Set<BlockPos> signalOutputPositions;
@@ -129,9 +133,20 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         }
     }
 
-    public void reassembleMultiblock() {
+    private void clearInputOutputPositions() {
         signalOutputPositions.clear();
         signalInputPositions.clear();
+    }
+
+    public void reassembleMultiblock(Player player) {
+        clearInputOutputPositions();
+        for (int i = 0; i < DATA_SIZE_INPUT_SIGNAL; i++) {
+            this.setInputSignalData(i, 0);
+        }
+
+        for (int i = 0; i < DATA_SIZE_OUTPUT_SIGNAL; i++) {
+            this.setOutputSignalData(i, 0);
+        }
 
         BlockPos mainPos = this.getBlockPos();
         Set<BlockPos> checkedPositions = new HashSet<>();
@@ -148,13 +163,26 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                 if (this.level.getBlockEntity(checkingPos) instanceof SignalResearchStationSignalInputBlockEntity) {
                     signalInputPositions.add(checkingPos);
                     checkedPositions.add(checkingPos);
+                    if (signalInputPositions.size() > DATA_SIZE_INPUT_SIGNAL) {
+                        if (player instanceof ServerPlayer)
+                            player.displayClientMessage(Component.literal("Exceeded maximum number of signal inputs for the multiblock at " + mainPos), false);
+                        clearInputOutputPositions();
+                        return;
+                    }
                     toCheck.push(checkingPos);
                 } else if (this.level.getBlockEntity(checkingPos) instanceof SignalResearchStationSignalOutputBlockEntity) {
                     signalOutputPositions.add(checkingPos);
                     checkedPositions.add(checkingPos);
+                    if (signalOutputPositions.size() > DATA_SIZE_OUTPUT_SIGNAL) {
+                        if (player instanceof ServerPlayer)
+                            player.displayClientMessage(Component.literal("Exceeded maximum number of signal outputs for the multiblock at " + mainPos), false);
+                        clearInputOutputPositions();
+                        return;
+                    }
                     toCheck.push(checkingPos);
                 } else if (this.level.getBlockEntity(checkingPos) instanceof SignalResearchStationBlockEntity) {
                     multipleSignalResearchStations = true;
+                    player.displayClientMessage(Component.literal("Multiple Research Stations at " + mainPos), false);
                     checkedPositions.add(checkingPos);
                     toCheck.push(checkingPos);
                 } else {

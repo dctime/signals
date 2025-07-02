@@ -51,7 +51,8 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.getBlockEntity(pos) instanceof SignalResearchStationBlockEntity entity) {
-            entity.reassembleMultiblock();
+            // do this both in server and client cuz screen needs pos while hard to send pos data to client
+            entity.reassembleMultiblock(player);
         }
 
         if (player.isCrouching() && !level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
