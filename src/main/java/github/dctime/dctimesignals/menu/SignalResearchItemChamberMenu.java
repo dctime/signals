@@ -14,18 +14,25 @@ import org.jetbrains.annotations.Nullable;
 
 public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
     // Server
-    ContainerLevelAccess access;
+    private final ContainerLevelAccess access;
+    private final ContainerData data;
+
+    public double getProgress() {
+        return data.get(SignalResearchItemChamberBlockEntity.DATA_PROGRESS_INDEX);
+    }
+
     public SignalResearchItemChamberMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, IItemHandler itemSlots, ContainerData data) {
         super(RegisterMenuTypes.SIGNAL_RESEARCH_ITEM_CHAMBER_MENU.get(), containerId);
 
         this.access = access;
+        this.data = data;
 
         checkContainerDataCount(data, 1);
 
         this.addDataSlots(data);
 
-        this.addSlot(new SlotItemHandler(itemSlots, 0, 10, 10));
-        this.addSlot(new SlotItemHandler(itemSlots, 1, 20, 10));
+        this.addSlot(new SlotItemHandler(itemSlots, 0, 80, 16+1));
+        this.addSlot(new SlotItemHandler(itemSlots, 1, 80, 56+1));
 
         int rows = 3;
         int i = (rows - 4) * 18;

@@ -281,3 +281,7 @@ init research item chamber
 ### 2025.7.3
 
 init research item chamber gui
+
+### 2025.7.5
+
+light bulb progress ready
