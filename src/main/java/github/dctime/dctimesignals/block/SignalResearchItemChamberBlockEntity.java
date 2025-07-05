@@ -1,6 +1,9 @@
 package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.RegisterBlockEntities;
+import github.dctime.dctimesignals.RegisterRecipeTypes;
+import github.dctime.dctimesignals.recipe.SignalResearchRecipe;
+import github.dctime.dctimesignals.recipe.SignalResearchRecipeInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -8,10 +11,15 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
+
+import java.util.Optional;
 
 public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
@@ -22,6 +30,8 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     public static final int DATA_SIZE = 1;
 
     public static final int DATA_PROGRESS_INDEX = 0;
+    public static final int ITEMS_INPUT_INDEX = 0;
+    public static final int ITEMS_OUTPUT_INDEX = 1;
 
     public SimpleContainerData getData() {
         return data;
@@ -31,9 +41,10 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         return items;
     }
 
+    public final int MAX_PROGRESS = 100;
     public void addProgress(int amount) {
         int currentProgress = data.get(DATA_PROGRESS_INDEX);
-        int newProgress = Math.min(currentProgress + amount, 100);
+        int newProgress = Math.min(currentProgress + amount, MAX_PROGRESS);
         data.set(DATA_PROGRESS_INDEX, newProgress);
     }
 
@@ -42,7 +53,11 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     }
 
     public boolean checkProgressReady() {
-        return data.get(DATA_PROGRESS_INDEX) >= 100;
+        return data.get(DATA_PROGRESS_INDEX) >= MAX_PROGRESS;
+    }
+
+    public boolean inProgress() {
+        return data.get(DATA_PROGRESS_INDEX) != 0;
     }
 
     public SignalResearchItemChamberBlockEntity(BlockPos pos, BlockState blockState) {
@@ -82,11 +97,56 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    private ItemStack recipeOutputBuffer;
+    private void setRecipeOutputBuffer(ItemStack itemStack) {
+        if (inProgress()) return;
+        this.recipeOutputBuffer = itemStack;
+    }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, SignalResearchItemChamberBlockEntity signalResearchItemChamberBlockEntity) {
-        signalResearchItemChamberBlockEntity.addProgress(1);
-        if (signalResearchItemChamberBlockEntity.checkProgressReady()) {
-            signalResearchItemChamberBlockEntity.resetProgress();
+        if (level.isClientSide()) return;
+
+        // if in progress
+        if (signalResearchItemChamberBlockEntity.inProgress()) {
+            signalResearchItemChamberBlockEntity.addProgress(1);
+            if (signalResearchItemChamberBlockEntity.checkProgressReady()) {
+                // If progress is ready, output the result
+                ItemStack output = signalResearchItemChamberBlockEntity.recipeOutputBuffer;
+                if (!output.isEmpty()) {
+                    signalResearchItemChamberBlockEntity.items.insertItem(SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, output, false);
+                    signalResearchItemChamberBlockEntity.resetProgress();
+                }
+            }
+            return;
         }
+
+
+        SignalResearchRecipeInput inputRecipe = new SignalResearchRecipeInput(
+                blockState,
+                signalResearchItemChamberBlockEntity.items.getStackInSlot(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_INDEX)
+        );
+
+        Optional<RecipeHolder<SignalResearchRecipe>> recipe = level.getRecipeManager().getRecipeFor(
+                RegisterRecipeTypes.SIGNAL_RESEARCH_RECIPE_TYPE.get(),
+                inputRecipe,
+                level
+        );
+
+        if (recipe.isEmpty()) return;
+
+        ItemStack resultItem = recipe.get().value().assemble(inputRecipe, level.registryAccess());
+        if (resultItem.isEmpty()) return;
+
+        // make sure if the slot can eat this item
+        if (signalResearchItemChamberBlockEntity.items.insertItem(
+                SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX,
+                resultItem,
+                true
+        ) != ItemStack.EMPTY) return;
+
+        // all checks passed, set the output buffer and clear the input
+        signalResearchItemChamberBlockEntity.items.extractItem(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_INDEX, 1, false);
+        signalResearchItemChamberBlockEntity.setRecipeOutputBuffer(resultItem);
+        signalResearchItemChamberBlockEntity.addProgress(1);
     }
 }

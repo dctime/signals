@@ -16,6 +16,8 @@ public class DCtimeMod {
         RegisterMenuTypes.MENUS.register(modBus);
         RegisterItems.ITEMS.register(modBus);
         RegisterFeatures.FEATURES.register(modBus);
+        RegisterRecipeTypes.RECIPE_TYPES.register(modBus);
+        RegisterRecipeSerializer.RECIPE_SERIALIZERS.register(modBus);
 
     }
 

@@ -2,13 +2,17 @@ package github.dctime.dctimesignals.datagen;
 
 import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.RegisterBlockItems;
+import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterItems;
+import github.dctime.dctimesignals.datagen.signal_research.SignalResearchRecipeBuilder;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -111,6 +115,13 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 .pattern("BBB")
                 .unlockedBy("has_signal_blocking_material", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterItems.SIGNAL_BLOCKING_MATERIAL))
                 .save(recipeOutput);
+
+        new SignalResearchRecipeBuilder(
+                new ItemStack(Items.DIAMOND),
+                RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),
+                Ingredient.of(Items.DIRT)
+        ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "dirt_to_diamond"));
 
     }
 }

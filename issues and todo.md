@@ -223,13 +223,21 @@ show no port connected when inputs outputs are not connected (x) stuck to 0 inst
 
 Add card should not limit values while let the screen decide
 
-Add a research item chamber to reseach signal mod items
+Add a research item chamber to reseach signal mod items (5)
 
 research station not synced and stored
 
 ### 2025.7.3
 
 use init() to compute screen coord of research station
+
+### 2025.7.5
+
+research station only support one to one recipes
+
+output slot should not able to modify
+
+research station item chamber data needs to be stored
 
 
 
