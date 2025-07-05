@@ -285,3 +285,5 @@ init research item chamber gui
 ### 2025.7.5
 
 light bulb progress ready
+
+added recipes for research station uncomplete

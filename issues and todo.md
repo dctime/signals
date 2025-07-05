@@ -237,7 +237,11 @@ research station only support one to one recipes
 
 output slot should not able to modify
 
-research station item chamber data needs to be stored
+research station item chamber data needs to be stored 
+
+research station should check input signal to add progress
+
+recipe needs a formula input of signal from output to input
 
 
 
