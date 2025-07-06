@@ -10,6 +10,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -119,9 +120,20 @@ public class DCtimeRecipeProvider extends RecipeProvider {
         new SignalResearchRecipeBuilder(
                 new ItemStack(Items.DIAMOND),
                 RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),
-                Ingredient.of(Items.DIRT)
+                new ItemStack(Items.DIRT),
+                ItemStack.EMPTY,
+                ItemStack.EMPTY
         ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "dirt_to_diamond"));
+
+        new SignalResearchRecipeBuilder(
+                new ItemStack(Items.VILLAGER_SPAWN_EGG, 2),
+                RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),
+                new ItemStack(Items.DIAMOND, 2),
+                new ItemStack(Items.EMERALD, 3),
+                ItemStack.EMPTY
+        ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "villager_spawn_egg_exchange"));
 
     }
 }

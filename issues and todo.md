@@ -233,7 +233,7 @@ use init() to compute screen coord of research station
 
 ### 2025.7.5
 
-research station only support one to one recipes
+research station only support one to one recipes (1)
 
 output slot should not able to modify
 

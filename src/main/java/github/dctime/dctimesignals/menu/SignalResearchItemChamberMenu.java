@@ -31,8 +31,12 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
 
         this.addDataSlots(data);
 
-        this.addSlot(new SlotItemHandler(itemSlots, 0, 80, 16+1));
-        this.addSlot(new SlotItemHandler(itemSlots, 1, 80, 56+1));
+        // input
+        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_1_INDEX, 80, 56+1));
+        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_2_INDEX, 80-18, 56+1));
+        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_3_INDEX, 80+18, 56+1));
+        // output
+        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, 80, 16+1));
 
         int rows = 3;
         int i = (rows - 4) * 18;

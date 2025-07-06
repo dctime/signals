@@ -12,6 +12,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
@@ -26,12 +27,14 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     private ItemStackHandler items;
     private SimpleContainerData data;
 
-    public static final int ITEMS_SIZE = 2;
+    public static final int ITEMS_SIZE = 4;
     public static final int DATA_SIZE = 1;
 
     public static final int DATA_PROGRESS_INDEX = 0;
-    public static final int ITEMS_INPUT_INDEX = 0;
-    public static final int ITEMS_OUTPUT_INDEX = 1;
+    public static final int ITEMS_INPUT_1_INDEX = 0;
+    public static final int ITEMS_INPUT_2_INDEX = 1;
+    public static final int ITEMS_INPUT_3_INDEX = 2;
+    public static final int ITEMS_OUTPUT_INDEX = 3;
 
     public SimpleContainerData getData() {
         return data;
@@ -123,7 +126,11 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
         SignalResearchRecipeInput inputRecipe = new SignalResearchRecipeInput(
                 blockState,
-                signalResearchItemChamberBlockEntity.items.getStackInSlot(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_INDEX)
+                Ingredient.of(
+                        signalResearchItemChamberBlockEntity.items.getStackInSlot(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_1_INDEX),
+                        signalResearchItemChamberBlockEntity.items.getStackInSlot(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_2_INDEX),
+                        signalResearchItemChamberBlockEntity.items.getStackInSlot(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_3_INDEX)
+                )
         );
 
         Optional<RecipeHolder<SignalResearchRecipe>> recipe = level.getRecipeManager().getRecipeFor(
@@ -145,7 +152,17 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         ) != ItemStack.EMPTY) return;
 
         // all checks passed, set the output buffer and clear the input
-        signalResearchItemChamberBlockEntity.items.extractItem(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_INDEX, 1, false);
+        for (int inputIngredientIndex = 0; inputIngredientIndex < recipe.get().value().getIngredients().getFirst().getItems().length; inputIngredientIndex++) {
+            ItemStack inputIngredientStack = recipe.get().value().getIngredients().getFirst().getItems()[inputIngredientIndex];
+            if (inputIngredientStack.is(Items.BARRIER)) continue;
+            for (int inputSlotIndex = 0; inputSlotIndex < SignalResearchItemChamberBlockEntity.ITEMS_SIZE-1; inputSlotIndex++) {
+                if (inputIngredientStack.is(signalResearchItemChamberBlockEntity.items.getStackInSlot(inputSlotIndex).getItem())) {
+                    signalResearchItemChamberBlockEntity.items.extractItem(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_1_INDEX+inputSlotIndex, inputIngredientStack.getCount(), false);
+                    break;
+                }
+            }
+        }
+
         signalResearchItemChamberBlockEntity.setRecipeOutputBuffer(resultItem);
         signalResearchItemChamberBlockEntity.addProgress(1);
     }

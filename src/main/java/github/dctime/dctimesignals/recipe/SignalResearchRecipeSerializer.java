@@ -15,13 +15,17 @@ public class SignalResearchRecipeSerializer implements RecipeSerializer<SignalRe
 
     public static final MapCodec<SignalResearchRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             BlockState.CODEC.fieldOf("state").forGetter(SignalResearchRecipe::getInputState),
-            Ingredient.CODEC.fieldOf("ingredient").forGetter(SignalResearchRecipe::getInputItem),
+            ItemStack.CODEC.fieldOf("input1").forGetter(SignalResearchRecipe::getInput1ItemStack),
+            ItemStack.CODEC.fieldOf("input2").forGetter(SignalResearchRecipe::getInput2ItemStack),
+            ItemStack.CODEC.fieldOf("input3").forGetter(SignalResearchRecipe::getInput3ItemStack),
             ItemStack.CODEC.fieldOf("result").forGetter(SignalResearchRecipe::getResult)
     ).apply(inst, SignalResearchRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, SignalResearchRecipe> STREAM_CODEC =
             StreamCodec.composite(
                     ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY), SignalResearchRecipe::getInputState,
-                    Ingredient.CONTENTS_STREAM_CODEC, SignalResearchRecipe::getInputItem,
+                    ItemStack.STREAM_CODEC, SignalResearchRecipe::getInput1ItemStack,
+                    ItemStack.STREAM_CODEC, SignalResearchRecipe::getInput2ItemStack,
+                    ItemStack.STREAM_CODEC, SignalResearchRecipe::getInput3ItemStack,
                     ItemStack.STREAM_CODEC, SignalResearchRecipe::getResult,
                     SignalResearchRecipe::new
             );

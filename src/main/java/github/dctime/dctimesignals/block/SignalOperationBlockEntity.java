@@ -68,6 +68,7 @@ public class SignalOperationBlockEntity extends BlockEntity {
         outputValue = value;
 //        System.out.println("Output Value Changed to: " + outputValue);
     }
+
     public int getOutputValue() { return outputValue; }
 
     @Override

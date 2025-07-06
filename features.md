@@ -287,3 +287,7 @@ init research item chamber gui
 light bulb progress ready
 
 added recipes for research station uncomplete
+
+### 2025.7.6
+
+Signal Research Station now supports 3 input slots to 1 output slot recipes with item count
