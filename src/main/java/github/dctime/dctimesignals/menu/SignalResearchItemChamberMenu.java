@@ -13,6 +13,16 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
+    static class OutputSlotItemHand extends SlotItemHandler {
+        public OutputSlotItemHand(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return false;
+        }
+    }
     // Server
     private final ContainerLevelAccess access;
     private final ContainerData data;
@@ -22,6 +32,7 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
     }
 
     public SignalResearchItemChamberMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, IItemHandler itemSlots, ContainerData data) {
+
         super(RegisterMenuTypes.SIGNAL_RESEARCH_ITEM_CHAMBER_MENU.get(), containerId);
 
         this.access = access;
@@ -36,7 +47,7 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
         this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_2_INDEX, 80-18, 56+1));
         this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_3_INDEX, 80+18, 56+1));
         // output
-        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, 80, 16+1));
+        this.addSlot(new OutputSlotItemHand(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, 80, 16+1));
 
         int rows = 3;
         int i = (rows - 4) * 18;

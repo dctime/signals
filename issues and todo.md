@@ -235,7 +235,7 @@ use init() to compute screen coord of research station
 
 research station only support one to one recipes (1)
 
-output slot should not able to modify
+output slot should not able to modify (2)
 
 research station item chamber data needs to be stored 
 
