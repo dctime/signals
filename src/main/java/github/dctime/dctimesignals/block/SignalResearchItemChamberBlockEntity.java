@@ -9,6 +9,7 @@ import github.dctime.dctimesignals.recipe.SignalResearchRecipeInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -29,9 +30,11 @@ import java.util.Optional;
 public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
     private SignalResearchStationBlockEntity signalResearchStationBlockEntity;
+    private BlockPos stationBlockPos;
 
     public void setSignalResearchStationBlockEntity(SignalResearchStationBlockEntity signalResearchStationBlockEntity) {
         this.signalResearchStationBlockEntity = signalResearchStationBlockEntity;
+        stationBlockPos = signalResearchStationBlockEntity.getBlockPos();
     }
 
     @Nullable
@@ -95,6 +98,15 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
+        (items).deserializeNBT(registries, tag.getCompound("items"));
+        data.set(DATA_PROGRESS_INDEX, tag.getInt("dataProgress"));
+        signalRequired1 = tag.getString("signalRequired1");
+        signalRequired2 = tag.getString("signalRequired2");
+        signalRequired3 = tag.getString("signalRequired3");
+        if (tag.contains("recipeOutputBuffer"))
+            recipeOutputBuffer = ItemStack.CODEC.parse(NbtOps.INSTANCE, tag.get("recipeOutputBuffer")).getOrThrow();
+        if (tag.contains("stationBlockPos"))
+            stationBlockPos = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("stationBlockPos")).getOrThrow();
         // Will default to 0 if absent. See the NBT article for more information.
 //        this.value = tag.getInt("value");
     }
@@ -103,6 +115,15 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
+        tag.put("items", (items).serializeNBT(registries));
+        tag.putInt("dataProgress", data.get(DATA_PROGRESS_INDEX));
+        tag.putString("signalRequired1", this.signalRequired1);
+        tag.putString("signalRequired2", this.signalRequired2);
+        tag.putString("signalRequired3", this.signalRequired3);
+        if (recipeOutputBuffer != null)
+            tag.put("recipeOutputBuffer", ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, recipeOutputBuffer).getOrThrow());
+        if (stationBlockPos != null)
+            tag.put("stationBlockPos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, stationBlockPos).getOrThrow());
 //        tag.putInt("value", this.value);
         setChanged();
     }
@@ -142,7 +163,14 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, SignalResearchItemChamberBlockEntity signalResearchItemChamberBlockEntity) {
         if (level.isClientSide()) return;
         // if there is no signal research station block entity, do nothing
-        if (signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntity() == null) return;
+        if (signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntity() == null) {
+            if (signalResearchItemChamberBlockEntity.stationBlockPos == null) return;
+            if (level.getBlockEntity(signalResearchItemChamberBlockEntity.stationBlockPos) instanceof SignalResearchStationBlockEntity stationEntity) {
+                signalResearchItemChamberBlockEntity.setSignalResearchStationBlockEntity(stationEntity);
+            }
+            return;
+        }
+
         SignalResearchStationBlockEntity stationEntity = signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntity();
 
         // if in progress

@@ -299,3 +299,7 @@ output slot should not able to modify
 research station should check input signal to add progress
 
 recipe needs a formula input of signal from output to input
+
+research station item chamber data needs to be stored and
+research station not synced and stored
+fixed

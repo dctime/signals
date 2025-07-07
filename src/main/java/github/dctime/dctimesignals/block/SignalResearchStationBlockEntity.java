@@ -7,6 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -101,15 +103,62 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        // Will default to 0 if absent. See the NBT article for more information.
-//        this.value = tag.getInt("value");
+        for (int i = 0; i < DATA_SIZE_INPUT_SIGNAL; i++) {
+            inputSignalData.set(i, tag.getInt("inputSignal" + i));
+        }
+        for (int i = 0; i < DATA_SIZE_OUTPUT_SIGNAL; i++) {
+            outputSignalData.set(i, tag.getInt("outputSignal" + i));
+        }
+        for (int i = 0; i < DATA_SIZE_REQUIRED_INPUT_SIGNAL; i++) {
+            requiredInputSignalData.set(i, tag.getInt("requiredInputSignal" + i));
+        }
+
+        if (tag.contains("itemChamberPosition"))
+            itemChamberPosition = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("itemChamberPosition")).getOrThrow();
+
+        int inputCount = tag.getInt("signalInputCount");
+        for (int i = 0; i < inputCount; i++) {
+            BlockPos inputPos = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("signalInputPosition" + i)).getOrThrow();
+            signalInputPositions.add(inputPos);
+        }
+
+        int outputCount = tag.getInt("signalOutputCount");
+        for (int i = 0; i < outputCount; i++) {
+            BlockPos outputPos = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("signalOutputPosition" + i)).getOrThrow();
+            signalOutputPositions.add(outputPos);
+        }
     }
 
     // Save values into the passed CompoundTag here.
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-//        tag.putInt("value", this.value);
+        for (int i = 0; i < DATA_SIZE_INPUT_SIGNAL; i++) {
+            tag.putInt("inputSignal" + i, inputSignalData.get(i));
+        }
+        for (int i = 0; i < DATA_SIZE_OUTPUT_SIGNAL; i++) {
+            tag.putInt("outputSignal" + i, outputSignalData.get(i));
+        }
+        for (int i = 0; i < DATA_SIZE_REQUIRED_INPUT_SIGNAL; i++) {
+            tag.putInt("requiredInputSignal" + i, requiredInputSignalData.get(i));
+        }
+
+        if (itemChamberPosition != null) {
+            tag.put("itemChamberPosition", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, itemChamberPosition).getOrThrow());
+        }
+
+        // signalInputPositions count and the values
+
+        tag.putInt("signalInputCount", signalInputPositions.size());
+        for (int i = 0; i < signalInputPositions.size(); i++) {
+            tag.put("signalInputPosition" + i, BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, signalInputPositions.get(i)).getOrThrow());
+        }
+
+        tag.putInt("signalOutputCount", signalOutputPositions.size());
+        for (int i = 0; i < signalOutputPositions.size(); i++) {
+            tag.put("signalOutputPosition" + i, BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, signalOutputPositions.get(i)).getOrThrow());
+        }
+
         setChanged();
     }
 
@@ -153,12 +202,12 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
         BlockPos itemChamberPosition = blockEntity.getItemChamberPosition();
         if (itemChamberPosition == null) {
-            System.out.println("No item chamber position set for the Signal Research Station at " + blockEntity.getBlockPos());
+            // System.out.println("No item chamber position set for the Signal Research Station at " + blockEntity.getBlockPos());
             return;
         }
         BlockEntity itemChamberEntity = level.getBlockEntity(itemChamberPosition);
         if (!(itemChamberEntity instanceof SignalResearchItemChamberBlockEntity signalResearchItemChamberBlockEntity)) {
-            System.out.println("Item chamber entity at " + itemChamberPosition + " is not a SignalResearchItemChamberBlockEntity");
+            // System.out.println("Item chamber entity at " + itemChamberPosition + " is not a SignalResearchItemChamberBlockEntity");
             return;
         }
 
@@ -167,8 +216,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                 signalResearchItemChamberBlockEntity.getSignalRequired2(),
                 signalResearchItemChamberBlockEntity.getSignalRequired3()
         ).signalOperations(blockEntity.getOutputSignalData().get(0), blockEntity.getOutputSignalData().get(1), blockEntity.getOutputSignalData().get(2));
-        System.out.println("Correct input: " + correctInputs[0]);
-        System.out.println("Signal Required 1: " + signalResearchItemChamberBlockEntity.getSignalRequired1());
+//        System.out.println("Correct input: " + correctInputs[0]);
+//        System.out.println("Signal Required 1: " + signalResearchItemChamberBlockEntity.getSignalRequired1());
         int requiredInputPortCounter = 0;
         for (BlockPos inputPos : blockEntity.getSignalInputPositions()) {
             if (level.getBlockEntity(inputPos) instanceof SignalResearchStationSignalInputBlockEntity inputEntity) {

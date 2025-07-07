@@ -225,7 +225,7 @@ Add card should not limit values while let the screen decide
 
 Add a research item chamber to reseach signal mod items (5)
 
-research station not synced and stored
+research station not synced and stored (6)
 
 ### 2025.7.3
 
@@ -237,7 +237,7 @@ research station only support one to one recipes (1)
 
 output slot should not able to modify (2)
 
-research station item chamber data needs to be stored 
+research station item chamber data needs to be stored (5)
 
 research station should check input signal to add progress (3)
 
