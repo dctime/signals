@@ -106,12 +106,18 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         this.recipeOutputBuffer = itemStack;
     }
 
+    private String signalRequired1 = "";
+    private String signalRequired2 = "";
+    private String signalRequired3 = "";
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, SignalResearchItemChamberBlockEntity signalResearchItemChamberBlockEntity) {
         if (level.isClientSide()) return;
 
         // if in progress
         if (signalResearchItemChamberBlockEntity.inProgress()) {
             signalResearchItemChamberBlockEntity.addProgress(1);
+            System.out.println("Signal Required 1: " + signalResearchItemChamberBlockEntity.signalRequired1);
+            System.out.println("Signal Required 2: " + signalResearchItemChamberBlockEntity.signalRequired2);
+            System.out.println("Signal Required 3: " + signalResearchItemChamberBlockEntity.signalRequired3);
             if (signalResearchItemChamberBlockEntity.checkProgressReady()) {
                 // If progress is ready, output the result
                 ItemStack output = signalResearchItemChamberBlockEntity.recipeOutputBuffer;
@@ -164,6 +170,9 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         }
 
         signalResearchItemChamberBlockEntity.setRecipeOutputBuffer(resultItem);
+        signalResearchItemChamberBlockEntity.signalRequired1 = recipe.get().value().getSignalRequired1();
+        signalResearchItemChamberBlockEntity.signalRequired2 = recipe.get().value().getSignalRequired2();
+        signalResearchItemChamberBlockEntity.signalRequired3 = recipe.get().value().getSignalRequired3();
         signalResearchItemChamberBlockEntity.addProgress(1);
     }
 }

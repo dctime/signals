@@ -4,6 +4,7 @@ import github.dctime.dctimesignals.RegisterRecipeSerializer;
 import github.dctime.dctimesignals.RegisterRecipeTypes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -13,19 +14,30 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.List;
+
 public class SignalResearchRecipe implements Recipe<SignalResearchRecipeInput> {
     private final BlockState inputState;
     private final ItemStack result;
     private final ItemStack input1ItemStack;
     private final ItemStack input2ItemStack;
     private final ItemStack input3ItemStack;
+    private final String signalRequired1;
+    private final String signalRequired2;
+    private final String signalRequired3;
 
-    public SignalResearchRecipe(BlockState inputState, ItemStack input1ItemStack, ItemStack input2ItemStack, ItemStack input3ItemStack, ItemStack result) {
+    public SignalResearchRecipe(BlockState inputState, List<ItemStack> inputItemStacks, ItemStack result, String signalRequired1, String signalRequired2, String signalRequired3) {
         this.result = result;
         this.inputState = inputState;
-        this.input1ItemStack = input1ItemStack;
-        this.input2ItemStack = input2ItemStack;
-        this.input3ItemStack = input3ItemStack;
+        if (inputItemStacks.isEmpty()) this.input1ItemStack = ItemStack.EMPTY;
+        else this.input1ItemStack = inputItemStacks.get(0);
+        if (inputItemStacks.size() < 2) this.input2ItemStack = ItemStack.EMPTY;
+        else this.input2ItemStack = inputItemStacks.get(1);
+        if (inputItemStacks.size() < 3) this.input3ItemStack = ItemStack.EMPTY;
+        else this.input3ItemStack = inputItemStacks.get(2);
+        this.signalRequired1 = signalRequired1;
+        this.signalRequired2 = signalRequired2;
+        this.signalRequired3 = signalRequired3;
     }
 
     @Override
@@ -102,7 +114,23 @@ public class SignalResearchRecipe implements Recipe<SignalResearchRecipeInput> {
         return this.input3ItemStack;
     }
 
+    public List<ItemStack> getInputItemStacks() {
+        return List.of(input1ItemStack, input2ItemStack, input3ItemStack);
+    }
+
     public ItemStack getResult() {
         return this.result;
+    }
+
+    public String getSignalRequired1() {
+        return this.signalRequired1;
+    }
+
+    public String getSignalRequired2() {
+        return this.signalRequired2;
+    }
+
+    public String getSignalRequired3() {
+        return this.signalRequired3;
     }
 }
