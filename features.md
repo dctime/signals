@@ -293,3 +293,9 @@ added recipes for research station uncomplete
 Signal Research Station now supports 3 input slots to 1 output slot recipes with item count
 
 output slot should not able to modify
+
+### 2025.7.7
+
+research station should check input signal to add progress
+
+recipe needs a formula input of signal from output to input

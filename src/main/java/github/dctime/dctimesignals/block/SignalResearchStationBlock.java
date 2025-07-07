@@ -90,7 +90,8 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
                     playerInventory,
                     ContainerLevelAccess.create(level, pos),
                     entity.getInputSignalData(),
-                    entity.getOutputSignalData()
+                    entity.getOutputSignalData(),
+                    entity.getRequiredInputSignalData()
             );
         },
                 Component.translatable("menu.title." + DCtimeMod.MODID + ".signal_research_menu"));

@@ -2,6 +2,8 @@ package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.RegisterBlockEntities;
 import github.dctime.dctimesignals.RegisterRecipeTypes;
+import github.dctime.dctimesignals.lib.SignalOperationString;
+import github.dctime.dctimesignals.lib.StringToSignalOperation;
 import github.dctime.dctimesignals.recipe.SignalResearchRecipe;
 import github.dctime.dctimesignals.recipe.SignalResearchRecipeInput;
 import net.minecraft.core.BlockPos;
@@ -18,11 +20,24 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class SignalResearchItemChamberBlockEntity extends BlockEntity {
+
+    private SignalResearchStationBlockEntity signalResearchStationBlockEntity;
+
+    public void setSignalResearchStationBlockEntity(SignalResearchStationBlockEntity signalResearchStationBlockEntity) {
+        this.signalResearchStationBlockEntity = signalResearchStationBlockEntity;
+    }
+
+    @Nullable
+    public SignalResearchStationBlockEntity getSignalResearchStationBlockEntity() {
+        return this.signalResearchStationBlockEntity;
+    }
 
     private ItemStackHandler items;
     private SimpleContainerData data;
@@ -48,6 +63,12 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     public void addProgress(int amount) {
         int currentProgress = data.get(DATA_PROGRESS_INDEX);
         int newProgress = Math.min(currentProgress + amount, MAX_PROGRESS);
+        data.set(DATA_PROGRESS_INDEX, newProgress);
+    }
+
+    public void removeProgress(int amount) {
+        int currentProgress = data.get(DATA_PROGRESS_INDEX);
+        int newProgress = Math.max(currentProgress - amount, 1);
         data.set(DATA_PROGRESS_INDEX, newProgress);
     }
 
@@ -109,15 +130,43 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     private String signalRequired1 = "";
     private String signalRequired2 = "";
     private String signalRequired3 = "";
+    public String getSignalRequired1() {
+        return signalRequired1;
+    }
+    public String getSignalRequired2() {
+        return signalRequired2;
+    }
+    public String getSignalRequired3() {
+        return signalRequired3;
+    }
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, SignalResearchItemChamberBlockEntity signalResearchItemChamberBlockEntity) {
         if (level.isClientSide()) return;
+        // if there is no signal research station block entity, do nothing
+        if (signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntity() == null) return;
+        SignalResearchStationBlockEntity stationEntity = signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntity();
 
         // if in progress
         if (signalResearchItemChamberBlockEntity.inProgress()) {
+            int signalOutput1 = stationEntity.getOutputSignalData().get(0);
+            int signalOutput2 = stationEntity.getOutputSignalData().get(1);
+            int signalOutput3 = stationEntity.getOutputSignalData().get(2);
+
+            boolean allCorrect = true;
+
+            for (int i = 0; i < 3; i++) {
+                if (stationEntity.getRequiredInputSignalData().get(i) != stationEntity.getInputSignalData().get(i)) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+
+            if (!allCorrect) {
+                signalResearchItemChamberBlockEntity.removeProgress(1);
+                return;
+            }
+
             signalResearchItemChamberBlockEntity.addProgress(1);
-            System.out.println("Signal Required 1: " + signalResearchItemChamberBlockEntity.signalRequired1);
-            System.out.println("Signal Required 2: " + signalResearchItemChamberBlockEntity.signalRequired2);
-            System.out.println("Signal Required 3: " + signalResearchItemChamberBlockEntity.signalRequired3);
+
             if (signalResearchItemChamberBlockEntity.checkProgressReady()) {
                 // If progress is ready, output the result
                 ItemStack output = signalResearchItemChamberBlockEntity.recipeOutputBuffer;

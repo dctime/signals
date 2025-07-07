@@ -15,6 +15,9 @@ public class StringToSignalOperation {
         }
 
         int parseExpression() {
+            if (input.isEmpty()) {
+                return 0;
+            }
             int value = parseTerm();
             while (true) {
                 if (match('+')) {

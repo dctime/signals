@@ -49,6 +49,14 @@ public class SignalResearchStationBlockEntityRenderer implements BlockEntityRend
             renderBox(relX, relY, relZ, 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL-outputIndex), 0, 255, poseStack, vertexBuilder);
             outputIndex++;
         }
+
+        if (signalResearchStationBlockEntity.getItemChamberPosition() != null) {
+            BlockPos itemChamberPos = signalResearchStationBlockEntity.getItemChamberPosition();
+            double relX = itemChamberPos.getX() - signalResearchStationBlockEntity.getBlockPos().getX();
+            double relY = itemChamberPos.getY() - signalResearchStationBlockEntity.getBlockPos().getY();
+            double relZ = itemChamberPos.getZ() - signalResearchStationBlockEntity.getBlockPos().getZ();
+            renderBox(relX, relY, relZ, 255, 255, 255, 255, poseStack, vertexBuilder);
+        }
     }
 
     private void renderBox(double relX, double relY, double relZ, int r, int g, int b, int a, PoseStack poseStack, VertexConsumer vertexBuilder) {

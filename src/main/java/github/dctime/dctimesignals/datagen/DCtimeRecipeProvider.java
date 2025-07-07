@@ -135,7 +135,7 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 new ItemStack(Items.DIAMOND, 2),
                 new ItemStack(Items.EMERALD, 3),
                 ItemStack.EMPTY,
-                "A^B",
+                "A&B",
                 "",
                 ""
         ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))

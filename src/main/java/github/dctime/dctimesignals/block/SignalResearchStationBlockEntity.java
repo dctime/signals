@@ -1,6 +1,8 @@
 package github.dctime.dctimesignals.block;
 
+import com.mojang.serialization.Decoder;
 import github.dctime.dctimesignals.RegisterBlockEntities;
+import github.dctime.dctimesignals.lib.StringToSignalOperation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -15,6 +17,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -29,6 +32,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
     private final SimpleContainerData inputSignalData = new SimpleContainerData(DATA_SIZE_INPUT_SIGNAL);
     private final SimpleContainerData outputSignalData = new SimpleContainerData(DATA_SIZE_OUTPUT_SIGNAL);
+    private final SimpleContainerData requiredInputSignalData = new SimpleContainerData(DATA_SIZE_REQUIRED_INPUT_SIGNAL);
 
     public SimpleContainerData getInputSignalData() {
         return inputSignalData;
@@ -36,6 +40,10 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
     public SimpleContainerData getOutputSignalData() {
         return outputSignalData;
+    }
+
+    public SimpleContainerData getRequiredInputSignalData() {
+        return requiredInputSignalData;
     }
 
     public void setInputSignalData(int index, int value) {
@@ -54,12 +62,22 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         }
     }
 
+    public void setRequiredInputSignalData(int index, int value) {
+        if (index >= 0 && index < DATA_SIZE_REQUIRED_INPUT_SIGNAL) {
+            requiredInputSignalData.set(index, value);
+        } else {
+            System.out.println("Invalid index for required input signal data: " + index + ". Must be between 0 and " + (DATA_SIZE_REQUIRED_INPUT_SIGNAL - 1));
+        }
+    }
+
     public static final int DATA_SIZE_INPUT_SIGNAL = 3;
     public static final int DATA_SIZE_OUTPUT_SIGNAL = 3;
+    public static final int DATA_SIZE_REQUIRED_INPUT_SIGNAL = 3;
 
 
     private List<BlockPos> signalInputPositions;
     private List<BlockPos> signalOutputPositions;
+    private BlockPos itemChamberPosition;
 
     public List<BlockPos> getSignalInputPositions() {
         return signalInputPositions;
@@ -68,6 +86,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
     public List<BlockPos> getSignalOutputPositions() {
         return signalOutputPositions;
     }
+
+    public @Nullable BlockPos getItemChamberPosition() { return itemChamberPosition; }
 
     boolean multipleSignalResearchStations = false;
 
@@ -113,6 +133,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         if (level.isClientSide()) return;
 
         int inputPortCounter = 0;
+
         for (BlockPos inputPos : blockEntity.getSignalInputPositions()) {
             if (level.getBlockEntity(inputPos) instanceof SignalResearchStationSignalInputBlockEntity inputEntity) {
                 int inputValue = inputEntity.getStoredSignalValue();
@@ -129,6 +150,33 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                 outputPortCounter++;
             }
         }
+
+        BlockPos itemChamberPosition = blockEntity.getItemChamberPosition();
+        if (itemChamberPosition == null) {
+            System.out.println("No item chamber position set for the Signal Research Station at " + blockEntity.getBlockPos());
+            return;
+        }
+        BlockEntity itemChamberEntity = level.getBlockEntity(itemChamberPosition);
+        if (!(itemChamberEntity instanceof SignalResearchItemChamberBlockEntity signalResearchItemChamberBlockEntity)) {
+            System.out.println("Item chamber entity at " + itemChamberPosition + " is not a SignalResearchItemChamberBlockEntity");
+            return;
+        }
+
+        int[] correctInputs = StringToSignalOperation.fromString(
+                signalResearchItemChamberBlockEntity.getSignalRequired1(),
+                signalResearchItemChamberBlockEntity.getSignalRequired2(),
+                signalResearchItemChamberBlockEntity.getSignalRequired3()
+        ).signalOperations(blockEntity.getOutputSignalData().get(0), blockEntity.getOutputSignalData().get(1), blockEntity.getOutputSignalData().get(2));
+        System.out.println("Correct input: " + correctInputs[0]);
+        System.out.println("Signal Required 1: " + signalResearchItemChamberBlockEntity.getSignalRequired1());
+        int requiredInputPortCounter = 0;
+        for (BlockPos inputPos : blockEntity.getSignalInputPositions()) {
+            if (level.getBlockEntity(inputPos) instanceof SignalResearchStationSignalInputBlockEntity inputEntity) {
+                int requiredInputValue = correctInputs[requiredInputPortCounter];
+                blockEntity.setRequiredInputSignalData(requiredInputPortCounter, requiredInputValue);
+                requiredInputPortCounter++;
+            }
+        }
     }
 
     private void clearInputOutputPositions() {
@@ -138,6 +186,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
     public void reassembleMultiblock(Player player) {
         clearInputOutputPositions();
+        multipleSignalResearchStations = false;
+        itemChamberPosition = null;
         for (int i = 0; i < DATA_SIZE_INPUT_SIGNAL; i++) {
             this.setInputSignalData(i, 0);
         }
@@ -183,11 +233,33 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                     player.displayClientMessage(Component.literal("Multiple Research Stations at " + mainPos), false);
                     checkedPositions.add(checkingPos);
                     toCheck.push(checkingPos);
+                } else if (this.level.getBlockEntity(checkingPos) instanceof SignalResearchItemChamberBlockEntity) {
+                    if (itemChamberPosition == null) {
+                        itemChamberPosition = checkingPos;
+                    } else {
+                        // if there is already a item chamber position, we stop checking
+                        // this is to prevent infinite loops in case of broken multiblocks
+                        player.displayClientMessage(Component.literal("Multiple Item Chambers at " + mainPos), false);
+                        itemChamberPosition = null;
+                        return;
+                    }
+                    checkedPositions.add(checkingPos);
+                    toCheck.push(checkingPos);
                 } else {
                     // if there is a block that is not part of the multiblock, we stop checking
                     // this is to prevent infinite loops in case of broken multiblocks
                     continue;
                 }
+            }
+        }
+
+        if (itemChamberPosition != null) {
+            assert level != null;
+            BlockEntity itemChamberEntity = level.getBlockEntity(itemChamberPosition);
+            if (itemChamberEntity instanceof SignalResearchItemChamberBlockEntity chamberBlockEntity) {
+                chamberBlockEntity.setSignalResearchStationBlockEntity(this);
+            } else {
+                itemChamberPosition = null; // reset if not a valid chamber
             }
         }
 

@@ -19,10 +19,12 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
         super(menu, playerInventory, title);
         inputSignalQueues = List.of(new ArrayDeque<>(), new ArrayDeque<>(), new ArrayDeque<>());
         outputSignalQueues = List.of(new ArrayDeque<>(), new ArrayDeque<>(), new ArrayDeque<>());
+        requiredInputSignalQueues = List.of(new ArrayDeque<>(), new ArrayDeque<>(), new ArrayDeque<>());
     }
 
     List<Queue<Integer>> inputSignalQueues;
     List<Queue<Integer>> outputSignalQueues;
+    List<Queue<Integer>> requiredInputSignalQueues;
     private final int maxQueueSize = 100;
 
 
@@ -35,7 +37,7 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
         int graphHeight = (int)(imageHeight*(0.2));
         int gapHeight = (int)(imageHeight*(0.1));
 
-        renderSignalGraph(guiGraphics, inputSignalQueues, startX-graphWidth/2, startX+graphWidth/2, startY+gapHeight, graphHeight, gapHeight, "Signal Read");
+        renderSignalGraph(guiGraphics, inputSignalQueues, requiredInputSignalQueues, startX-graphWidth/2, startX+graphWidth/2, startY+gapHeight, graphHeight, gapHeight, "Signal Read");
         renderSignalGraph(guiGraphics, outputSignalQueues, startX+imageWidth-graphWidth/2, startX+imageWidth+graphWidth/2, startY+gapHeight, graphHeight, gapHeight, "Signal Export");
     }
 
@@ -78,6 +80,112 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
             }
             targetQueue.offer(value);
         }
+
+        for (int requiredInputQueue = 0; requiredInputQueue < this.getMenu().getRequiredInputSignalData().getCount(); requiredInputQueue++) {
+            int value = this.getMenu().getRequiredInputSignalData().get(requiredInputQueue);
+            Queue<Integer> targetQueue = requiredInputSignalQueues.get(requiredInputQueue);
+            if (targetQueue.size() >= maxQueueSize) {
+                targetQueue.poll();
+            }
+            targetQueue.offer(value);
+        }
+    }
+
+    private void renderSignalGraph(GuiGraphics guiGraphics, List<Queue<Integer>> listOfQueues, List<Queue<Integer>> secondaryListOfQueues, int x1, int x2, int y1, int graphHeight, int spaceBetweenGraph, String graphName) {
+        for (int queueIndex = 0; queueIndex < listOfQueues.size(); queueIndex++) {
+            int minY = y1+(spaceBetweenGraph+graphHeight)*queueIndex;
+            int maxY = y1+graphHeight+(spaceBetweenGraph+graphHeight)*queueIndex;
+            int minX = x1;
+            int maxX = x2;
+            int graphWidth = maxX - minX;
+            // background
+            guiGraphics.fill(minX, minY, maxX, maxY, 0xFF000000);
+            Queue<Integer> targetQueue = listOfQueues.get(queueIndex);
+            Queue<Integer> secondaryTargetQueue = secondaryListOfQueues.get(queueIndex);
+
+
+            int targetQueueSize = targetQueue.size();
+            if (targetQueueSize != secondaryTargetQueue.size()) {
+                System.out.println("Warning: Target queue size does not match secondary target queue size for graph: " + graphName);
+                return;
+            }
+
+            double widthBetweenValues = (double)graphWidth / (targetQueueSize-1);
+
+            int valueMin = Math.min(getMinFromQueue(targetQueue), getMinFromQueue(secondaryTargetQueue));
+            int valueMax = Math.max(getMaxFromQueue(targetQueue), getMaxFromQueue(secondaryTargetQueue));
+
+            if (Math.abs(valueMin) > Math.abs(valueMax)) {
+                valueMax = Math.abs(valueMin);
+                valueMin = -Math.abs(valueMin);
+            } else if (Math.abs(valueMax) > Math.abs(valueMin)) {
+                valueMin = -Math.abs(valueMax);
+                valueMax = Math.abs(valueMax);
+            } else if (Math.abs(valueMax) == Math.abs(valueMin)) {
+                valueMin = -Math.abs(valueMax);
+                valueMax = Math.abs(valueMax);
+            }
+
+            if (valueMax == 0) {
+                valueMin = -1;
+                valueMax = 1;
+            }
+            // draw center line
+            int zeroY = (int)(maxY - (double)(0 - valueMin) / (valueMax - valueMin) * graphHeight);
+            drawLine(guiGraphics, minX, zeroY, maxX, zeroY, 0x99FF0000, 1.0);
+
+            int lastX = -1;
+            int lastY = -1;
+            int valueIndex = 0;
+
+            for (Integer value : secondaryTargetQueue) {
+                if (lastX == -1 || lastY == -1) {
+                    lastX = minX;
+                    lastY = (int)(maxY - (double)(value - valueMin) / (valueMax - valueMin) * graphHeight);
+//                    String text = ""+value;
+//                    guiGraphics.drawString(this.font, text, lastX - this.font.width(text)-1, lastY - 5, 0xFFFFFF);
+                } else {
+                    int x = (int)(minX + valueIndex * widthBetweenValues);
+                    int y = (int)(maxY - (double)(value - valueMin) / (valueMax - valueMin) * graphHeight);
+                    drawLine(guiGraphics, lastX, lastY, x, y, 0x9900FF00, 1.0);
+                    lastX = x;
+                    lastY = y;
+                }
+
+                valueIndex++;
+            }
+
+            String text = ""+((ArrayDeque<Integer>)secondaryTargetQueue).peekLast();
+            guiGraphics.drawString(this.font, text, lastX+1+this.font.width(""+((ArrayDeque<Integer>)targetQueue).peekLast()+1), lastY - 5, 0x9900FF00);
+
+            lastX = -1;
+            lastY = -1;
+            valueIndex = 0;
+
+            for (Integer value : targetQueue) {
+                if (lastX == -1 || lastY == -1) {
+                    lastX = minX;
+                    lastY = (int)(maxY - (double)(value - valueMin) / (valueMax - valueMin) * graphHeight);
+//                    String text = ""+value;
+//                    guiGraphics.drawString(this.font, text, lastX - this.font.width(text)-1, lastY - 5, 0xFFFFFF);
+                } else {
+                    int x = (int)(minX + valueIndex * widthBetweenValues);
+                    int y = (int)(maxY - (double)(value - valueMin) / (valueMax - valueMin) * graphHeight);
+                    drawLine(guiGraphics, lastX, lastY, x, y, 0xFFFFFFFF, 1.0);
+                    lastX = x;
+                    lastY = y;
+                }
+
+                valueIndex++;
+            }
+
+            text = ""+((ArrayDeque<Integer>)targetQueue).peekLast();
+            guiGraphics.drawString(this.font, text, lastX+1, lastY - 5, 0xFFFFFF);
+        }
+
+        int endX = x1;
+        int endY = y1+graphHeight+(spaceBetweenGraph+graphHeight)*(listOfQueues.size()-1)+ spaceBetweenGraph/2;
+        guiGraphics.drawString(this.font, graphName, endX, endY, 0xFFFFFF);
     }
 
     private void renderSignalGraph(GuiGraphics guiGraphics, List<Queue<Integer>> listOfQueues, int x1, int x2, int y1, int graphHeight, int spaceBetweenGraph, String graphName) {
@@ -87,8 +195,10 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
             int minX = x1;
             int maxX = x2;
             int graphWidth = maxX - minX;
+            // background
             guiGraphics.fill(minX, minY, maxX, maxY, 0xFF000000);
             Queue<Integer> targetQueue = listOfQueues.get(queueIndex);
+
             int valueIndex = 0;
             int targetQueueSize = targetQueue.size();
 
