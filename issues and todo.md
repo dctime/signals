@@ -245,6 +245,12 @@ recipe needs a formula input of signal from output to input (4)
 
 signal outputs switching not synced
 
+### 2025.7.7
+
+auto reassemble when breaking or adding block
+
+add debug mode button to show up block outline for game debugging
+
 
 
 
