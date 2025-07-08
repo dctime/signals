@@ -80,7 +80,8 @@ public class SignalResearchItemChamberBlock extends Block implements EntityBlock
                     playerInventory,
                     ContainerLevelAccess.create(level, pos),
                     entity.getItems(),
-                    entity.getData()
+                    entity.getData(),
+                    entity.getResearchingItem()
             );
         },
                 Component.translatable("menu.title." + DCtimeMod.MODID + ".signal_item_chamber_menu"));

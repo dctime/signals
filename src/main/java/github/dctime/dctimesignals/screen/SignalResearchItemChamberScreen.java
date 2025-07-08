@@ -30,5 +30,11 @@ public class SignalResearchItemChamberScreen extends AbstractContainerScreen<Sig
         int progressHeight = (int)((22-3-4)*progress);
         int startY = 22 - progressHeight - 3;
         guiGraphics.blit(LIGHT_BULB, i+79, j+33+startY+1, 0, startY, 18, progressHeight+4-1, 18, 22);
+
+        int researchingTextX = i + this.imageWidth / 7 * 4;
+        int researchingTextY = j + this.imageHeight / 4;
+
+        if (!menu.getResearchingItem().isEmpty())
+            guiGraphics.drawString(this.font, "Researching...", researchingTextX, researchingTextY, 0xFFFFFF);
     }
 }

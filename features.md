@@ -307,3 +307,5 @@ fixed
 ### 2025.7.8
 
 Debug outlines when reassembles
+
+item chamber researching item shown

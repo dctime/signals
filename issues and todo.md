@@ -251,6 +251,12 @@ auto reassemble when breaking or adding block (x)(needs to store too much stuff)
 
 add debug mode button to show up block outline for game debugging (x)(debug outline when reassemble)
 
+### 2025.7.8
+
+item chamber researching item shown (1)
+
+a button to cancel research
+
 
 
 

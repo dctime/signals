@@ -44,15 +44,18 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
     private ItemStackHandler items;
     private SimpleContainerData data;
+    private ItemStackHandler researchingItem;
 
     public static final int ITEMS_SIZE = 4;
     public static final int DATA_SIZE = 1;
+    public static final int RESEARCHING_ITEM_SIZE = 1;
 
     public static final int DATA_PROGRESS_INDEX = 0;
     public static final int ITEMS_INPUT_1_INDEX = 0;
     public static final int ITEMS_INPUT_2_INDEX = 1;
     public static final int ITEMS_INPUT_3_INDEX = 2;
     public static final int ITEMS_OUTPUT_INDEX = 3;
+    public static final int RESEARCHING_ITEM_INDEX = 0;
 
     public SimpleContainerData getData() {
         return data;
@@ -60,6 +63,10 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
     public ItemStackHandler getItems() {
         return items;
+    }
+
+    public ItemStackHandler getResearchingItem() {
+        return researchingItem;
     }
 
     public final int MAX_PROGRESS = 100;
@@ -91,6 +98,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         super(RegisterBlockEntities.SIGNAL_RESEARCH_ITEM_CHAMBER_BLOCK_ENTITY.get(), pos, blockState);
         items = new ItemStackHandler(ITEMS_SIZE);
         data = new SimpleContainerData(DATA_SIZE);
+        researchingItem = new ItemStackHandler(RESEARCHING_ITEM_SIZE);
         data.set(DATA_PROGRESS_INDEX, 0);
     }
 
@@ -99,12 +107,11 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         (items).deserializeNBT(registries, tag.getCompound("items"));
+        (researchingItem).deserializeNBT(registries, tag.getCompound("researchingItem"));
         data.set(DATA_PROGRESS_INDEX, tag.getInt("dataProgress"));
         signalRequired1 = tag.getString("signalRequired1");
         signalRequired2 = tag.getString("signalRequired2");
         signalRequired3 = tag.getString("signalRequired3");
-        if (tag.contains("recipeOutputBuffer"))
-            recipeOutputBuffer = ItemStack.CODEC.parse(NbtOps.INSTANCE, tag.get("recipeOutputBuffer")).getOrThrow();
         if (tag.contains("stationBlockPos"))
             stationBlockPos = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("stationBlockPos")).getOrThrow();
         // Will default to 0 if absent. See the NBT article for more information.
@@ -116,12 +123,11 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.put("items", (items).serializeNBT(registries));
+        tag.put("researchingItem", (researchingItem).serializeNBT(registries));
         tag.putInt("dataProgress", data.get(DATA_PROGRESS_INDEX));
         tag.putString("signalRequired1", this.signalRequired1);
         tag.putString("signalRequired2", this.signalRequired2);
         tag.putString("signalRequired3", this.signalRequired3);
-        if (recipeOutputBuffer != null)
-            tag.put("recipeOutputBuffer", ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, recipeOutputBuffer).getOrThrow());
         if (stationBlockPos != null)
             tag.put("stationBlockPos", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, stationBlockPos).getOrThrow());
 //        tag.putInt("value", this.value);
@@ -142,10 +148,9 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    private ItemStack recipeOutputBuffer;
-    private void setRecipeOutputBuffer(ItemStack itemStack) {
+    private void setResearchingItem(ItemStack itemStack) {
         if (inProgress()) return;
-        this.recipeOutputBuffer = itemStack;
+        this.researchingItem.setStackInSlot(0, itemStack);
     }
 
     private String signalRequired1 = "";
@@ -175,10 +180,6 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
         // if in progress
         if (signalResearchItemChamberBlockEntity.inProgress()) {
-            int signalOutput1 = stationEntity.getOutputSignalData().get(0);
-            int signalOutput2 = stationEntity.getOutputSignalData().get(1);
-            int signalOutput3 = stationEntity.getOutputSignalData().get(2);
-
             boolean allCorrect = true;
 
             for (int i = 0; i < 3; i++) {
@@ -197,7 +198,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
             if (signalResearchItemChamberBlockEntity.checkProgressReady()) {
                 // If progress is ready, output the result
-                ItemStack output = signalResearchItemChamberBlockEntity.recipeOutputBuffer;
+                ItemStack output = signalResearchItemChamberBlockEntity.researchingItem.getStackInSlot(0);
                 if (!output.isEmpty()) {
                     signalResearchItemChamberBlockEntity.items.insertItem(SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, output, false);
                     signalResearchItemChamberBlockEntity.resetProgress();
@@ -225,7 +226,10 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         if (recipe.isEmpty()) return;
 
         ItemStack resultItem = recipe.get().value().assemble(inputRecipe, level.registryAccess());
-        if (resultItem.isEmpty()) return;
+        if (resultItem.isEmpty()) {
+            signalResearchItemChamberBlockEntity.setResearchingItem(ItemStack.EMPTY);
+            return;
+        }
 
         // make sure if the slot can eat this item
         if (signalResearchItemChamberBlockEntity.items.insertItem(
@@ -246,7 +250,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
             }
         }
 
-        signalResearchItemChamberBlockEntity.setRecipeOutputBuffer(resultItem);
+        signalResearchItemChamberBlockEntity.setResearchingItem(resultItem);
         signalResearchItemChamberBlockEntity.signalRequired1 = recipe.get().value().getSignalRequired1();
         signalResearchItemChamberBlockEntity.signalRequired2 = recipe.get().value().getSignalRequired2();
         signalResearchItemChamberBlockEntity.signalRequired3 = recipe.get().value().getSignalRequired3();

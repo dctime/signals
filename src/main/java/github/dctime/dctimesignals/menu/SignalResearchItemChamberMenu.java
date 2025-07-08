@@ -23,20 +23,40 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
             return false;
         }
     }
+
+    static class ResearchingItemSlot extends SlotItemHandler {
+        public ResearchingItemSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return false; // Prevent placing items in this slot
+        }
+        public boolean mayPickup(Player player) {
+            return false; // Prevent picking up items from this slot
+        }
+    }
     // Server
     private final ContainerLevelAccess access;
     private final ContainerData data;
+    private final IItemHandler researchingItem;
 
     public double getProgress() {
         return data.get(SignalResearchItemChamberBlockEntity.DATA_PROGRESS_INDEX);
     }
+    public ItemStack getResearchingItem() {
+        return researchingItem.getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INDEX);
+    }
 
-    public SignalResearchItemChamberMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, IItemHandler itemSlots, ContainerData data) {
+    // server
+    public SignalResearchItemChamberMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, IItemHandler itemSlots, ContainerData data, IItemHandler researchingItem) {
 
         super(RegisterMenuTypes.SIGNAL_RESEARCH_ITEM_CHAMBER_MENU.get(), containerId);
 
         this.access = access;
         this.data = data;
+        this.researchingItem = researchingItem;
 
         checkContainerDataCount(data, 1);
 
@@ -48,6 +68,8 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
         this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_3_INDEX, 80+18, 56+1));
         // output
         this.addSlot(new OutputSlotItemHand(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, 80, 16+1));
+        // researching item
+        this.addSlot(new ResearchingItemSlot(researchingItem, SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INDEX, 80 + 18 * 2, 16+1));
 
         int rows = 3;
         int i = (rows - 4) * 18;
@@ -69,7 +91,7 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
     }
     // Client
     public SignalResearchItemChamberMenu(int containerId, Inventory playerInv) {
-        this(containerId, playerInv, ContainerLevelAccess.NULL, new ItemStackHandler(SignalResearchItemChamberBlockEntity.ITEMS_SIZE), new SimpleContainerData(SignalResearchItemChamberBlockEntity.DATA_SIZE));
+        this(containerId, playerInv, ContainerLevelAccess.NULL, new ItemStackHandler(SignalResearchItemChamberBlockEntity.ITEMS_SIZE), new SimpleContainerData(SignalResearchItemChamberBlockEntity.DATA_SIZE), new ItemStackHandler(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_SIZE));
     }
 
     @Override
