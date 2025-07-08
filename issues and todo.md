@@ -247,9 +247,9 @@ signal outputs switching not synced
 
 ### 2025.7.7
 
-auto reassemble when breaking or adding block
+auto reassemble when breaking or adding block (x)(needs to store too much stuff)
 
-add debug mode button to show up block outline for game debugging
+add debug mode button to show up block outline for game debugging (x)(debug outline when reassemble)
 
 
 

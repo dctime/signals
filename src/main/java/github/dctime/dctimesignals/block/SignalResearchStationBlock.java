@@ -2,6 +2,7 @@ package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.RegisterBlockEntities;
+import github.dctime.dctimesignals.RegisterItems;
 import github.dctime.dctimesignals.menu.SignalOperationMenu;
 import github.dctime.dctimesignals.menu.SignalResearchMenu;
 import github.dctime.dctimesignals.screen.SignalResearchScreen;
@@ -50,23 +51,28 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (level.getBlockEntity(pos) instanceof SignalResearchStationBlockEntity entity) {
-            // do this both in server and client cuz screen needs pos while hard to send pos data to client
-            entity.reassembleMultiblock(player);
+        if (player.getMainHandItem().is(RegisterItems.SIGNAL_CONFIGURATOR)) {
+            if (level.getBlockEntity(pos) instanceof SignalResearchStationBlockEntity entity) {
+                // do this both in server and client cuz screen needs pos while hard to send pos data to client
+                entity.reassembleMultiblock(player);
+                entity.showDebugOutline();
+                if (!level.isClientSide()) {
+                    player.displayClientMessage(Component.literal("Multiblock Reassembled!"), false);
+                    int inputsCount = entity.getSignalInputPositions().size();
+                    int outputCount = entity.getSignalOutputPositions().size();
+                    player.displayClientMessage(Component.literal("Signal Inputs: " + inputsCount), false);
+                    player.displayClientMessage(Component.literal("Signal Outputs: " + outputCount), false);
+
+                    return InteractionResult.SUCCESS;
+                }
+            }
         }
 
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             serverPlayer.openMenu(state.getMenuProvider(level, pos));
-            player.displayClientMessage(Component.literal("Multiblock Reassembled!"), false);
-            if (level.getBlockEntity(pos) instanceof SignalResearchStationBlockEntity entity) {
-                int inputsCount = entity.getSignalInputPositions().size();
-                int outputCount = entity.getSignalOutputPositions().size();
-                player.displayClientMessage(Component.literal("Signal Inputs: " + inputsCount), false);
-                player.displayClientMessage(Component.literal("Signal Outputs: " + outputCount), false);
-
-            }
             return InteractionResult.SUCCESS;
         }
+
         return InteractionResult.SUCCESS;
     }
 

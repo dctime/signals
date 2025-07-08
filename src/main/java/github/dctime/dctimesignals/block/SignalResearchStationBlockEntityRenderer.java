@@ -17,6 +17,8 @@ import java.util.Set;
 
 public class SignalResearchStationBlockEntityRenderer implements BlockEntityRenderer<SignalResearchStationBlockEntity> {
     BlockEntityRendererProvider.Context context;
+
+
     public SignalResearchStationBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         this.context = context;
     }
@@ -28,6 +30,7 @@ public class SignalResearchStationBlockEntityRenderer implements BlockEntityRend
 
     @Override
     public void render(SignalResearchStationBlockEntity signalResearchStationBlockEntity, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int i1) {
+        if (!signalResearchStationBlockEntity.checkIfInDebugOutline()) return;
         VertexConsumer vertexBuilder = multiBufferSource.getBuffer(RenderType.lines());
         List<BlockPos> signalInputPositions = signalResearchStationBlockEntity.getSignalInputPositions();
         List<BlockPos> signalOutputPositions = signalResearchStationBlockEntity.getSignalOutputPositions();

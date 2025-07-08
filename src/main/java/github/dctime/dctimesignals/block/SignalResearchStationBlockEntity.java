@@ -32,6 +32,23 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         the main control block of the multiblock
     */
 
+    private final int DEBUG_OUTLINE_SHOW_TICKS = 100;
+    private int debugOutlineTicks = 0;
+    public void showDebugOutline() {
+        debugOutlineTicks = DEBUG_OUTLINE_SHOW_TICKS;
+    }
+
+    public void decreaseDebugOutlineTicks() {
+        if (debugOutlineTicks > 0) {
+            debugOutlineTicks--;
+        }
+    }
+
+    public boolean checkIfInDebugOutline() {
+        if (debugOutlineTicks <= 0) return false;
+        return true;
+    }
+
     private final SimpleContainerData inputSignalData = new SimpleContainerData(DATA_SIZE_INPUT_SIGNAL);
     private final SimpleContainerData outputSignalData = new SimpleContainerData(DATA_SIZE_OUTPUT_SIGNAL);
     private final SimpleContainerData requiredInputSignalData = new SimpleContainerData(DATA_SIZE_REQUIRED_INPUT_SIGNAL);
@@ -127,6 +144,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
             BlockPos outputPos = BlockPos.CODEC.parse(NbtOps.INSTANCE, tag.get("signalOutputPosition" + i)).getOrThrow();
             signalOutputPositions.add(outputPos);
         }
+
+        debugOutlineTicks = tag.getInt("debugOutlineTicks");
     }
 
     // Save values into the passed CompoundTag here.
@@ -159,6 +178,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
             tag.put("signalOutputPosition" + i, BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, signalOutputPositions.get(i)).getOrThrow());
         }
 
+        tag.putInt("debugOutlineTicks", debugOutlineTicks);
+
         setChanged();
     }
 
@@ -179,7 +200,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, SignalResearchStationBlockEntity blockEntity) {
-        if (level.isClientSide()) return;
+        if (level.isClientSide()) blockEntity.decreaseDebugOutlineTicks();
 
         int inputPortCounter = 0;
 
@@ -311,11 +332,6 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                 itemChamberPosition = null; // reset if not a valid chamber
             }
         }
-
-    }
-
-
-    public static void tick(Level level, BlockPos blockPos, BlockState blockState, SignalResearchItemChamberBlockEntity signalResearchItemChamberBlockEntity) {
 
     }
 }
