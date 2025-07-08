@@ -309,3 +309,5 @@ fixed
 Debug outlines when reassembles
 
 item chamber researching item shown
+
+signal Required reset when process finished

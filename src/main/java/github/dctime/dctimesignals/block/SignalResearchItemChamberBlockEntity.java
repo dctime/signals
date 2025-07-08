@@ -201,7 +201,11 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
                 ItemStack output = signalResearchItemChamberBlockEntity.researchingItem.getStackInSlot(0);
                 if (!output.isEmpty()) {
                     signalResearchItemChamberBlockEntity.items.insertItem(SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, output, false);
+                    signalResearchItemChamberBlockEntity.signalRequired1 = "";
+                    signalResearchItemChamberBlockEntity.signalRequired2 = "";
+                    signalResearchItemChamberBlockEntity.signalRequired3 = "";
                     signalResearchItemChamberBlockEntity.resetProgress();
+                    signalResearchItemChamberBlockEntity.setResearchingItem(ItemStack.EMPTY);
                 }
             }
             return;
