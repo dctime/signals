@@ -33,6 +33,7 @@ public class RegisterCreativeModeTab {
                 output.accept(RegisterItems.PLUS_CARD);
                 output.accept(RegisterItems.SIGNAL_CONFIGURATOR);
                 output.accept(RegisterItems.SIGNAL_BLOCKING_MATERIAL);
+                output.accept(RegisterBlockItems.AETHERITE_CERAMIC_BLOCK_ITEM);
             })
             .build()
     );

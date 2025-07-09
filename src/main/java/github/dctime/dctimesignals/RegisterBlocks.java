@@ -134,4 +134,13 @@ public class RegisterBlocks {
                     .sound(SoundType.METAL)
                     .noOcclusion()
     );
+
+    public static final DeferredBlock<Block> AETHERITE_CERAMIC_BLOCK = BLOCKS.registerBlock(
+            "aetherite_ceramic_block",
+            AetheriteCeramicBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(0.6F) // Same as clay
+                    .sound(SoundType.GRAVEL)
+                    .requiresCorrectToolForDrops()
+    );
 }

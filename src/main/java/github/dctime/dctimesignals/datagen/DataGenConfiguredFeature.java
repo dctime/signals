@@ -26,6 +26,8 @@ public class DataGenConfiguredFeature {
             ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_dripstone_cluster"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> SIGNAL_BLOCKING_CHUNK =
             ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_blocking_material_chunk"));
+    public static final ResourceKey<ConfiguredFeature<?, ?>> AETHERITE_CERAMIC_CHUNK =
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "aetherite_ceramic_chunk"));
 
     public static void registerSignalConfiguredFeature(RegistrySetBuilder builder) {
         // Register your configured features here
@@ -34,6 +36,7 @@ public class DataGenConfiguredFeature {
             registerSignalRedstoneOre(bootStrap);
             registerSignalDripstone(bootStrap);
             registerSignalBlockingChunk(bootStrap);
+            registerAetheriteCeramicChunk(bootStrap);
         });
     }
 
@@ -77,6 +80,20 @@ public class DataGenConfiguredFeature {
                 SIGNAL_BLOCKING_CHUNK,
                 RegisterFeatures.SIGNAL_BLOCKING_MATERIAL_CHUNK.get(),
                 new SignalBlockingMaterialChunkConfiguration()
+        );
+    }
+
+    private static void registerAetheriteCeramicChunk(BootstrapContext<ConfiguredFeature<?,?>> context) {
+        context.register(
+            AETHERITE_CERAMIC_CHUNK,
+            new ConfiguredFeature<>(
+                Feature.ORE, // If you have a custom chunk feature, use it here
+                new OreConfiguration(
+                    new BlockMatchTest(Blocks.STONE),
+                    github.dctime.dctimesignals.RegisterBlocks.AETHERITE_CERAMIC_BLOCK.get().defaultBlockState(),
+                    12 // vein size or chunk size
+                )
+            )
         );
     }
 }

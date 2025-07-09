@@ -48,8 +48,11 @@ public class RegisterItems {
         Item::new, // The factory that the properties will be passed into.
         new Item.Properties() // The properties to use.
     );
-
-
+    public static final DeferredItem<Item> AETHERITE_CERAMIC_BALL = ITEMS.registerItem(
+        "aetherite_ceramic_ball",
+        Item::new,
+        new Item.Properties()
+    );
 
 
 }

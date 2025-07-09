@@ -311,3 +311,7 @@ Debug outlines when reassembles
 item chamber researching item shown
 
 signal Required reset when process finished
+
+research station related recipes done
+
+aetherite ceramic for making research station related blocks

@@ -257,6 +257,11 @@ item chamber researching item shown (1)
 
 a button to cancel research
 
+### 2025.7.9
+
+aetherite ceramic for making research station related blocks
+
+
 
 
 

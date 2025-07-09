@@ -117,6 +117,47 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_signal_blocking_material", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterItems.SIGNAL_BLOCKING_MATERIAL))
                 .save(recipeOutput);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, RegisterBlocks.SIGNAL_RESEARCH_STATION.get())
+                .define('B', RegisterItems.SIGNAL_BLOCKING_MATERIAL.get())
+                .define('A', RegisterItems.AETHERITE_CERAMIC_BALL.get())
+                .define('S', RegisterBlocks.SIGNAL_OPERATION_BLOCK.get())
+                .pattern("BAB")
+                .pattern("ASA")
+                .pattern("BAB")
+                .unlockedBy("has_signal_operation_block", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_OPERATION_BLOCK))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT.get())
+                .define('B', RegisterItems.SIGNAL_BLOCKING_MATERIAL.get())
+                .define('A', RegisterItems.AETHERITE_CERAMIC_BALL.get())
+                .define('C', RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get())
+                .pattern("BAB")
+                .pattern("ACA")
+                .pattern("BAB")
+                .unlockedBy("has_const_signal", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.CONSTANT_SIGNAL_BLOCK_ITEM))
+                .save(recipeOutput);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, RegisterBlockItems.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT.get())
+                .requires(RegisterBlockItems.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT.get())
+                .unlockedBy("has_research_station_signal_output", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "research_output_to_input"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, RegisterBlockItems.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT.get())
+                .requires(RegisterBlockItems.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT.get())
+                .unlockedBy("has_research_station_signal_input", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "research_input_to_output"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, RegisterBlockItems.SIGNAL_RESEARCH_ITEM_CHAMBER.get())
+                .define('B', RegisterItems.SIGNAL_BLOCKING_MATERIAL.get())
+                .define('A', RegisterItems.AETHERITE_CERAMIC_BALL.get())
+                .define('C', Items.CHEST)
+                .pattern("BAB")
+                .pattern("ACA")
+                .pattern("BAB")
+                .unlockedBy("has_ceramic_ball", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterItems.AETHERITE_CERAMIC_BALL))
+                .save(recipeOutput);
+
+
         new SignalResearchRecipeBuilder(
                 new ItemStack(Items.DIAMOND),
                 RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),

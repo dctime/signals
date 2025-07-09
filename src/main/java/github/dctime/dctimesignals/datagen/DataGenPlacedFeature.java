@@ -20,6 +20,8 @@ public class DataGenPlacedFeature {
             ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_world_redstone_ore"));
     public static final ResourceKey<PlacedFeature> SIGNAL_BLOCKING_MATERIAL_CHUNK_PLACED =
             ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_blocking_material_chunk"));
+    public static final ResourceKey<PlacedFeature> AETHERITE_CERAMIC_CHUNK_PLACED =
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "aetherite_ceramic_chunk"));
 
     public static void registerSignalPlacedFeature(RegistrySetBuilder builder) {
         // Register your configured features here
@@ -28,6 +30,7 @@ public class DataGenPlacedFeature {
             registerSignalDripstonePlace(bootStrap);
             registerSignalRedstoneOrePlace(bootStrap);
             registerSignalBlockingChunkPlace(bootStrap);
+            registerAetheriteCeramicChunkPlace(bootStrap);
         });
     }
 
@@ -47,5 +50,24 @@ public class DataGenPlacedFeature {
         HolderGetter<ConfiguredFeature<?, ?>> holdergetter = context.lookup(Registries.CONFIGURED_FEATURE);
         Holder<ConfiguredFeature<?, ?>> holder = holdergetter.getOrThrow(DataGenConfiguredFeature.SIGNAL_BLOCKING_CHUNK);
         PlacementUtils.register(context, SIGNAL_BLOCKING_MATERIAL_CHUNK_PLACED, holder, new PlacementModifier[]{CountPlacement.of(UniformInt.of(48, 96)), InSquarePlacement.spread(), PlacementUtils.RANGE_BOTTOM_TO_MAX_TERRAIN_HEIGHT, BiomeFilter.biome()});
+    }
+
+    public static void registerAetheriteCeramicChunkPlace(BootstrapContext<PlacedFeature> context) {
+        HolderGetter<ConfiguredFeature<?, ?>> holdergetter = context.lookup(Registries.CONFIGURED_FEATURE);
+        Holder<ConfiguredFeature<?, ?>> holder = holdergetter.getOrThrow(DataGenConfiguredFeature.AETHERITE_CERAMIC_CHUNK);
+        PlacementUtils.register(
+            context,
+            AETHERITE_CERAMIC_CHUNK_PLACED,
+            holder,
+            new PlacementModifier[]{
+                CountPlacement.of(UniformInt.of(64, 128)), // much more common
+                InSquarePlacement.spread(),
+                HeightRangePlacement.uniform(
+                    net.minecraft.world.level.levelgen.VerticalAnchor.absolute(-64),
+                    net.minecraft.world.level.levelgen.VerticalAnchor.absolute(0)
+                ),
+                BiomeFilter.biome()
+            }
+        );
     }
 }

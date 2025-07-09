@@ -28,6 +28,7 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         operationSignalModel();
         redstoneToSignalModel();
         simpleBlock(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK.get());
+        simpleBlock(RegisterBlocks.AETHERITE_CERAMIC_BLOCK.get());
         portalBlockModel();
         researchStationBlockModel();
         signalResearchStationOutputBlockModel();

@@ -24,5 +24,7 @@ public class DCtimeBlockTagsProvider extends BlockTagsProvider {
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK.get());
 
+        tag(BlockTags.MINEABLE_WITH_SHOVEL)
+                .add(RegisterBlocks.AETHERITE_CERAMIC_BLOCK.get());
     }
 }

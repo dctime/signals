@@ -31,6 +31,12 @@ public class DCtimeLanguageProvider extends LanguageProvider {
         this.add("menu.title." + DCtimeMod.MODID + ".signal_operation_menu", "Signal Operation Menu");
         this.addBlock(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK, "Signal Blocking Material Block");
         this.addItem(RegisterItems.SIGNAL_BLOCKING_MATERIAL, "Signal Blocking Material");
+        this.addBlock(RegisterBlocks.AETHERITE_CERAMIC_BLOCK, "Aetherite Ceramic Block");
+        this.addItem(RegisterItems.AETHERITE_CERAMIC_BALL, "Aetherite Ceramic Ball");
+        this.addBlock(RegisterBlocks.SIGNAL_RESEARCH_STATION, "Signal Research Station");
+        this.addBlock(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT, "Signal Research Station Signal Input");
+        this.addBlock(RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER, "Signal Research Station Item Chamber");
+        this.addBlock(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT, "Signal Research Station Signal Output");
 
         // ponder text
         if (ModList.get().isLoaded("ponder")) {
