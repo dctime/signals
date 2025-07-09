@@ -133,4 +133,6 @@ public class SignalResearchRecipe implements Recipe<SignalResearchRecipeInput> {
     public String getSignalRequired3() {
         return this.signalRequired3;
     }
+
+
 }

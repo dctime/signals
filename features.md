@@ -319,3 +319,5 @@ research station related recipes done
 aetherite ceramic for making research station related blocks
 
 Multiblock valid flag added
+
+jei integration for research station recipes 

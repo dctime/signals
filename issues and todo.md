@@ -259,9 +259,15 @@ a button to cancel research
 
 ### 2025.7.9
 
-aetherite ceramic for making research station related blocks
+aetherite ceramic for making research station related blocks (1)
 
-jei integration for research station recipes
+jei integration for research station recipes (2)
+
+research station item chamber quick swap not working
+
+jei quick swap not working
+
+a button to try research (same spot as the cancel research button)
 
 
 
