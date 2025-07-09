@@ -261,6 +261,8 @@ a button to cancel research
 
 aetherite ceramic for making research station related blocks
 
+jei integration for research station recipes
+
 
 
 

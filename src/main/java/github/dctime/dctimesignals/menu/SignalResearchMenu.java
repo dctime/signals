@@ -14,6 +14,7 @@ public class SignalResearchMenu extends AbstractContainerMenu {
     private final ContainerData inputSignalData;
     private final ContainerData outputSignalData;
     private final ContainerData requiredInputSignalData;
+    private final ContainerData flagsData;
 
     public ContainerData getInputSignalData() {
         return inputSignalData;
@@ -27,27 +28,34 @@ public class SignalResearchMenu extends AbstractContainerMenu {
         return requiredInputSignalData;
     }
 
+    public ContainerData getFlagsData() {
+        return this.flagsData; // Assuming flags are stored in requiredInputSignalData
+    }
+
     // Server
-    public SignalResearchMenu(int containerId, Inventory playerInv, ContainerLevelAccess access, ContainerData inputSignalData, ContainerData outputSignalData, ContainerData requiredInputSignalData) {
+    public SignalResearchMenu(int containerId, Inventory playerInv, ContainerLevelAccess access, ContainerData inputSignalData, ContainerData outputSignalData, ContainerData requiredInputSignalData, ContainerData flagsData) {
         super(RegisterMenuTypes.SIGNAL_RESEARCH_MENU.get(), containerId);
         this.access = access;
         this.inputSignalData = inputSignalData;
         this.outputSignalData = outputSignalData;
         this.requiredInputSignalData = requiredInputSignalData;
+        this.flagsData = flagsData;
 
         checkContainerDataCount(inputSignalData, SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL);
         checkContainerDataCount(outputSignalData, SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL);
         checkContainerDataCount(requiredInputSignalData, SignalResearchStationBlockEntity.DATA_SIZE_REQUIRED_INPUT_SIGNAL);
+        checkContainerDataCount(flagsData, SignalResearchStationBlockEntity.DATA_SIZE_FLAGS);
 
         addDataSlots(this.inputSignalData);
         addDataSlots(this.outputSignalData);
         addDataSlots(this.requiredInputSignalData);
+        addDataSlots(this.flagsData);
 
     }
 
     // Client menu constructor (Registered)
     public SignalResearchMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL, new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL), new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL), new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE_REQUIRED_INPUT_SIGNAL));
+        this(containerId, playerInventory, ContainerLevelAccess.NULL, new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL), new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL), new SimpleContainerData(SignalResearchStationBlockEntity.DATA_SIZE_REQUIRED_INPUT_SIGNAL), new SimpleContainerData((SignalResearchStationBlockEntity.DATA_SIZE_FLAGS)));
     }
 
     @Override

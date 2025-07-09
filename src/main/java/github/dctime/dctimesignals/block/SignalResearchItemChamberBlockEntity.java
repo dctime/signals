@@ -189,7 +189,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
                 }
             }
 
-            if (!allCorrect) {
+            if (!allCorrect || stationEntity.areOutputPortsInvalid()) {
                 signalResearchItemChamberBlockEntity.removeProgress(1);
                 return;
             }

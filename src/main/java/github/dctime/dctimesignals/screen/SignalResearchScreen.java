@@ -1,13 +1,12 @@
 package github.dctime.dctimesignals.screen;
 
+import github.dctime.dctimesignals.block.SignalResearchStationBlockEntity;
 import github.dctime.dctimesignals.menu.SignalResearchMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.joml.Quaternionf;
 
 import java.util.ArrayDeque;
@@ -37,19 +36,27 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
         int graphHeight = (int)(imageHeight*(0.2));
         int gapHeight = (int)(imageHeight*(0.1));
 
+        // invalid output ports
+        if (menu.getFlagsData().get(SignalResearchStationBlockEntity.DATA_FLAGS_MULTIBLOCK_INVALID_INDEX) > 0) {
+            int textWidth = this.font.width("Multiblock invalid! Try reassembling the multiblock.");
+            guiGraphics.fill(startX+imageWidth/2-textWidth/2, startY+imageHeight/2, startX+imageWidth/2+textWidth/2, startY+imageHeight/2, 0xFF000000);
+            guiGraphics.drawString(this.font, "Multiblock invalid! Try reassembling the multiblock.", startX+imageWidth/2-textWidth/2, startY+imageHeight/2, 0xFFFF0000);
+            return;
+        }
+
         renderSignalGraph(guiGraphics, inputSignalQueues, requiredInputSignalQueues, startX-graphWidth/2, startX+graphWidth/2, startY+gapHeight, graphHeight, gapHeight, "Signal Read");
         renderSignalGraph(guiGraphics, outputSignalQueues, startX+imageWidth-graphWidth/2, startX+imageWidth+graphWidth/2, startY+gapHeight, graphHeight, gapHeight, "Signal Export");
     }
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        int startX = (this.width - this.imageWidth)/2;
-        int startY = (this.height - this.imageHeight)/2;
-        int graphWidth = (int)(imageWidth*(0.9));
-        int graphHeight = (int)(imageHeight*(0.2));
-        int gapHeight = (int)(imageHeight*(0.1));
-
-        guiGraphics.drawString(this.font, this.title, -graphWidth/2, 0, 4210752, false);
+//        int startX = (this.width - this.imageWidth)/2;
+//        int startY = (this.height - this.imageHeight)/2;
+//        int graphWidth = (int)(imageWidth*(0.9));
+//        int graphHeight = (int)(imageHeight*(0.2));
+//        int gapHeight = (int)(imageHeight*(0.1));
+//
+//        guiGraphics.drawString(this.font, this.title, -graphWidth/2, 0, 4210752, false);
     }
 
     @Override

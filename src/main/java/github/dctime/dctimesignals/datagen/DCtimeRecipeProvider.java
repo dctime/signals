@@ -66,15 +66,27 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_signal_blocking_material", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterItems.SIGNAL_BLOCKING_MATERIAL))
                 .save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, RegisterBlockItems.REDSTONE_TO_SIGNAL_CONVERTER.get())
-                .define('B', RegisterItems.SIGNAL_BLOCKING_MATERIAL.get())
-                .define('S', RegisterBlockItems.SINGAL_TO_REDSTONE_CONVERTER.get())
-                .define('R', Items.REDSTONE)
-                .pattern("BRB")
-                .pattern("RSR")
-                .pattern("BRB")
-                .unlockedBy("has_signal_blocking_material", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterItems.SIGNAL_BLOCKING_MATERIAL))
-                .save(recipeOutput);
+//        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, RegisterBlockItems.REDSTONE_TO_SIGNAL_CONVERTER.get())
+//                .define('B', RegisterItems.SIGNAL_BLOCKING_MATERIAL.get())
+//                .define('S', RegisterBlockItems.SINGAL_TO_REDSTONE_CONVERTER.get())
+//                .define('R', Items.REDSTONE)
+//                .pattern("BRB")
+//                .pattern("RSR")
+//                .pattern("BRB")
+//                .unlockedBy("has_signal_blocking_material", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterItems.SIGNAL_BLOCKING_MATERIAL))
+//                .save(recipeOutput);
+
+        new SignalResearchRecipeBuilder(
+                new ItemStack(RegisterBlockItems.REDSTONE_TO_SIGNAL_CONVERTER.get(), 1),
+                RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),
+                new ItemStack(RegisterItems.SIGNAL_BLOCKING_MATERIAL.get(), 4),
+                new ItemStack(Items.REDSTONE, 4),
+                new ItemStack(RegisterBlockItems.SINGAL_TO_REDSTONE_CONVERTER.get(), 1),
+                "A&B",
+                "",
+                ""
+        ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "redstone_to_signal_converter"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, RegisterItems.SIGNAL_CONFIGURATOR.get())
                 .define('B', RegisterItems.SIGNAL_BLOCKING_MATERIAL.get())
@@ -156,31 +168,6 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 .pattern("BAB")
                 .unlockedBy("has_ceramic_ball", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterItems.AETHERITE_CERAMIC_BALL))
                 .save(recipeOutput);
-
-
-        new SignalResearchRecipeBuilder(
-                new ItemStack(Items.DIAMOND),
-                RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),
-                new ItemStack(Items.DIRT),
-                ItemStack.EMPTY,
-                ItemStack.EMPTY,
-                "A+B",
-                "",
-                ""
-        ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "dirt_to_diamond"));
-
-        new SignalResearchRecipeBuilder(
-                new ItemStack(Items.VILLAGER_SPAWN_EGG, 2),
-                RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),
-                new ItemStack(Items.DIAMOND, 2),
-                new ItemStack(Items.EMERALD, 3),
-                ItemStack.EMPTY,
-                "A&B",
-                "",
-                ""
-        ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "villager_spawn_egg_exchange"));
 
     }
 }

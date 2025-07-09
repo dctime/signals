@@ -312,6 +312,10 @@ item chamber researching item shown
 
 signal Required reset when process finished
 
+### 2025.7.9
+
 research station related recipes done
 
 aetherite ceramic for making research station related blocks
+
+Multiblock valid flag added

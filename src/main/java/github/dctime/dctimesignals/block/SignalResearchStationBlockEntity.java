@@ -1,6 +1,5 @@
 package github.dctime.dctimesignals.block;
 
-import com.mojang.serialization.Decoder;
 import github.dctime.dctimesignals.RegisterBlockEntities;
 import github.dctime.dctimesignals.lib.StringToSignalOperation;
 import net.minecraft.core.BlockPos;
@@ -8,7 +7,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -52,6 +50,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
     private final SimpleContainerData inputSignalData = new SimpleContainerData(DATA_SIZE_INPUT_SIGNAL);
     private final SimpleContainerData outputSignalData = new SimpleContainerData(DATA_SIZE_OUTPUT_SIGNAL);
     private final SimpleContainerData requiredInputSignalData = new SimpleContainerData(DATA_SIZE_REQUIRED_INPUT_SIGNAL);
+    private final SimpleContainerData flagsData = new SimpleContainerData(DATA_SIZE_FLAGS);
 
     public SimpleContainerData getInputSignalData() {
         return inputSignalData;
@@ -63,6 +62,10 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
     public SimpleContainerData getRequiredInputSignalData() {
         return requiredInputSignalData;
+    }
+
+    public SimpleContainerData getFlagsData() {
+        return flagsData;
     }
 
     public void setInputSignalData(int index, int value) {
@@ -89,9 +92,20 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         }
     }
 
+    public void setFlagsData(int index, boolean value) {
+        if (index >= 0 && index < DATA_SIZE_FLAGS) {
+            flagsData.set(index, value ? 1 : 0);
+        } else {
+            System.out.println("Invalid index for flags data: " + index + ". Must be between 0 and " + (DATA_SIZE_FLAGS - 1));
+        }
+    }
+
     public static final int DATA_SIZE_INPUT_SIGNAL = 3;
     public static final int DATA_SIZE_OUTPUT_SIGNAL = 3;
     public static final int DATA_SIZE_REQUIRED_INPUT_SIGNAL = 3;
+    public static final int DATA_SIZE_FLAGS = 1;
+
+    public static final int DATA_FLAGS_MULTIBLOCK_INVALID_INDEX = 0;
 
 
     private List<BlockPos> signalInputPositions;
@@ -146,6 +160,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         }
 
         debugOutlineTicks = tag.getInt("debugOutlineTicks");
+
+        flagsData.set(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX, tag.getBoolean("outputPortsInvalid") ? 1 : 0);
     }
 
     // Save values into the passed CompoundTag here.
@@ -180,6 +196,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
         tag.putInt("debugOutlineTicks", debugOutlineTicks);
 
+        tag.putBoolean("outputPortsInvalid", flagsData.get(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX) > 0);
+
         setChanged();
     }
 
@@ -199,8 +217,25 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    // a variable to check if output ports are valid so that there is no bypass of the multiblock
+    public boolean areOutputPortsInvalid() {
+        return flagsData.get(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX) > 0;
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState state, SignalResearchStationBlockEntity blockEntity) {
         if (level.isClientSide()) blockEntity.decreaseDebugOutlineTicks();
+
+        int outputPortCounter = 0;
+        for (BlockPos outputPos : blockEntity.getSignalOutputPositions()) {
+            if (level.getBlockEntity(outputPos) instanceof SignalResearchStationSignalOutputBlockEntity outputEntity) {
+                int outputValue = outputEntity.getOutputValue();
+                blockEntity.setOutputSignalData(outputPortCounter, outputValue);
+                outputPortCounter++;
+            } else {
+                blockEntity.setFlagsData(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX, true);
+                return;
+            }
+        }
 
         int inputPortCounter = 0;
 
@@ -209,15 +244,6 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                 int inputValue = inputEntity.getStoredSignalValue();
                 blockEntity.setInputSignalData(inputPortCounter, inputValue);
                 inputPortCounter++;
-            }
-        }
-
-        int outputPortCounter = 0;
-        for (BlockPos outputPos : blockEntity.getSignalOutputPositions()) {
-            if (level.getBlockEntity(outputPos) instanceof SignalResearchStationSignalOutputBlockEntity outputEntity) {
-                int outputValue = outputEntity.getOutputValue();
-                blockEntity.setOutputSignalData(outputPortCounter, outputValue);
-                outputPortCounter++;
             }
         }
 
@@ -239,25 +265,26 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         ).signalOperations(blockEntity.getOutputSignalData().get(0), blockEntity.getOutputSignalData().get(1), blockEntity.getOutputSignalData().get(2));
 //        System.out.println("Correct input: " + correctInputs[0]);
 //        System.out.println("Signal Required 1: " + signalResearchItemChamberBlockEntity.getSignalRequired1());
-        int requiredInputPortCounter = 0;
-        for (BlockPos inputPos : blockEntity.getSignalInputPositions()) {
-            if (level.getBlockEntity(inputPos) instanceof SignalResearchStationSignalInputBlockEntity inputEntity) {
+
+        for (int requiredInputPortCounter = 0; requiredInputPortCounter < DATA_SIZE_REQUIRED_INPUT_SIGNAL; requiredInputPortCounter++) {
                 int requiredInputValue = correctInputs[requiredInputPortCounter];
                 blockEntity.setRequiredInputSignalData(requiredInputPortCounter, requiredInputValue);
                 requiredInputPortCounter++;
-            }
         }
+
+        blockEntity.setFlagsData(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX, false);
     }
 
-    private void clearInputOutputPositions() {
+    private void clearInputOutputAndItemChamberPositions() {
         signalOutputPositions.clear();
         signalInputPositions.clear();
+        itemChamberPosition = null;
+        setFlagsData(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX, true);
     }
 
     public void reassembleMultiblock(Player player) {
-        clearInputOutputPositions();
+        clearInputOutputAndItemChamberPositions();
         multipleSignalResearchStations = false;
-        itemChamberPosition = null;
         for (int i = 0; i < DATA_SIZE_INPUT_SIGNAL; i++) {
             this.setInputSignalData(i, 0);
         }
@@ -284,7 +311,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                     if (signalInputPositions.size() > DATA_SIZE_INPUT_SIGNAL) {
                         if (player instanceof ServerPlayer)
                             player.displayClientMessage(Component.literal("Exceeded maximum number of signal inputs for the multiblock at " + mainPos), false);
-                        clearInputOutputPositions();
+                        clearInputOutputAndItemChamberPositions();
                         return;
                     }
                     toCheck.push(checkingPos);
@@ -294,7 +321,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                     if (signalOutputPositions.size() > DATA_SIZE_OUTPUT_SIGNAL) {
                         if (player instanceof ServerPlayer)
                             player.displayClientMessage(Component.literal("Exceeded maximum number of signal outputs for the multiblock at " + mainPos), false);
-                        clearInputOutputPositions();
+                        clearInputOutputAndItemChamberPositions();
                         return;
                     }
                     toCheck.push(checkingPos);
@@ -311,6 +338,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                         // this is to prevent infinite loops in case of broken multiblocks
                         player.displayClientMessage(Component.literal("Multiple Item Chambers at " + mainPos), false);
                         itemChamberPosition = null;
+                        clearInputOutputAndItemChamberPositions();
                         return;
                     }
                     checkedPositions.add(checkingPos);
@@ -323,6 +351,14 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
             }
         }
 
+        if (signalOutputPositions.size() != DATA_SIZE_OUTPUT_SIGNAL) {
+            if (player instanceof ServerPlayer) {
+                player.displayClientMessage(Component.literal("There should be 3 signal outputs but found " + signalOutputPositions.size()), false);
+            }
+            clearInputOutputAndItemChamberPositions();
+            return;
+        }
+
         if (itemChamberPosition != null) {
             assert level != null;
             BlockEntity itemChamberEntity = level.getBlockEntity(itemChamberPosition);
@@ -330,8 +366,18 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                 chamberBlockEntity.setSignalResearchStationBlockEntity(this);
             } else {
                 itemChamberPosition = null; // reset if not a valid chamber
+                clearInputOutputAndItemChamberPositions();
+                return;
             }
+        } else {
+            assert level != null;
+            if (!level.isClientSide())
+                player.displayClientMessage(Component.literal("Item Chambers not found"), false);
+            clearInputOutputAndItemChamberPositions();
+            return;
         }
 
+        if (!level.isClientSide())
+            player.displayClientMessage(Component.literal("Multiblock reassembled"), false);
     }
 }

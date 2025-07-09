@@ -56,15 +56,7 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
                 // do this both in server and client cuz screen needs pos while hard to send pos data to client
                 entity.reassembleMultiblock(player);
                 entity.showDebugOutline();
-                if (!level.isClientSide()) {
-                    player.displayClientMessage(Component.literal("Multiblock Reassembled!"), false);
-                    int inputsCount = entity.getSignalInputPositions().size();
-                    int outputCount = entity.getSignalOutputPositions().size();
-                    player.displayClientMessage(Component.literal("Signal Inputs: " + inputsCount), false);
-                    player.displayClientMessage(Component.literal("Signal Outputs: " + outputCount), false);
-
-                    return InteractionResult.SUCCESS;
-                }
+                return InteractionResult.SUCCESS;
             }
         }
 
@@ -97,7 +89,8 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
                     ContainerLevelAccess.create(level, pos),
                     entity.getInputSignalData(),
                     entity.getOutputSignalData(),
-                    entity.getRequiredInputSignalData()
+                    entity.getRequiredInputSignalData(),
+                    entity.getFlagsData()
             );
         },
                 Component.translatable("menu.title." + DCtimeMod.MODID + ".signal_research_menu"));
