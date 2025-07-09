@@ -128,6 +128,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         super(RegisterBlockEntities.SIGNAL_RESEARCH_STATION_BLOCK_ENTITY.get(), pos, blockState);
         signalInputPositions = new ArrayList<>();
         signalOutputPositions = new ArrayList<>();
+        setFlagsData(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX, true);
     }
 
     // Read values from the passed CompoundTag here.

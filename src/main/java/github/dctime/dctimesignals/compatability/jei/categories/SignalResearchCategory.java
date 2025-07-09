@@ -4,6 +4,7 @@ import com.simibubi.create.compat.jei.ItemIcon;
 import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.RegisterBlockItems;
 import github.dctime.dctimesignals.RegisterRecipeTypes;
+import github.dctime.dctimesignals.compatability.jei.RegisterRecipeTypeForJEI;
 import github.dctime.dctimesignals.recipe.SignalResearchRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -21,9 +22,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 
-public class SignalResearchCategory implements IRecipeCategory<RecipeHolder<SignalResearchRecipe>> {
-    public static final RecipeType<RecipeHolder<SignalResearchRecipe>> SIGNAL_RESEARCH_RECIPE_TYPE =
-            RecipeType.createFromDeferredVanilla(() -> RegisterRecipeTypes.SIGNAL_RESEARCH_RECIPE_TYPE.get()).get();
+public class SignalResearchCategory implements IRecipeCategory<SignalResearchRecipe> {
+
     private static final ResourceLocation CONTAINER_TEXTURE = ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "textures/gui/jei/signal_research_station_item_chamber_screen.png");
     private static final ResourceLocation BULB_TEXTURE = ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "textures/gui/container/signal_research_station_item_chamber_light_bulb.png");
     private final IGuiHelper helper;
@@ -40,8 +40,8 @@ public class SignalResearchCategory implements IRecipeCategory<RecipeHolder<Sign
     }
 
     @Override
-    public RecipeType<RecipeHolder<SignalResearchRecipe>> getRecipeType() {
-        return SIGNAL_RESEARCH_RECIPE_TYPE;
+    public RecipeType<SignalResearchRecipe> getRecipeType() {
+        return RegisterRecipeTypeForJEI.SIGNAL_RESEARCH_RECIPE_TYPE;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class SignalResearchCategory implements IRecipeCategory<RecipeHolder<Sign
     }
 
     @Override
-    public void draw(RecipeHolder<SignalResearchRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(SignalResearchRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         guiGraphics.blit(CONTAINER_TEXTURE, 0, 0+1, 0, 0, imageWidth, imageHeight);
         bulb.draw(guiGraphics, 80-1, 34);
     }
@@ -61,17 +61,17 @@ public class SignalResearchCategory implements IRecipeCategory<RecipeHolder<Sign
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<SignalResearchRecipe> recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, SignalResearchRecipe recipe, IFocusGroup focuses) {
 //        // input
 //        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_1_INDEX, 80, 56+1));
 //        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_2_INDEX, 80-18, 56+1));
 //        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_3_INDEX, 80+18, 56+1));
 //        // output
 //        this.addSlot(new SignalResearchItemChamberMenu.OutputSlotItemHand(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, 80, 16+1));
-        builder.addInputSlot(80, 56+1).addItemStack(recipe.value().getInput1ItemStack());
-        builder.addInputSlot(80-18, 56+1).addItemStack(recipe.value().getInput2ItemStack());
-        builder.addInputSlot(80+18, 56+1).addItemStack(recipe.value().getInput3ItemStack());
-        builder.addOutputSlot(80, 16+1).addItemStack(recipe.value().getResult());
+        builder.addInputSlot(80, 56+1).addItemStack(recipe.getInput1ItemStack());
+        builder.addInputSlot(80-18, 56+1).addItemStack(recipe.getInput2ItemStack());
+        builder.addInputSlot(80+18, 56+1).addItemStack(recipe.getInput3ItemStack());
+        builder.addOutputSlot(80, 16+1).addItemStack(recipe.getResult());
     }
 
     @Override

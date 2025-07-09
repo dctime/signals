@@ -172,8 +172,8 @@ dependencies {
 
     // EMI
     // NeoForge
-    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
-    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+//    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+//    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
 
     // jade_version example: 15.10.0+neoforge
     // Visit https://modrinth.com/mod/jade/versions?l=neoforge to get the latest version

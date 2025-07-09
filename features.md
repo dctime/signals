@@ -321,3 +321,9 @@ aetherite ceramic for making research station related blocks
 Multiblock valid flag added
 
 jei integration for research station recipes 
+
+### 2025.7.10
+
+research station invalid flag is true when placed initially
+
+jei quick swap and click to view recipes and related blocks added
