@@ -48,6 +48,17 @@ public class DCtimeModPonders {
 
         HELPER.addStoryBoard(RegisterBlocks.SIGNAL_OPERATION_BLOCK, "operation_block_tutorial", DCtimeModPonderScenes::operationBlockTutorial, SIGNALS);
 
+        HELPER.addStoryBoard(RegisterBlocks.SINGAL_WORLD_PORTAL, "signal_world_portal", DCtimeModPonderScenes::signalWorldPortal, SIGNALS);
+        HELPER.addStoryBoard(RegisterItems.SIGNAL_BLOCKING_MATERIAL, "signal_world_portal", DCtimeModPonderScenes::signalWorldPortal, SIGNALS);
+        HELPER.addStoryBoard(RegisterItems.AETHERITE_CERAMIC_BALL, "signal_world_portal", DCtimeModPonderScenes::signalWorldPortal, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK, "signal_world_portal", DCtimeModPonderScenes::signalWorldPortal, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.AETHERITE_CERAMIC_BLOCK, "signal_world_portal", DCtimeModPonderScenes::signalWorldPortal, SIGNALS);
+
+        HELPER.addStoryBoard(RegisterBlocks.AETHERITE_CERAMIC_BLOCK, "signal_world_resources", DCtimeModPonderScenes::signalWorldResources, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK, "signal_world_resources", DCtimeModPonderScenes::signalWorldResources, SIGNALS);
+        HELPER.addStoryBoard(RegisterItems.AETHERITE_CERAMIC_BALL, "signal_world_resources", DCtimeModPonderScenes::signalWorldResources, SIGNALS);
+        HELPER.addStoryBoard(RegisterItems.SIGNAL_BLOCKING_MATERIAL, "signal_world_resources", DCtimeModPonderScenes::signalWorldResources, SIGNALS);
+
         List<DeferredItem<Item>> cards = List.of(
           RegisterItems.AND_CARD,
           RegisterItems.NOT_CARD,

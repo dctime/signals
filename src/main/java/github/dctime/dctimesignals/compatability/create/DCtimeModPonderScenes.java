@@ -1154,7 +1154,6 @@ public class DCtimeModPonderScenes {
 
         scene.markAsFinished();
     }
-
     public static void signalResearchStationTutorial(SceneBuilder scene, SceneBuildingUtil util) {
         scene.title("signal_research_station_tutorial", "Signal Research Station Tutorial");
         scene.showBasePlate();
@@ -1385,5 +1384,124 @@ public class DCtimeModPonderScenes {
 
         scene.markAsFinished();
     }
+    public static void signalWorldPortal(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("signal_world_portal", "Signal World Portal");
+        // 8 8 6
+        scene.idle(10);
 
+        BlockPos portalBlockPos = util.grid().at(4, 3, 3);
+
+        Selection portalStructure = util.select().fromTo(0, 0, 0, 8, 8, 6);
+        scene.world().showSection(portalStructure, Direction.DOWN);
+        scene.idle(20);
+        scene.rotateCameraY(360);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The Signal World Portal naturally generates in the overworld between Y levels -10 and 10")
+            .pointAt(portalBlockPos.getCenter());
+        scene.idle(70);
+
+        Selection portalBlockSelection = util.select().fromTo(portalBlockPos, portalBlockPos);
+        scene.addKeyframe();
+        scene.overlay().showOutline(PonderPalette.BLUE, null, portalBlockSelection, 80);
+        scene.overlay().showText(60)
+            .colored(PonderPalette.BLUE)
+            .text("The portal block in the center is your gateway to the Signal World")
+            .pointAt(portalBlockPos.getCenter());
+
+        scene.idle(70);
+        scene.overlay().showText(60)
+            .colored(PonderPalette.GREEN)
+            .text("Crouch inside the portal block to be teleported to the Signal World")
+            .pointAt(portalBlockPos.getCenter());
+        scene.idle(70);
+
+        scene.markAsFinished();
+    }
+    public static void signalWorldResources(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("signal_world_resources", "Signal World Resources");
+        scene.showBasePlate();
+        scene.idle(10);
+
+        BlockPos blockingMaterialPos = util.grid().at(1, 1, 2);
+        BlockPos aetheriteBallPos = util.grid().at(3, 1, 2);
+
+        // Show both resources
+        scene.world().showSection(util.select().position(blockingMaterialPos), Direction.DOWN);
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Signal Blocking Material can be found throughout the Signal World")
+            .pointAt(blockingMaterialPos.getCenter());
+
+        scene.idle(70);
+
+        scene.overlay().showControls(blockingMaterialPos.getCenter(), Pointing.DOWN, 40)
+            .withItem(Items.IRON_PICKAXE.getDefaultInstance());
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("You'll need at least an Iron Pickaxe to mine it")
+            .pointAt(blockingMaterialPos.getCenter());
+
+        scene.idle(70);
+
+        // Show block breaking and item drops
+        scene.world().destroyBlock(blockingMaterialPos);
+        scene.idle(5);
+        scene.world().createItemEntity(
+            blockingMaterialPos.getCenter(),
+            util.vector().of(0.1, 0.2, 0.05),
+            RegisterItems.SIGNAL_BLOCKING_MATERIAL.get().getDefaultInstance()
+        );
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Breaking it drops Signal Blocking Material, which is used in crafting signal-related blocks")
+            .pointAt(blockingMaterialPos.getCenter());
+
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        scene.world().showSection(util.select().position(aetheriteBallPos), Direction.DOWN);
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Aetherite Ceramic Balls can be found below Y level 0 in the Signal World")
+            .pointAt(aetheriteBallPos.getCenter());
+
+        scene.idle(70);
+
+        scene.overlay().showControls(aetheriteBallPos.getCenter(), Pointing.DOWN, 40)
+            .withItem(Items.IRON_SHOVEL.getDefaultInstance());
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("You can mine them with any type of shovel")
+            .pointAt(aetheriteBallPos.getCenter());
+
+        scene.idle(70);
+
+        // Show block breaking and item drops
+        scene.world().destroyBlock(aetheriteBallPos);
+        scene.idle(5);
+        scene.world().createItemEntity(
+            aetheriteBallPos.getCenter(),
+            util.vector().of(-0.1, 0.2, 0.05),
+            RegisterItems.AETHERITE_CERAMIC_BALL.get().getDefaultInstance()
+        );
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Breaking it drops an Aetherite Ceramic Ball, a crucial component in signal research")
+            .pointAt(aetheriteBallPos.getCenter());
+
+        scene.idle(70);
+
+        scene.markAsFinished();
+    }
 }

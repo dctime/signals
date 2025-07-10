@@ -277,6 +277,8 @@ drop cards when breaking the operation block (2)
 
 add traditional chinese language
 
+add ponder about signal world dimension
+
 
 
 

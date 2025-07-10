@@ -1,9 +1,7 @@
 package github.dctime.dctimesignals;
 
-import github.dctime.dctimesignals.item.AndCardItem;
-import github.dctime.dctimesignals.item.NotCardItem;
-import github.dctime.dctimesignals.item.OrCardItem;
-import github.dctime.dctimesignals.item.PlusCardItem;
+import github.dctime.dctimesignals.block.AetheriteCeramicBlock;
+import github.dctime.dctimesignals.item.*;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
