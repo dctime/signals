@@ -92,11 +92,11 @@ public class SignalResearchItemChamberBlock extends Block implements EntityBlock
                     Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
                             (blockEntity).getItems().getStackInSlot(SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX));
                     Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
-                            (blockEntity).getResearchingItem().getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_1_INDEX));
+                            (blockEntity).getResearchingItem().getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_1_INDEX).copy());
                     Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
-                            (blockEntity).getResearchingItem().getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_2_INDEX));
+                            (blockEntity).getResearchingItem().getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_2_INDEX).copy());
                     Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
-                            (blockEntity).getResearchingItem().getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_3_INDEX));
+                            (blockEntity).getResearchingItem().getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_3_INDEX).copy());
 
                 }
             }

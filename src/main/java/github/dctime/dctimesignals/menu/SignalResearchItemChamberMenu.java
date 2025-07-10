@@ -117,15 +117,15 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
 
             // If we're moving from the container slots (inputs or output)
             if (index < 5) {
-                // Try to move to player inventory
-                if (!this.moveItemStackTo(itemstack1, 5, this.slots.size(), true)) {
+                // Try to move to player inventory 8 slots inventory starts from 8
+                if (!this.moveItemStackTo(itemstack1, SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_SIZE + SignalResearchItemChamberBlockEntity.ITEMS_SIZE, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             }
             // If we're moving from player inventory
             else {
-                // Try to move to input slots only (0-2)
-                if (!this.moveItemStackTo(itemstack1, 0, 3, false)) {
+                // Try to move to input slots only (0-2) not include 3
+                if (!this.moveItemStackTo(itemstack1, 0, SignalResearchItemChamberBlockEntity.ITEMS_SIZE-1, false)) {
                     return ItemStack.EMPTY;
                 }
             }

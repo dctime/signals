@@ -331,3 +331,7 @@ jei quick swap and click to view recipes and related blocks added
 research station tutorial ponder added
 
 add ponder to explain signal world resources
+
+eaten multiblock break then replace and place redstone in it will cause it not comsume item but can research (4) fixed
+
+quick swap will swap into the buffer (5) fixed

@@ -277,7 +277,17 @@ drop cards when breaking the operation block (2)
 
 add traditional chinese language
 
-add ponder about signal world dimension
+add ponder about signal world dimension (3)
+
+eaten multiblock break then replace and place redstone in it will cause it not comsume item but can research (4)
+
+gui items no tooltip
+
+add a tutorial about integer and binary
+
+quick swap will swap into the buffer (5)
+
+needs tips for signal recipes
 
 
 

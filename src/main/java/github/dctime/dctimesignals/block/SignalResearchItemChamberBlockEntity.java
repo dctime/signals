@@ -158,7 +158,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     }
 
     private void setEatenResearchingInputItem(ItemStack input1, ItemStack input2, ItemStack input3) {
-        if (inProgress()) return;
+        if (inProgress() || researchingItem == null) return;
         this.researchingItem.setStackInSlot(RESEARCHING_ITEM_INPUT_1_INDEX, input1);
         this.researchingItem.setStackInSlot(RESEARCHING_ITEM_INPUT_2_INDEX, input2);
         this.researchingItem.setStackInSlot(RESEARCHING_ITEM_INPUT_3_INDEX, input3);
