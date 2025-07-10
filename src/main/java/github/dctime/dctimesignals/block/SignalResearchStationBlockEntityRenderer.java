@@ -31,28 +31,47 @@ public class SignalResearchStationBlockEntityRenderer implements BlockEntityRend
     @Override
     public void render(SignalResearchStationBlockEntity signalResearchStationBlockEntity, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int i1) {
         if (!signalResearchStationBlockEntity.checkIfInDebugOutline()) return;
+        int showIndex = signalResearchStationBlockEntity.getInputOutputShowTimeIndex();
         VertexConsumer vertexBuilder = multiBufferSource.getBuffer(RenderType.lines());
         List<BlockPos> signalInputPositions = signalResearchStationBlockEntity.getSignalInputPositions();
         List<BlockPos> signalOutputPositions = signalResearchStationBlockEntity.getSignalOutputPositions();
 
-        int inputIndex = 0;
-        for (BlockPos pos : signalInputPositions) {
+        if (signalInputPositions.size() > showIndex) {
+            BlockPos pos = signalInputPositions.get(showIndex);
             double relX = pos.getX() - signalResearchStationBlockEntity.getBlockPos().getX();
             double relY = pos.getY() - signalResearchStationBlockEntity.getBlockPos().getY();
             double relZ = pos.getZ() - signalResearchStationBlockEntity.getBlockPos().getZ();
-            renderBox(relX, relY, relZ, 0, 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL/2*(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL*2-inputIndex), 255/SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL-inputIndex), poseStack, vertexBuilder);
-            inputIndex++;
+            renderBox(relX, relY, relZ, 0, 0, 255, 255, poseStack, vertexBuilder);
         }
 
-        int outputIndex = 0;
-        for (BlockPos pos : signalOutputPositions) {
+        if (signalOutputPositions.size() > showIndex) {
+            BlockPos pos = signalOutputPositions.get(showIndex);
             double relX = pos.getX() - signalResearchStationBlockEntity.getBlockPos().getX();
             double relY = pos.getY() - signalResearchStationBlockEntity.getBlockPos().getY();
             double relZ = pos.getZ() - signalResearchStationBlockEntity.getBlockPos().getZ();
-            renderBox(relX, relY, relZ, 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL/2*(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL*2-outputIndex), 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL-outputIndex), poseStack, vertexBuilder);
-            outputIndex++;
+            renderBox(relX, relY, relZ, 0, 255, 0, 255, poseStack, vertexBuilder);
         }
 
+
+
+//        int inputIndex = 0;
+//        for (BlockPos pos : signalInputPositions) {
+//            double relX = pos.getX() - signalResearchStationBlockEntity.getBlockPos().getX();
+//            double relY = pos.getY() - signalResearchStationBlockEntity.getBlockPos().getY();
+//            double relZ = pos.getZ() - signalResearchStationBlockEntity.getBlockPos().getZ();
+//            renderBox(relX, relY, relZ, 0, 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL/2*(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL*2-inputIndex), 255/SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL-inputIndex), poseStack, vertexBuilder);
+//            inputIndex++;
+//        }
+//
+//        int outputIndex = 0;
+//        for (BlockPos pos : signalOutputPositions) {
+//            double relX = pos.getX() - signalResearchStationBlockEntity.getBlockPos().getX();
+//            double relY = pos.getY() - signalResearchStationBlockEntity.getBlockPos().getY();
+//            double relZ = pos.getZ() - signalResearchStationBlockEntity.getBlockPos().getZ();
+//            renderBox(relX, relY, relZ, 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL/2*(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL*2-outputIndex), 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL-outputIndex), poseStack, vertexBuilder);
+//            outputIndex++;
+//        }
+//
         if (signalResearchStationBlockEntity.getItemChamberPosition() != null) {
             BlockPos itemChamberPos = signalResearchStationBlockEntity.getItemChamberPosition();
             double relX = itemChamberPos.getX() - signalResearchStationBlockEntity.getBlockPos().getX();

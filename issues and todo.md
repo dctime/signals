@@ -281,13 +281,13 @@ add ponder about signal world dimension (3)
 
 eaten multiblock break then replace and place redstone in it will cause it not comsume item but can research (4)
 
-gui items no tooltip
+gui items no tooltip (6)
 
-add a tutorial about integer and binary
+add a tutorial about integer and binary (8)
 
 quick swap will swap into the buffer (5)
 
-needs tips for signal recipes
+needs tips for signal recipes (7)
 
 
 

@@ -25,19 +25,23 @@ public class SignalResearchRecipe implements Recipe<SignalResearchRecipeInput> {
     private final String signalRequired1;
     private final String signalRequired2;
     private final String signalRequired3;
+    private final String tips;
 
-    public SignalResearchRecipe(BlockState inputState, List<ItemStack> inputItemStacks, ItemStack result, String signalRequired1, String signalRequired2, String signalRequired3) {
-        this.result = result;
+    public SignalResearchRecipe(BlockState inputState, List<ItemStack> inputItemStacksAndResult, String signalRequired1, String signalRequired2, String signalRequired3, String tips) {
+
         this.inputState = inputState;
-        if (inputItemStacks.isEmpty()) this.input1ItemStack = ItemStack.EMPTY;
-        else this.input1ItemStack = inputItemStacks.get(0);
-        if (inputItemStacks.size() < 2) this.input2ItemStack = ItemStack.EMPTY;
-        else this.input2ItemStack = inputItemStacks.get(1);
-        if (inputItemStacks.size() < 3) this.input3ItemStack = ItemStack.EMPTY;
-        else this.input3ItemStack = inputItemStacks.get(2);
+        if (inputItemStacksAndResult.isEmpty()) this.input1ItemStack = ItemStack.EMPTY;
+        else this.input1ItemStack = inputItemStacksAndResult.get(0);
+        if (inputItemStacksAndResult.size() < 2) this.input2ItemStack = ItemStack.EMPTY;
+        else this.input2ItemStack = inputItemStacksAndResult.get(1);
+        if (inputItemStacksAndResult.size() < 3) this.input3ItemStack = ItemStack.EMPTY;
+        else this.input3ItemStack = inputItemStacksAndResult.get(2);
+        if (inputItemStacksAndResult.size() < 4) this.result = ItemStack.EMPTY;
+        else this.result = inputItemStacksAndResult.get(3);
         this.signalRequired1 = signalRequired1;
         this.signalRequired2 = signalRequired2;
         this.signalRequired3 = signalRequired3;
+        this.tips = tips;
     }
 
     @Override
@@ -115,7 +119,7 @@ public class SignalResearchRecipe implements Recipe<SignalResearchRecipeInput> {
     }
 
     public List<ItemStack> getInputItemStacks() {
-        return List.of(input1ItemStack, input2ItemStack, input3ItemStack);
+        return List.of(input1ItemStack, input2ItemStack, input3ItemStack, result);
     }
 
     public ItemStack getResult() {
@@ -132,6 +136,10 @@ public class SignalResearchRecipe implements Recipe<SignalResearchRecipeInput> {
 
     public String getSignalRequired3() {
         return this.signalRequired3;
+    }
+
+    public String getTips() {
+        return this.tips;
     }
 
 

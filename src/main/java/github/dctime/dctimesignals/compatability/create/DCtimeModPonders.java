@@ -8,6 +8,8 @@ import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -66,16 +68,37 @@ public class DCtimeModPonders {
         );
 
         for (DeferredItem<Item> card : cards) {
+            HELPER.addStoryBoard(card, "basic_plate", DCtimeModPonderScenes::binaryConversionTutorial, SIGNALS);
+        }
+
+        HELPER.addStoryBoard(RegisterItems.AND_CARD, "basic_plate", DCtimeModPonderScenes::binaryAndOrOperationTutorial, SIGNALS);
+        HELPER.addStoryBoard(RegisterItems.OR_CARD, "basic_plate", DCtimeModPonderScenes::binaryAndOrOperationTutorial, SIGNALS);
+        HELPER.addStoryBoard(RegisterItems.NOT_CARD, "basic_plate", DCtimeModPonderScenes::binaryNotOperationTutorial, SIGNALS);
+
+        for (DeferredItem<Item> card : cards) {
             HELPER.addStoryBoard(card, "operation_block_tutorial", DCtimeModPonderScenes::operationBlockTutorial, SIGNALS);
         }
+
+
 
         HELPER.addStoryBoard(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER, "signal_to_redstone", DCtimeModPonderScenes::signalToRedstone, SIGNALS);
 
         HELPER.addStoryBoard(RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER, "redstone_to_signal", DCtimeModPonderScenes::redstoneToSignal, SIGNALS);
 
-        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_RESEARCH_STATION, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
-        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
-        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
-        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
+
+        List<DeferredBlock<Block>> signalResearchBlocks = List.of(
+                RegisterBlocks.SIGNAL_RESEARCH_STATION,
+                RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER,
+                RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT,
+                RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT
+        );
+
+        for (DeferredBlock<Block> block : signalResearchBlocks) {
+            HELPER.addStoryBoard(block, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
+            HELPER.addStoryBoard(block, "null", DCtimeModPonderScenes::binaryConversionTutorial, SIGNALS);
+        }
+
+
+
     }
 }

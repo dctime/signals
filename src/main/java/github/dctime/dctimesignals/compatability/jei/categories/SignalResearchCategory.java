@@ -16,6 +16,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -53,6 +54,7 @@ public class SignalResearchCategory implements IRecipeCategory<SignalResearchRec
     public void draw(SignalResearchRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         guiGraphics.blit(CONTAINER_TEXTURE, 0, 0+1, 0, 0, imageWidth, imageHeight);
         bulb.draw(guiGraphics, 80-1, 34);
+        guiGraphics.drawString(Minecraft.getInstance().font, recipe.getTips(), 5, 5, 0xFFFFFFFF);
     }
 
     @Override

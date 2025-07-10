@@ -47,6 +47,19 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         return true;
     }
 
+    // return 1-3 0 if there is error
+    public int getInputOutputShowTimeIndex() {
+        if (DEBUG_OUTLINE_SHOW_TICKS * 1.0/DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
+            return 2;
+        } else if (DEBUG_OUTLINE_SHOW_TICKS * 2.0/DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
+            return 1;
+        } else if (DEBUG_OUTLINE_SHOW_TICKS * 3.0/DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
+            return 0;
+        } else {
+            return 0;
+        }
+    }
+
     private final SimpleContainerData inputSignalData = new SimpleContainerData(DATA_SIZE_INPUT_SIGNAL);
     private final SimpleContainerData outputSignalData = new SimpleContainerData(DATA_SIZE_OUTPUT_SIGNAL);
     private final SimpleContainerData requiredInputSignalData = new SimpleContainerData(DATA_SIZE_REQUIRED_INPUT_SIGNAL);

@@ -84,7 +84,8 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 new ItemStack(RegisterBlockItems.SINGAL_TO_REDSTONE_CONVERTER.get(), 1),
                 "A&B",
                 "",
-                ""
+                "",
+                "Two Outputs One Operation"
         ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "redstone_to_signal_converter"));
 

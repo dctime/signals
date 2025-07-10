@@ -19,8 +19,9 @@ public class SignalResearchRecipeBuilder extends SimpleRecipeBuilder{
     private final String signalRequired1;
     private final String signalRequired2;
     private final String signalRequired3;
+    private final String tips;
 
-    public SignalResearchRecipeBuilder(ItemStack result, BlockState state, ItemStack inputStack1, ItemStack inputStack2, ItemStack inputStack3, String signalRequired1, String signalRequired2, String signalRequired3) {
+    public SignalResearchRecipeBuilder(ItemStack result, BlockState state, ItemStack inputStack1, ItemStack inputStack2, ItemStack inputStack3, String signalRequired1, String signalRequired2, String signalRequired3, String tips) {
         super(result);
         this.state = state;
 
@@ -36,12 +37,14 @@ public class SignalResearchRecipeBuilder extends SimpleRecipeBuilder{
         this.signalRequired1 = signalRequired1;
         this.signalRequired2 = signalRequired2;
         this.signalRequired3 = signalRequired3;
+
+        this.tips = tips;
     }
 
     @Override
     public void save(RecipeOutput recipeOutput, ResourceLocation resourceLocation) {
         SignalResearchRecipe recipe = new SignalResearchRecipe(
-                state, List.of(inputStack1, inputStack2, inputStack3), result, signalRequired1, signalRequired2, signalRequired3
+                state, List.of(inputStack1, inputStack2, inputStack3, result), signalRequired1, signalRequired2, signalRequired3, tips
         );
         recipeOutput.accept(resourceLocation, recipe, null);
     }

@@ -1235,7 +1235,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(60)
                 .colored(PonderPalette.WHITE)
-                .text("Inputs 1, 2, and 3, as well as Outputs 1, 2, and 3, will be outlined from light to dark, while the item chamber will be outlined in white")
+                .text("Inputs 1, 2, and 3, as well as Outputs 1, 2, and 3, will be outlined one by one, while the item chamber will be outlined in white")
                 .pointAt(researchStationTopCenter);
 
         scene.idle(70);
@@ -1501,6 +1501,256 @@ public class DCtimeModPonderScenes {
             .pointAt(aetheriteBallPos.getCenter());
 
         scene.idle(70);
+
+        scene.markAsFinished();
+    }
+    public static void binaryConversionTutorial(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("binary_conversion_tutorial", "64-bit Integer to Binary Conversion");
+        scene.showBasePlate();
+        scene.idle(10);
+
+        BlockPos displayPos = util.grid().at(2, 1, 2);
+        scene.world().showSection(util.select().position(displayPos), Direction.DOWN);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Let's start with 8-bit binary numbers, which are easier to understand")
+            .independent();
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("In an 8-bit number, each position represents a specific value: -128 64 32 16 8 4 2 1")
+            .independent();
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The leftmost bit is special - it represents -128 instead of 128, allowing us to store negative numbers")
+            .independent();
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("For example, 5 in binary is 00000101, because 0*(-128) + 0*64 + 0*32 + 0*16 + 0*8 + 1*4 + 0*2 + 1*1 = 5")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("-5 would be 11111011: 1*(-128) + 1*64 + 1*32 + 1*16 + 1*8 + 0*4 + 1*2 + 1*1 = -5")
+            .independent();
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("Modern computers use 64 bits instead of 8 bits, following the same principle")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("In 64-bit, the leftmost bit represents -2⁶³, and the rest represent powers of 2 from 2⁶² down to 2⁰")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.RED)
+            .text("With 64 bits, the maximum value is 2⁶³-1, and the minimum is -2⁶³")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("This range is approximately from -9.2 quintillion to +9.2 quintillion")
+            .independent();
+        scene.idle(70);
+
+        scene.markAsFinished();
+    }
+    public static void binaryNotOperationTutorial(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("binary_not_operation_tutorial", "Binary NOT Operation with Mask");
+        scene.showBasePlate();
+        scene.idle(10);
+
+        BlockPos displayPos = util.grid().at(2, 1, 2);
+        BlockPos notCardPos = util.grid().at(2, 1, 2);
+        scene.world().showSection(util.select().position(displayPos), Direction.DOWN);
+
+        // Show NOT card being dropped
+        scene.world().createItemEntity(
+            notCardPos.getCenter(),
+            util.vector().of(0, 0.2, 0),
+            RegisterItems.NOT_CARD.get().getDefaultInstance()
+        );
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The NOT Card operates in two different modes")
+            .pointAt(notCardPos.getCenter());
+        scene.idle(70);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.BLUE)
+            .text("Mode 1: Single input and output - simple bit inversion of the entire number")
+            .pointAt(notCardPos.getCenter());
+        scene.idle(90);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.GREEN)
+            .text("Mode 2: Two inputs and one output - input 1 (white) is the value, while input 2 (blue) is the mask")
+            .pointAt(notCardPos.getCenter());
+        scene.idle(90);
+
+        // Continue with the rest of the tutorial
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Let's learn about the NOT operation without a mask")
+            .independent();
+        scene.idle(70);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("The NOT operation inverts bits: 0 becomes 1, and 1 becomes 0")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("For example, 0101 results in 1010")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(80)
+                .colored(PonderPalette.WHITE)
+                .text("When there is a mask (blue input), the NOT operation only inverts bits where the mask is 1")
+                .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(80)
+                .colored(PonderPalette.WHITE)
+                .text("And 0101 with mask 0011 results in 0110")
+                .independent();
+        scene.idle(90);
+
+        scene.addKeyframe();
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("This works the same way with 64-bit numbers")
+            .independent();
+        scene.idle(70);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.RED)
+            .text("The mask gives you precise control over which bits to invert")
+            .independent();
+        scene.idle(70);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.RED)
+            .text("This is useful for toggling specific properties in binary flags")
+            .independent();
+        scene.idle(70);
+
+        scene.markAsFinished();
+    }
+    public static void binaryAndOrOperationTutorial(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("binary_and_or_operation_tutorial", "Binary AND/OR Operations");
+        scene.showBasePlate();
+        scene.idle(10);
+
+        BlockPos displayPos = util.grid().at(2, 1, 2);
+        BlockPos andCardPos = util.grid().at(1, 1, 2);
+        BlockPos orCardPos = util.grid().at(3, 1, 2);
+        scene.world().showSection(util.select().position(displayPos), Direction.DOWN);
+
+        // Show AND card being dropped
+        scene.world().createItemEntity(
+            andCardPos.getCenter(),
+            util.vector().of(0, 0.2, 0),
+            RegisterItems.AND_CARD.get().getDefaultInstance()
+        );
+        scene.idle(20);
+
+        // Show OR card being dropped
+        scene.world().createItemEntity(
+            orCardPos.getCenter(),
+            util.vector().of(0, 0.2, 0),
+            RegisterItems.OR_CARD.get().getDefaultInstance()
+        );
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The AND and OR cards are basic binary logic operation cards")
+            .pointAt(displayPos.getCenter());
+        scene.idle(70);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("Both cards take two inputs (white and blue) and produce one output")
+            .pointAt(displayPos.getCenter());
+        scene.idle(90);
+
+        scene.addKeyframe();
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Let's start with the AND operation")
+            .pointAt(andCardPos.getCenter());
+        scene.idle(70);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("AND compares each pair of bits: both must be 1 to produce a 1, otherwise it's 0")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(90)
+            .colored(PonderPalette.GREEN)
+            .text("Example: 0101 AND 0011 = 0001")
+            .independent();
+        scene.idle(100);
+
+        scene.addKeyframe();
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Now let's look at the OR operation")
+            .pointAt(orCardPos.getCenter());
+        scene.idle(70);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("OR compares each pair of bits: if either is 1 (or both), it produces 1")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(90)
+            .colored(PonderPalette.GREEN)
+            .text("Example: 0101 OR 0011 = 0111")
+            .independent();
+        scene.idle(100);
+
+        scene.addKeyframe();
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.WHITE)
+            .text("Both operations work on all 64 bits of the input integers simultaneously")
+            .independent();
+        scene.idle(90);
+
+        scene.overlay().showText(80)
+            .colored(PonderPalette.RED)
+            .text("This makes them useful for working with binary flags and masks")
+            .independent();
+        scene.idle(90);
 
         scene.markAsFinished();
     }

@@ -335,3 +335,9 @@ add ponder to explain signal world resources
 eaten multiblock break then replace and place redstone in it will cause it not comsume item but can research (4) fixed
 
 quick swap will swap into the buffer (5) fixed
+
+gui items no tooltip (6) fixed
+
+needs tips for signal recipes (7) fixed
+
+add a tutorial about integer and binary (8) fixed

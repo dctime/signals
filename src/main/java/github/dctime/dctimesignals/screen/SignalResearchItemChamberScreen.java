@@ -44,4 +44,10 @@ public class SignalResearchItemChamberScreen extends AbstractContainerScreen<Sig
             guiGraphics.drawString(this.font, "Inputs Buffer", researchingInputX, researchingInputY, 0xFFFFFF);
 
     }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.renderTooltip(guiGraphics, mouseX, mouseY);
+    }
 }

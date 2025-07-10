@@ -26,19 +26,20 @@ public class SignalResearchRecipeSerializer implements RecipeSerializer<SignalRe
             ItemStack.CODEC.fieldOf("result").forGetter(SignalResearchRecipe::getResult),
             Codec.STRING.fieldOf("signal_required1").forGetter(SignalResearchRecipe::getSignalRequired1),
             Codec.STRING.fieldOf("signal_required2").forGetter(SignalResearchRecipe::getSignalRequired2),
-            Codec.STRING.fieldOf("signal_required3").forGetter(SignalResearchRecipe::getSignalRequired3)
-    ).apply(inst, ((blockState, itemStack, itemStack2, itemStack3, itemStack4, s, s2, s3) -> {
-        return new SignalResearchRecipe(blockState, List.of(itemStack, itemStack2, itemStack3), itemStack4, s, s2, s3);
+            Codec.STRING.fieldOf("signal_required3").forGetter(SignalResearchRecipe::getSignalRequired3),
+            Codec.STRING.fieldOf("tips").forGetter(SignalResearchRecipe::getTips)
+    ).apply(inst, ((blockState, itemStack, itemStack2, itemStack3, itemStack4, s, s2, s3, ts) -> {
+        return new SignalResearchRecipe(blockState, List.of(itemStack, itemStack2, itemStack3, itemStack4), s, s2, s3, ts);
     })));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SignalResearchRecipe> STREAM_CODEC =
             StreamCodec.composite(
                     ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY), SignalResearchRecipe::getInputState,
                     ItemStack.LIST_STREAM_CODEC, SignalResearchRecipe::getInputItemStacks,
-                    ItemStack.STREAM_CODEC, SignalResearchRecipe::getResult,
                     ByteBufCodecs.STRING_UTF8, SignalResearchRecipe::getSignalRequired1,
                     ByteBufCodecs.STRING_UTF8, SignalResearchRecipe::getSignalRequired2,
                     ByteBufCodecs.STRING_UTF8, SignalResearchRecipe::getSignalRequired3,
+                    ByteBufCodecs.STRING_UTF8, SignalResearchRecipe::getTips,
                     SignalResearchRecipe::new
             );
 
