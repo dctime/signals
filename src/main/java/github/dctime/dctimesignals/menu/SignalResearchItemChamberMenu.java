@@ -33,9 +33,12 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
         public boolean mayPlace(ItemStack stack) {
             return false; // Prevent placing items in this slot
         }
+        @Override
         public boolean mayPickup(Player player) {
             return false; // Prevent picking up items from this slot
         }
+        @Override
+        public boolean isHighlightable() {return true;}
     }
     // Server
     private final ContainerLevelAccess access;
@@ -47,6 +50,12 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
     }
     public ItemStack getResearchingItem() {
         return researchingItem.getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INDEX);
+    }
+
+    public boolean allEatenResearchingInputItemEmpty() {
+        return researchingItem.getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_1_INDEX).isEmpty() &&
+               researchingItem.getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_2_INDEX).isEmpty() &&
+               researchingItem.getStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_3_INDEX).isEmpty();
     }
 
     // server
@@ -70,6 +79,10 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
         this.addSlot(new OutputSlotItemHand(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, 80, 16+1));
         // researching item
         this.addSlot(new ResearchingItemSlot(researchingItem, SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INDEX, 80 + 18 * 2, 16+1));
+        // researching eaten item
+        this.addSlot(new ResearchingItemSlot(researchingItem, SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_1_INDEX, 30, 16+1));
+        this.addSlot(new ResearchingItemSlot(researchingItem, SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_2_INDEX, 30-18, 16+1));
+        this.addSlot(new ResearchingItemSlot(researchingItem, SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_3_INDEX, 30+18, 16+1));
 
         int rows = 3;
         int i = (rows - 4) * 18;

@@ -31,10 +31,17 @@ public class SignalResearchItemChamberScreen extends AbstractContainerScreen<Sig
         int startY = 22 - progressHeight - 3;
         guiGraphics.blit(LIGHT_BULB, i+79, j+33+startY+1, 0, startY, 18, progressHeight+4-1, 18, 22);
 
-        int researchingTextX = i + this.imageWidth / 7 * 4;
+        int researchingTextX = (int)(i + this.imageWidth / 7 * 4.5);
         int researchingTextY = j + this.imageHeight / 4;
 
         if (!menu.getResearchingItem().isEmpty())
-            guiGraphics.drawString(this.font, "Researching...", researchingTextX, researchingTextY, 0xFFFFFF);
+            guiGraphics.drawString(this.font, "Result", researchingTextX, researchingTextY, 0xFFFFFF);
+
+        int researchingInputX = i + 5;
+        int researchingInputY = j + this.imageHeight / 4;
+
+        if (!menu.allEatenResearchingInputItemEmpty())
+            guiGraphics.drawString(this.font, "Inputs Buffer", researchingInputX, researchingInputY, 0xFFFFFF);
+
     }
 }

@@ -48,7 +48,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
     public static final int ITEMS_SIZE = 4;
     public static final int DATA_SIZE = 1;
-    public static final int RESEARCHING_ITEM_SIZE = 1;
+    public static final int RESEARCHING_ITEM_SIZE = 4;
 
     public static final int DATA_PROGRESS_INDEX = 0;
     public static final int ITEMS_INPUT_1_INDEX = 0;
@@ -56,6 +56,10 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     public static final int ITEMS_INPUT_3_INDEX = 2;
     public static final int ITEMS_OUTPUT_INDEX = 3;
     public static final int RESEARCHING_ITEM_INDEX = 0;
+    public static final int RESEARCHING_ITEM_INPUT_1_INDEX = 1;
+    public static final int RESEARCHING_ITEM_INPUT_2_INDEX = 2;
+    public static final int RESEARCHING_ITEM_INPUT_3_INDEX = 3;
+
 
     public SimpleContainerData getData() {
         return data;
@@ -150,7 +154,14 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
     private void setResearchingItem(ItemStack itemStack) {
         if (inProgress()) return;
-        this.researchingItem.setStackInSlot(0, itemStack);
+        this.researchingItem.setStackInSlot(RESEARCHING_ITEM_INDEX, itemStack);
+    }
+
+    private void setEatenResearchingInputItem(ItemStack input1, ItemStack input2, ItemStack input3) {
+        if (inProgress()) return;
+        this.researchingItem.setStackInSlot(RESEARCHING_ITEM_INPUT_1_INDEX, input1);
+        this.researchingItem.setStackInSlot(RESEARCHING_ITEM_INPUT_2_INDEX, input2);
+        this.researchingItem.setStackInSlot(RESEARCHING_ITEM_INPUT_3_INDEX, input3);
     }
 
     private String signalRequired1 = "";
@@ -198,7 +209,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
             if (signalResearchItemChamberBlockEntity.checkProgressReady()) {
                 // If progress is ready, output the result
-                ItemStack output = signalResearchItemChamberBlockEntity.researchingItem.getStackInSlot(0);
+                ItemStack output = signalResearchItemChamberBlockEntity.researchingItem.getStackInSlot(RESEARCHING_ITEM_INDEX);
                 if (!output.isEmpty()) {
                     signalResearchItemChamberBlockEntity.items.insertItem(SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, output, false);
                     signalResearchItemChamberBlockEntity.signalRequired1 = "";
@@ -206,6 +217,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
                     signalResearchItemChamberBlockEntity.signalRequired3 = "";
                     signalResearchItemChamberBlockEntity.resetProgress();
                     signalResearchItemChamberBlockEntity.setResearchingItem(ItemStack.EMPTY);
+                    signalResearchItemChamberBlockEntity.setEatenResearchingInputItem(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
                 }
             }
             return;
@@ -232,6 +244,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
         ItemStack resultItem = recipe.get().value().assemble(inputRecipe, level.registryAccess());
         if (resultItem.isEmpty()) {
             signalResearchItemChamberBlockEntity.setResearchingItem(ItemStack.EMPTY);
+            signalResearchItemChamberBlockEntity.setEatenResearchingInputItem(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
             return;
         }
 
@@ -249,6 +262,7 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
             for (int inputSlotIndex = 0; inputSlotIndex < SignalResearchItemChamberBlockEntity.ITEMS_SIZE-1; inputSlotIndex++) {
                 if (inputIngredientStack.is(signalResearchItemChamberBlockEntity.items.getStackInSlot(inputSlotIndex).getItem())) {
                     signalResearchItemChamberBlockEntity.items.extractItem(SignalResearchItemChamberBlockEntity.ITEMS_INPUT_1_INDEX+inputSlotIndex, inputIngredientStack.getCount(), false);
+                    signalResearchItemChamberBlockEntity.researchingItem.setStackInSlot(SignalResearchItemChamberBlockEntity.RESEARCHING_ITEM_INPUT_1_INDEX+inputSlotIndex, inputIngredientStack);
                     break;
                 }
             }

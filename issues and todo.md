@@ -271,9 +271,9 @@ a button to try research (same spot as the cancel research button)
 
 ### 2025.7.10
 
-drop researching items and item slot items when breaking the research station
+drop researching items and item slot items when breaking the research station (1)
 
-drop cards when breaking the operation block
+drop cards when breaking the operation block (2)
 
 add traditional chinese language
 

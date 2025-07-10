@@ -9,7 +9,9 @@ import github.dctime.dctimesignals.menu.SignalOperationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -27,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -251,6 +255,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        dropContents(state, level, pos, newState, movedByPiston);
         if (!state.is(newState.getBlock())) {
             level.invalidateCapabilities(pos);
         }
@@ -262,6 +267,18 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         detectSignalWireAndUpdate(state, level, pos, true, true, 0, outputDirection);
 
         super.onRemove(state, level, pos, newState, true);
+    }
+
+    protected void dropContents(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            BlockEntity blockentity = level.getBlockEntity(pos);
+            if (blockentity instanceof SignalOperationBlockEntity blockEntity) {
+                if (level instanceof ServerLevel) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
+                            blockEntity.getItems().getStackInSlot(SignalOperationBlockEntity.CARD_SLOT_INDEX));
+                }
+            }
+        }
     }
 
     @Override
