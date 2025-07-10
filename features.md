@@ -327,3 +327,5 @@ jei integration for research station recipes
 research station invalid flag is true when placed initially
 
 jei quick swap and click to view recipes and related blocks added
+
+research station tutorial ponder added

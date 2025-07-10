@@ -95,8 +95,42 @@ public class SignalResearchItemChamberMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int i) {
-        return null;
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
+            itemstack = itemstack1.copy();
+
+            // If we're moving from the container slots (inputs or output)
+            if (index < 5) {
+                // Try to move to player inventory
+                if (!this.moveItemStackTo(itemstack1, 5, this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            // If we're moving from player inventory
+            else {
+                // Try to move to input slots only (0-2)
+                if (!this.moveItemStackTo(itemstack1, 0, 3, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.setByPlayer(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(player, itemstack1);
+        }
+
+        return itemstack;
     }
 
     @Override

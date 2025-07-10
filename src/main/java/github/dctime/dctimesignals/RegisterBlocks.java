@@ -30,7 +30,7 @@ public class RegisterBlocks {
                     .noOcclusion()
     );
 
-    public static final DeferredBlock<Block> SINGAL_WIRE = BLOCKS.registerBlock(
+    public static final DeferredBlock<Block> SIGNAL_WIRE = BLOCKS.registerBlock(
             "signal_wire",
             SignalWireBlock::new,
             BlockBehaviour.Properties.of()

@@ -23,7 +23,7 @@ public class RegisterBlockEntities {
             "signal_wire_block_entity",
             ()-> BlockEntityType.Builder.of(
                     SignalWireBlockEntity::new,
-                    RegisterBlocks.SINGAL_WIRE.get(),
+                    RegisterBlocks.SIGNAL_WIRE.get(),
                     RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER.get()
             ).build(null)
     );

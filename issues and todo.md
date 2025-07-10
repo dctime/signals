@@ -263,11 +263,19 @@ aetherite ceramic for making research station related blocks (1)
 
 jei integration for research station recipes (2)
 
-research station item chamber quick swap not working
+research station item chamber quick swap not working (3)
 
-jei quick swap not working
+jei quick swap not working (4)
 
 a button to try research (same spot as the cancel research button)
+
+### 2025.7.10
+
+drop researching items and item slot items when breaking the research station
+
+drop cards when breaking the operation block
+
+add traditional chinese language
 
 
 

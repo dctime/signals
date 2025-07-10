@@ -25,7 +25,7 @@ public class DCtimeModPonders {
                 .register();
 
         helper.addToTag(SIGNALS)
-                .add(RegisterBlocks.SINGAL_WIRE.getId())
+                .add(RegisterBlocks.SIGNAL_WIRE.getId())
                 .add(RegisterBlocks.CONSTANT_SIGNAL_BLOCK.getId())
                 .add(RegisterItems.SIGNAL_DETECTOR.getId())
                 .add(RegisterBlocks.SIGNAL_OPERATION_BLOCK.getId());
@@ -35,9 +35,9 @@ public class DCtimeModPonders {
     public static void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         PonderSceneRegistrationHelper<DeferredHolder<?, ?>> HELPER = helper.withKeyFunction(DeferredHolder::getId);
 
-        HELPER.addStoryBoard(RegisterBlocks.SINGAL_WIRE, "signal_wire_connection", DCtimeModPonderScenes::signalWireConnection, SIGNALS);
-        HELPER.addStoryBoard(RegisterBlocks.SINGAL_WIRE, "signal_wire_signal_characteristics", DCtimeModPonderScenes::signalWireCharacteristics, SIGNALS);
-        HELPER.addStoryBoard(RegisterBlocks.SINGAL_WIRE, "signal_wire_high_value_first", DCtimeModPonderScenes::signalWireHighValueFirst, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_WIRE, "signal_wire_connection", DCtimeModPonderScenes::signalWireConnection, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_WIRE, "signal_wire_signal_characteristics", DCtimeModPonderScenes::signalWireCharacteristics, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_WIRE, "signal_wire_high_value_first", DCtimeModPonderScenes::signalWireHighValueFirst, SIGNALS);
 
         HELPER.addStoryBoard(RegisterBlocks.CONSTANT_SIGNAL_BLOCK, "const_signal_block_tutorial", DCtimeModPonderScenes::constSignalBlockTutorial, SIGNALS);
         HELPER.addStoryBoard(RegisterBlocks.CONSTANT_SIGNAL_BLOCK, "signal_wire_signal_characteristics", DCtimeModPonderScenes::signalWireCharacteristics, SIGNALS);
@@ -61,5 +61,10 @@ public class DCtimeModPonders {
         HELPER.addStoryBoard(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER, "signal_to_redstone", DCtimeModPonderScenes::signalToRedstone, SIGNALS);
 
         HELPER.addStoryBoard(RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER, "redstone_to_signal", DCtimeModPonderScenes::redstoneToSignal, SIGNALS);
+
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_RESEARCH_STATION, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
+        HELPER.addStoryBoard(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT, "signal_research_station_tutorial", DCtimeModPonderScenes::signalResearchStationTutorial, SIGNALS);
     }
 }

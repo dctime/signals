@@ -37,7 +37,7 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
     }
 
     private void signalWireModel() {
-        MultiPartBlockStateBuilder multiPartBuilderSignal = getMultipartBuilder(RegisterBlocks.SINGAL_WIRE.get());
+        MultiPartBlockStateBuilder multiPartBuilderSignal = getMultipartBuilder(RegisterBlocks.SIGNAL_WIRE.get());
         multiPartBuilderSignal.part()
                 .modelFile(models().getExistingFile(modLoc("block/signal_wire_none")))
                 .addModel()

@@ -1,11 +1,9 @@
 package github.dctime.dctimesignals.compatability.create;
 
-import github.dctime.dctimesignals.RegisterBlockItems;
 import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterItems;
 import github.dctime.dctimesignals.block.*;
 import net.createmod.catnip.math.Pointing;
-import net.createmod.ponder.Ponder;
 import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
@@ -15,7 +13,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RedStoneWireBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -48,7 +45,7 @@ public class DCtimeModPonderScenes {
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight, wireClickSurfaceExpanded, 40);
         scene.overlay().showControls(wireConnectionSurface, Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_CONFIGURATOR.toStack());
         scene.idle(20);
-        scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.NORTH, true), false);
+        scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.NORTH, true), false);
         scene.idle(20);
 
         Object connectionHighlight2 = new Object();
@@ -58,8 +55,8 @@ public class DCtimeModPonderScenes {
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight2, wireClickSurfaceExpanded2, 60);
         scene.overlay().showControls(wireConnectionSurface2, Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_CONFIGURATOR.toStack());
         scene.idle(20);
-        scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.NORTH, true).setValue(SignalWireBlock.WEST, true), false);
-        scene.world().replaceBlocks(util.select().position(1, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true), false);
+        scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.NORTH, true).setValue(SignalWireBlock.WEST, true), false);
+        scene.world().replaceBlocks(util.select().position(1, 1, 2), RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true), false);
         scene.idle(20);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
@@ -76,7 +73,7 @@ public class DCtimeModPonderScenes {
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight3, wireClickSurfaceExpanded3, 40);
         scene.overlay().showControls(wireConnectionSurface3, Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_CONFIGURATOR.toStack());
         scene.idle(20);
-        scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true), false);
+        scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true), false);
         scene.idle(20);
 
         Object connectionHighlight4 = new Object();
@@ -86,8 +83,8 @@ public class DCtimeModPonderScenes {
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight4, wireClickSurfaceExpanded4, 40);
         scene.overlay().showControls(wireConnectionSurface4, Pointing.UP, 20).rightClick().withItem(RegisterItems.SIGNAL_CONFIGURATOR.toStack());
         scene.idle(20);
-        scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState(), false);
-        scene.world().replaceBlocks(util.select().position(1, 1, 2), RegisterBlocks.SINGAL_WIRE.get().defaultBlockState(), false);
+        scene.world().replaceBlocks(util.select().position(2, 1, 2), RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState(), false);
+        scene.world().replaceBlocks(util.select().position(1, 1, 2), RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState(), false);
         scene.idle(20);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
@@ -117,9 +114,9 @@ public class DCtimeModPonderScenes {
         Selection wireSelection2 = util.select().position(2, 1, 2);
         Selection wireSelection3 = util.select().position(1, 1, 2);
 
-        scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true), false);
-        scene.world().replaceBlocks(wireSelection2, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true).setValue(SignalWireBlock.EAST, true), false);
-        scene.world().replaceBlocks(wireSelection3, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true), false);
+        scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true), false);
+        scene.world().replaceBlocks(wireSelection2, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true).setValue(SignalWireBlock.EAST, true), false);
+        scene.world().replaceBlocks(wireSelection3, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true), false);
 
         scene.overlay().showText(20)
             .independent(10)
@@ -151,7 +148,7 @@ public class DCtimeModPonderScenes {
         scene.idle(30);
         scene.addKeyframe();
 
-        scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true).setValue(SignalWireBlock.SOUTH, true), false);
+        scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true).setValue(SignalWireBlock.SOUTH, true), false);
         scene.idle(20);
 
         scene.overlay().showText(20)
@@ -178,8 +175,8 @@ public class DCtimeModPonderScenes {
 
         scene.idle(30);
 
-        scene.world().replaceBlocks(wireSelection2, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true), false);
-        scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.SOUTH, true), false);
+        scene.world().replaceBlocks(wireSelection2, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true), false);
+        scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.SOUTH, true), false);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
             .text("Now, let's try disconnecting the wires")
@@ -320,9 +317,9 @@ public class DCtimeModPonderScenes {
             }
         }
 
-        scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true).setValue(SignalWireBlock.SOUTH, true), false);
-        scene.world().replaceBlocks(wireSelection2, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true), false);
-        scene.world().replaceBlocks(wireSelection3, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.SOUTH, true), false);
+        scene.world().replaceBlocks(wireSelection1, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.WEST, true).setValue(SignalWireBlock.SOUTH, true), false);
+        scene.world().replaceBlocks(wireSelection2, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true), false);
+        scene.world().replaceBlocks(wireSelection3, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.SOUTH, true).setValue(SignalWireBlock.EAST, true), false);
 
         scene.overlay().showText(20)
             .independent(10)
@@ -354,8 +351,8 @@ public class DCtimeModPonderScenes {
 
         scene.addKeyframe();
 
-        scene.world().replaceBlocks(wireSelection2, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true).setValue(SignalWireBlock.WEST, true), false);
-        scene.world().replaceBlocks(wireSelection3, RegisterBlocks.SINGAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.SOUTH, true).setValue(SignalWireBlock.EAST, true), false);
+        scene.world().replaceBlocks(wireSelection2, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.EAST, true).setValue(SignalWireBlock.WEST, true), false);
+        scene.world().replaceBlocks(wireSelection3, RegisterBlocks.SIGNAL_WIRE.get().defaultBlockState().setValue(SignalWireBlock.SOUTH, true).setValue(SignalWireBlock.EAST, true), false);
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
             .text("Let's see what happens when we connect the wires together...")
@@ -384,7 +381,7 @@ public class DCtimeModPonderScenes {
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
             .text("On the left, the wire reset its value to \"No Signal\" and instructed its connected neighbors to do the same when it received the command")
-            .pointAt(wireSelection1.getCenter().add(0, 0, 0));
+            .pointAt(wireSelection1.getCenter().add(0, 0.5, 0));
 
         AABB updateBlockBox2 = new AABB(sourceHighPos.getCenter().add(-0.5f, -0.5f, -0.5f), sourceHighPos.getCenter().add(0.5f, 0.5f, 0.5f));
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.WHITE, highlightUpdatedBlocks, updateBlockBox2, 210);
@@ -397,7 +394,7 @@ public class DCtimeModPonderScenes {
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
             .text("This wire is already at \"No Signal\", so the update chain ends here.")
-            .pointAt(wireSelection2.getCenter().add(0, 0, 0));
+            .pointAt(wireSelection2.getCenter().add(0, 0.5, 0));
 
         scene.idle(30);
 
@@ -406,28 +403,28 @@ public class DCtimeModPonderScenes {
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
             .text("Let's focus on the right side now.")
-            .pointAt(sourceLowPos.getCenter().add(0, 0, 0));
+            .pointAt(sourceLowPos.getCenter().add(0, 0.5, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
             .text("The source will attempt to set the connected wire to its own value")
-            .pointAt(sourceLowPos.getCenter().add(0, 0, 0));
+            .pointAt(sourceLowPos.getCenter().add(0, 0.5, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
             .text("It cannot overwrite the wire if the wire already holds a higher signal value than the one being set")
-            .pointAt(sourceLowPos.getCenter().add(0, 0, 0));
+            .pointAt(sourceLowPos.getCenter().add(0, 0.5, 0));
 
         scene.idle(30);
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
             .text("In this case, the wire holds \"No Signal\", so the source can overwrite the value and tell the wire to update its connected neighbors")
-            .pointAt(sourceLowPos.getCenter().add(0, 0, 0));
+            .pointAt(sourceLowPos.getCenter().add(0, 0.5, 0));
 
         AABB updateBlockBox5 = new AABB(wirePos3.getCenter().add(-0.5f, -0.5f, -0.5f), wirePos3.getCenter().add(0.5f, 0.5f, 0.5f));
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.OUTPUT, highlightUpdatedBlocks3, updateBlockBox5, 30);
@@ -497,7 +494,7 @@ public class DCtimeModPonderScenes {
 
         scene.overlay().showText(20)
             .colored(PonderPalette.WHITE)
-            .text("Therefore, it updates itself and instructs connected neighbors to update to the higher value")
+            .text("Therefore, it updates itself and instructs connected neighbors to update as well")
             .pointAt(wirePos2.getCenter().add(0, 0, 0));
         AABB updateBlockBox12 = new AABB(wirePos3.getCenter().add(-0.5f, -0.5f, -0.5f), wirePos3.getCenter().add(0.5f, 0.5f, 0.5f));
         scene.overlay().chaseBoundingBoxOutline(PonderPalette.RED, highlightUpdatedBlocks, updateBlockBox12, 100);
@@ -1067,7 +1064,6 @@ public class DCtimeModPonderScenes {
 
         scene.markAsFinished();
     }
-
     public static void redstoneToSignal(SceneBuilder scene, SceneBuildingUtil util) {
         Object highlightUpdatedBlocks = new Object();
         BlockPos chestPos = util.grid().at(4, 1, 2);
@@ -1158,4 +1154,210 @@ public class DCtimeModPonderScenes {
 
         scene.markAsFinished();
     }
+
+    public static void signalResearchStationTutorial(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("signal_research_station_tutorial", "Signal Research Station Tutorial");
+        scene.showBasePlate();
+
+        // Base positions for the multiblock structure
+        BlockPos researchStationPos = util.grid().at(2, 1, 2);
+        BlockPos input1Pos = util.grid().at(1, 1, 2);
+        BlockPos input2Pos = util.grid().at(1, 1, 1);
+        BlockPos input3Pos = util.grid().at(1, 1, 3);
+        BlockPos output1Pos = util.grid().at(3, 1, 2);
+        BlockPos output2Pos = util.grid().at(2, 1, 3);
+        BlockPos output3Pos = util.grid().at(2, 1, 1);
+        BlockPos chamberPos = util.grid().at(3, 1, 1);
+        Vec3 researchStationTopCenter = researchStationPos.getCenter().add(0, 0.5, 0);
+
+        // Show the base research station first
+        scene.world().showSection(util.select().position(researchStationPos), Direction.DOWN);
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The Signal Research Station is a multi-block structure used for researching and discovering signal-based recipes")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        // Show input blocks one by one
+        scene.world().showSection(util.select().position(input1Pos), Direction.DOWN);
+        scene.idle(20);
+        scene.world().showSection(util.select().position(input2Pos), Direction.DOWN);
+        scene.idle(20);
+        scene.world().showSection(util.select().position(input3Pos), Direction.DOWN);
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.BLUE)
+            .text("You can add up to 3 input blocks - these will be checked against recipe requirements")
+            .pointAt(input1Pos.getCenter().add(0, 0.5, 0));
+
+        scene.idle(70);
+
+        // Show all 3 outputs simultaneously to emphasize they're required
+        scene.world().showSection(util.select().position(output1Pos), Direction.DOWN);
+        scene.world().showSection(util.select().position(output2Pos), Direction.DOWN);
+        scene.world().showSection(util.select().position(output3Pos), Direction.DOWN);
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.RED)
+            .text("The structure requires exactly 3 output blocks - no more, no less")
+            .pointAt(output1Pos.getCenter().add(0, 0.5, 0));
+
+        scene.idle(70);
+
+        // Show chamber last
+        scene.world().showSection(util.select().position(chamberPos), Direction.DOWN);
+        scene.idle(20);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("A Research Item Chamber is required - it must be connected and will hold research ingredients")
+            .pointAt(chamberPos.getCenter().add(0, 0.5, 0));
+
+        scene.idle(70);
+
+        // Now show assembly with configurator after all blocks are placed
+        scene.overlay().showControls(researchStationTopCenter, Pointing.DOWN, 40)
+            .rightClick()
+            .withItem(RegisterItems.SIGNAL_CONFIGURATOR.get().getDefaultInstance());
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Once all blocks are placed, right-click the top of the station with a Signal Configurator to assemble the structure")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        // Continue with connection requirement highlight
+        Object connectionHighlight = new Object();
+        AABB connectionBox = new AABB(
+            researchStationPos.getCenter().add(-1.5, -0.5, -1.5),
+            researchStationPos.getCenter().add(1.5, 0.5, 1.5)
+        );
+        scene.overlay().chaseBoundingBoxOutline(PonderPalette.GREEN, connectionHighlight, connectionBox, 80);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("All blocks must form a connected structure - each block must touch the station or another component")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        // Recipe research process
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("To start research, first reassemble the multiblock structure")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        scene.overlay().showControls(chamberPos.getCenter(), Pointing.DOWN, 40)
+            .rightClick();
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Then open the Research Item Chamber GUI and place your research ingredients inside")
+            .pointAt(chamberPos.getCenter().add(0, 0.5, 0));
+
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The chamber's GUI will indicate when research begins")
+            .pointAt(chamberPos.getCenter().add(0, 0.5, 0));
+
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        // Show GUI functionality
+        scene.overlay().showControls(researchStationTopCenter, Pointing.DOWN, 40)
+            .rightClick();
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Right-click the station to view the real-time signal graph GUI")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The GUI shows signal inputs on the left and outputs on the right")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.GREEN)
+            .text("When researching, three green lines on the left show the required signal values")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Match your input signals to the green lines to progress research")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("With no active research, the required signal line stays at 0")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        // Final key points
+        scene.overlay().showText(60)
+            .colored(PonderPalette.RED)
+            .text("Remember: Assemble structure > Add ingredients > Match required signals to research")
+            .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        // Place connected wires and operation block at y-level 2
+        Selection wiresSelection = util.select().fromTo(0, 2, 0, 4, 2, 4);
+        scene.world().showSection(util.select().fromTo(0, 2, 0, 4, 2, 4), Direction.DOWN);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Each recipe requires you to build a circuit that processes signals")
+            .pointAt(wiresSelection.getCenter());
+
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The circuit must take signals from the output blocks and transform them correctly")
+            .pointAt(wiresSelection.getCenter());
+
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Then send the processed signals to the input blocks to match the recipe requirements")
+            .pointAt(input1Pos.getCenter().add(0, 0.5, 0));
+
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.BLUE)
+            .text("Here's an example circuit - you'll need to design different circuits for different recipes")
+            .pointAt(wiresSelection.getCenter());
+
+        scene.idle(70);
+
+        scene.markAsFinished();
+    }
+
 }
