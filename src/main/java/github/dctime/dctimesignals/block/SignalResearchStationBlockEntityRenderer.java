@@ -40,7 +40,7 @@ public class SignalResearchStationBlockEntityRenderer implements BlockEntityRend
             double relX = pos.getX() - signalResearchStationBlockEntity.getBlockPos().getX();
             double relY = pos.getY() - signalResearchStationBlockEntity.getBlockPos().getY();
             double relZ = pos.getZ() - signalResearchStationBlockEntity.getBlockPos().getZ();
-            renderBox(relX, relY, relZ, 255/SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL-inputIndex), 0, 0, 255, poseStack, vertexBuilder);
+            renderBox(relX, relY, relZ, 0, 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL/2*(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL*2-inputIndex), 255/SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_INPUT_SIGNAL-inputIndex), poseStack, vertexBuilder);
             inputIndex++;
         }
 
@@ -49,7 +49,7 @@ public class SignalResearchStationBlockEntityRenderer implements BlockEntityRend
             double relX = pos.getX() - signalResearchStationBlockEntity.getBlockPos().getX();
             double relY = pos.getY() - signalResearchStationBlockEntity.getBlockPos().getY();
             double relZ = pos.getZ() - signalResearchStationBlockEntity.getBlockPos().getZ();
-            renderBox(relX, relY, relZ, 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL-outputIndex), 0, 255, poseStack, vertexBuilder);
+            renderBox(relX, relY, relZ, 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL/2*(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL*2-outputIndex), 0, 255/SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL*(SignalResearchStationBlockEntity.DATA_SIZE_OUTPUT_SIGNAL-outputIndex), poseStack, vertexBuilder);
             outputIndex++;
         }
 

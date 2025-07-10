@@ -1225,14 +1225,21 @@ public class DCtimeModPonderScenes {
             .rightClick()
             .withItem(RegisterItems.SIGNAL_CONFIGURATOR.get().getDefaultInstance());
 
+        scene.addKeyframe();
+
         scene.overlay().showText(60)
             .colored(PonderPalette.WHITE)
-            .text("Once all blocks are placed, right-click the top of the station with a Signal Configurator to assemble the structure")
+            .text("Once all blocks are placed, right-click the station with a Signal Configurator to assemble the structure")
             .pointAt(researchStationTopCenter);
 
         scene.idle(70);
 
-        scene.addKeyframe();
+        scene.overlay().showText(60)
+                .colored(PonderPalette.WHITE)
+                .text("Inputs 1, 2, and 3, as well as Outputs 1, 2, and 3, will be outlined from light to dark, while the item chamber will be outlined in white")
+                .pointAt(researchStationTopCenter);
+
+        scene.idle(70);
 
         // Continue with connection requirement highlight
         Object connectionHighlight = new Object();
@@ -1257,13 +1264,32 @@ public class DCtimeModPonderScenes {
 
         scene.idle(70);
 
-        scene.overlay().showControls(chamberPos.getCenter(), Pointing.DOWN, 40)
+        scene.overlay().showControls(chamberPos.getCenter().add(0, 0.5, 0), Pointing.DOWN, 40)
             .rightClick();
 
         scene.overlay().showText(60)
             .colored(PonderPalette.WHITE)
             .text("Then open the Research Item Chamber GUI and place your research ingredients inside")
             .pointAt(chamberPos.getCenter().add(0, 0.5, 0));
+
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        scene.overlay().showText(60)
+                .colored(PonderPalette.GREEN)
+                .text("The recipe inputs will be stored inside the signal research station when the recipe matches")
+                .pointAt(chamberPos.getCenter().add(0, 0.5, 0));
+
+        scene.idle(70);
+
+        scene.overlay().showControls(chamberPos.getCenter(), Pointing.DOWN, 40)
+                .withItem(Items.DIAMOND_PICKAXE.getDefaultInstance());
+
+        scene.overlay().showText(60)
+                .colored(PonderPalette.WHITE)
+                .text("To retrieve the stored inputs, simply break the Research Item Chamber")
+                .pointAt(chamberPos.getCenter());
 
         scene.idle(70);
 
