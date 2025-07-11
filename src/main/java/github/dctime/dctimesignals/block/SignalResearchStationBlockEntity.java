@@ -377,7 +377,7 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
             assert level != null;
             BlockEntity itemChamberEntity = level.getBlockEntity(itemChamberPosition);
             if (itemChamberEntity instanceof SignalResearchItemChamberBlockEntity chamberBlockEntity) {
-                chamberBlockEntity.setSignalResearchStationBlockEntity(this);
+                chamberBlockEntity.setSignalResearchStationBlockEntityPos(this.getBlockPos());
             } else {
                 itemChamberPosition = null; // reset if not a valid chamber
                 clearInputOutputAndItemChamberPositions();

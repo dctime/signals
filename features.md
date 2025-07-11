@@ -341,3 +341,7 @@ gui items no tooltip (6) fixed
 needs tips for signal recipes (7) fixed
 
 add a tutorial about integer and binary (8) fixed
+
+### 2025.7.11
+
+infinite research when station is broken (1) fixed

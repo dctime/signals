@@ -29,17 +29,15 @@ import java.util.Optional;
 
 public class SignalResearchItemChamberBlockEntity extends BlockEntity {
 
-    private SignalResearchStationBlockEntity signalResearchStationBlockEntity;
     private BlockPos stationBlockPos;
 
-    public void setSignalResearchStationBlockEntity(SignalResearchStationBlockEntity signalResearchStationBlockEntity) {
-        this.signalResearchStationBlockEntity = signalResearchStationBlockEntity;
-        stationBlockPos = signalResearchStationBlockEntity.getBlockPos();
+    public void setSignalResearchStationBlockEntityPos(BlockPos pos) {
+        stationBlockPos = pos;
     }
 
     @Nullable
-    public SignalResearchStationBlockEntity getSignalResearchStationBlockEntity() {
-        return this.signalResearchStationBlockEntity;
+    public BlockPos getSignalResearchStationBlockEntityPos() {
+        return this.stationBlockPos;
     }
 
     private ItemStackHandler items;
@@ -178,16 +176,19 @@ public class SignalResearchItemChamberBlockEntity extends BlockEntity {
     }
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, SignalResearchItemChamberBlockEntity signalResearchItemChamberBlockEntity) {
         if (level.isClientSide()) return;
+        
         // if there is no signal research station block entity, do nothing
-        if (signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntity() == null) {
-            if (signalResearchItemChamberBlockEntity.stationBlockPos == null) return;
-            if (level.getBlockEntity(signalResearchItemChamberBlockEntity.stationBlockPos) instanceof SignalResearchStationBlockEntity stationEntity) {
-                signalResearchItemChamberBlockEntity.setSignalResearchStationBlockEntity(stationEntity);
-            }
+        if (signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntityPos() == null) {
             return;
         }
 
-        SignalResearchStationBlockEntity stationEntity = signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntity();
+        if (!(level.getBlockEntity(signalResearchItemChamberBlockEntity.stationBlockPos) instanceof SignalResearchStationBlockEntity)) {
+            signalResearchItemChamberBlockEntity.setSignalResearchStationBlockEntityPos(null);
+            return;
+        }
+
+
+        SignalResearchStationBlockEntity stationEntity = (SignalResearchStationBlockEntity) level.getBlockEntity(signalResearchItemChamberBlockEntity.getSignalResearchStationBlockEntityPos());
 
         // if in progress
         if (signalResearchItemChamberBlockEntity.inProgress()) {

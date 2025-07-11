@@ -289,6 +289,10 @@ quick swap will swap into the buffer (5)
 
 needs tips for signal recipes (7)
 
+### 2025.7.11
+
+infinite research when station is broken (1)
+
 
 
 
