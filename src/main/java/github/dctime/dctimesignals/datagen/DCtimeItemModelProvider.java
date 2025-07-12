@@ -39,6 +39,7 @@ public class DCtimeItemModelProvider extends net.neoforged.neoforge.client.model
         basicItem(RegisterItems.SIGNAL_BLOCKING_MATERIAL.get());
         basicItem(RegisterItems.AETHERITE_CERAMIC_BALL.get());
         simpleBlockItem(RegisterBlocks.AETHERITE_CERAMIC_BLOCK.get());
+        basicItem(RegisterItems.SIGNAL_PICKAXE.get());
     }
 
     private String getBlockKey(Block block) {

@@ -1,6 +1,5 @@
 package github.dctime.dctimesignals;
 
-import github.dctime.dctimesignals.block.AetheriteCeramicBlock;
 import github.dctime.dctimesignals.item.*;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -50,6 +49,11 @@ public class RegisterItems {
         "aetherite_ceramic_ball",
         Item::new,
         new Item.Properties()
+    );
+    public static final DeferredItem<SignalPickaxe> SIGNAL_PICKAXE = ITEMS.registerItem(
+            "signal_pickaxe",
+            SignalPickaxe::new,
+            new Item.Properties()
     );
 
 

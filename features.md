@@ -345,3 +345,9 @@ add a tutorial about integer and binary (8) fixed
 ### 2025.7.11
 
 infinite research when station is broken (1) fixed
+
+0.0.4 beta released
+
+### 2025.7.12
+
+Signal Pickaxe init and turns nearby ores into screen coords ready for putting to screen
