@@ -1,6 +1,7 @@
 package github.dctime.dctimesignals;
 
 import github.dctime.dctimesignals.payload.ConstSignalValueChangePayload;
+import github.dctime.dctimesignals.payload.NearestOreLocationPayload;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -19,6 +20,15 @@ public class RegisterPayloads {
                 ConstSignalValueChangePayload::handleDataInClient,
                 ConstSignalValueChangePayload::handleDataInServer
             )
+        );
+
+        registrar.playBidirectional(
+                NearestOreLocationPayload.TYPE,
+                NearestOreLocationPayload.STREAM_CODEC,
+                new DirectionalPayloadHandler<>(
+                        NearestOreLocationPayload::handleDataInClient,
+                        NearestOreLocationPayload::handleDataInServer
+                )
         );
 
 

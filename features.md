@@ -351,3 +351,7 @@ infinite research when station is broken (1) fixed
 ### 2025.7.12
 
 Signal Pickaxe init and turns nearby ores into screen coords ready for putting to screen
+
+### 2025.7.13
+
+Signal Pickaxe screen coords put onto the screen
