@@ -106,7 +106,7 @@ public class SignalPickaxe extends PickaxeItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack itemstack = player.getItemInHand(usedHand);
-        int maxDistance = 16;
+        int maxDistance = 8;
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             BlockPos orePosition = getNearestOrePosition(maxDistance, level, serverPlayer);
             if (orePosition == null) {

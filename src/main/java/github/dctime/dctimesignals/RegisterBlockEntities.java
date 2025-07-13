@@ -83,4 +83,12 @@ public class RegisterBlockEntities {
                     RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get()
             ).build(null)
     );
+
+    public static final Supplier<BlockEntityType<GroundPenetratingSignalEmitterBlockEntity>> GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "ground_penetrating_signal_emitter_block_entity",
+            ()-> BlockEntityType.Builder.of(
+                    GroundPenetratingSignalEmitterBlockEntity::new,
+                    RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK.get()
+            ).build(null)
+    );
 }

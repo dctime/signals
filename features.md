@@ -357,3 +357,5 @@ Signal Pickaxe init and turns nearby ores into screen coords ready for putting t
 Signal Pickaxe screen coords put onto the screen
 
 Added Ore name and max range and range 
+
+ground penerating signal emitter for immersion? (2) init

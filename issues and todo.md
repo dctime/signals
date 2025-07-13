@@ -293,6 +293,8 @@ needs tips for signal recipes (7)
 
 infinite research when station is broken (1)
 
+ground penerating signal emitter for immersion? (2)
+
 
 
 

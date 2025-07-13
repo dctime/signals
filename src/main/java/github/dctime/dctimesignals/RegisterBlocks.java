@@ -143,4 +143,14 @@ public class RegisterBlocks {
                     .sound(SoundType.GRAVEL)
                     .requiresCorrectToolForDrops()
     );
+
+    public static final DeferredBlock<Block> GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK = BLOCKS.registerBlock(
+            "ground_penetrating_signal_emitter_block",
+            GroundPenetratingSignalEmitterBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+    );
 }

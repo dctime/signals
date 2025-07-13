@@ -15,5 +15,6 @@ public class RegisterScreens {
         event.register(RegisterMenuTypes.SIGNAL_OPERATION_MENU.get(), SignalOperationScreen::new);
         event.register(RegisterMenuTypes.SIGNAL_RESEARCH_MENU.get(), SignalResearchScreen::new);
         event.register(RegisterMenuTypes.SIGNAL_RESEARCH_ITEM_CHAMBER_MENU.get(), SignalResearchItemChamberScreen::new);
+        event.register(RegisterMenuTypes.GROUND_PENETRATING_SIGNAL_EMITTER.get(), GroundPenetratingSignalEmitterScreen::new);
     }
 }

@@ -26,8 +26,6 @@ public class RegisterBlockItems {
     public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_STATION_SIGNAL_INPUT = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT);
     public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT);
     public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_ITEM_CHAMBER = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER);
-    public static final DeferredItem<BlockItem> AETHERITE_CERAMIC_BLOCK_ITEM =
-        ITEMS.registerSimpleBlockItem(
-            RegisterBlocks.AETHERITE_CERAMIC_BLOCK
-        );
+    public static final DeferredItem<BlockItem> AETHERITE_CERAMIC_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(RegisterBlocks.AETHERITE_CERAMIC_BLOCK);
+    public static final DeferredItem<BlockItem> GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK);
 }
