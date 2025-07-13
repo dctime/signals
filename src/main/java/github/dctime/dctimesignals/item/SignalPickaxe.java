@@ -38,7 +38,7 @@ import java.util.List;
 public class SignalPickaxe extends PickaxeItem {
 
     public SignalPickaxe(Properties properties) {
-        super(Tiers.IRON, properties);
+        super(Tiers.DIAMOND, properties);
     }
 
     @Override
@@ -106,15 +106,18 @@ public class SignalPickaxe extends PickaxeItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack itemstack = player.getItemInHand(usedHand);
+        int maxDistance = 16;
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            BlockPos orePosition = getNearestOrePosition(64, level, serverPlayer);
+            BlockPos orePosition = getNearestOrePosition(maxDistance, level, serverPlayer);
             if (orePosition == null) {
-                player.sendSystemMessage(Component.translatable("message.dctimesignals.no_nearest_ore_found"));
+                PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(false, "null", 0, 0, 0, 0));
+                player.getCooldowns().addCooldown(this, 20);
                 return InteractionResultHolder.fail(itemstack);
             }
-            PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(orePosition.getX(), orePosition.getY(), orePosition.getZ()));
+            PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(true, level.getBlockState(orePosition).getBlock().getDescriptionId(), orePosition.getX(), orePosition.getY(), orePosition.getZ(), maxDistance));
 
         }
+        player.getCooldowns().addCooldown(this, 20);
         return InteractionResultHolder.success(itemstack);
     }
 }

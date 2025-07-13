@@ -355,3 +355,5 @@ Signal Pickaxe init and turns nearby ores into screen coords ready for putting t
 ### 2025.7.13
 
 Signal Pickaxe screen coords put onto the screen
+
+Added Ore name and max range and range 
