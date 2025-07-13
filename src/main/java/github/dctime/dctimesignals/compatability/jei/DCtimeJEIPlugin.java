@@ -8,6 +8,7 @@ import github.dctime.dctimesignals.compatability.jei.categories.SignalResearchCa
 import github.dctime.dctimesignals.menu.SignalResearchItemChamberMenu;
 import github.dctime.dctimesignals.menu.SignalResearchMenu;
 import github.dctime.dctimesignals.recipe.SignalResearchRecipe;
+import github.dctime.dctimesignals.screen.GroundPenetratingSignalEmitterScreen;
 import github.dctime.dctimesignals.screen.SignalResearchItemChamberScreen;
 import github.dctime.dctimesignals.screen.SignalResearchScreen;
 import mezz.jei.api.IModPlugin;
@@ -62,6 +63,7 @@ public class DCtimeJEIPlugin implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(SignalResearchItemChamberScreen.class, 80, 34, 18, 22, RegisterRecipeTypeForJEI.SIGNAL_RESEARCH_RECIPE_TYPE);
+        registration.addGhostIngredientHandler(GroundPenetratingSignalEmitterScreen.class, new GhostIngredientHandler());
     }
 
     @Override

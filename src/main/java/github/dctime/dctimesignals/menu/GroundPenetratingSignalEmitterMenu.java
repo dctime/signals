@@ -15,6 +15,52 @@ import org.jetbrains.annotations.Nullable;
 
 public class GroundPenetratingSignalEmitterMenu extends AbstractContainerMenu {
 
+    public static class FilterSlot extends SlotItemHandler {
+        public FilterSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+
+        }
+
+        @Override
+        public boolean mayPickup(Player playerIn) {
+            return false; // Prevent player from taking items out of the filter slot
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            System.out.println("Trying to place item in filter slot: " + stack);
+            if (!(getItemHandler() instanceof ItemStackHandler)) return false;
+            ItemStackHandler itemHandler = (ItemStackHandler) getItemHandler();
+            itemHandler.setStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, stack.copyWithCount(1));
+            return false; // Allow placing any item in the filter slot
+        }
+    }
+
+
+    @Override
+    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+        System.out.println("Clicked slot: " + slotId + ", button: " + button + ", clickType: " + clickType);
+        if (slotId == GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER &&
+                clickType == ClickType.PICKUP && button == 0
+        ) {
+            clearFilter();
+            System.out.println("Filter slot cleared.");
+        }
+        super.clicked(slotId, button, clickType, player);
+    }
+
+    public void clearFilter() {
+        items.setStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, ItemStack.EMPTY);
+    }
+
+    public void setFilter(@Nullable ItemStack stack) {
+        if (stack == null || stack.isEmpty()) {
+            clearFilter();
+        } else {
+            items.setStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, stack.copyWithCount(1));
+        }
+    }
+
     ContainerLevelAccess access;
     ItemStackHandler items;
     ContainerData data;
@@ -29,7 +75,7 @@ public class GroundPenetratingSignalEmitterMenu extends AbstractContainerMenu {
 
         this.addSlot(new SlotItemHandler(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_INPUT, 0, 10));
         this.addSlot(new SlotItemHandler(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_OUTPUT, 0, 30));
-        this.addSlot(new SlotItemHandler(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, 0, 50));
+        this.addSlot(new FilterSlot(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, 0, 50));
         this.addDataSlots(data);
 
         // inventory slots
@@ -55,6 +101,7 @@ public class GroundPenetratingSignalEmitterMenu extends AbstractContainerMenu {
     public GroundPenetratingSignalEmitterMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL, new ItemStackHandler(GroundPenetratingSignalEmitterBlockEntity.ITEMS_SIZE), new SimpleContainerData(GroundPenetratingSignalEmitterBlockEntity.DATA_SIZE));
     }
+
 
     @Override
     public ItemStack quickMoveStack(Player player, int i) {
