@@ -1,6 +1,7 @@
 package github.dctime.dctimesignals;
 
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
+import github.dctime.dctimesignals.data_component.SignalPickaxeHudDataComponent;
 import github.dctime.dctimesignals.item.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
@@ -54,7 +55,12 @@ public class RegisterItems {
     );
     public static final DeferredItem<SignalPickaxe> SIGNAL_PICKAXE = ITEMS.registerItem(
             "signal_pickaxe",
-            SignalPickaxe::new,
+            (itemProperties) -> {
+                itemProperties
+                        .component(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT.get(), new SignalPickaxeDataComponent(false, new BlockPos(0, 0, 0), SignalPickaxeDataComponent.ACTIVE_MODE))
+                        .component(RegisterDataComponents.SIGNAL_PICKAXE_HUD_DATA_COMPONENT.get(), new SignalPickaxeHudDataComponent(false, "", 0, 0, 0, 0));
+                return new SignalPickaxe(itemProperties);
+            },
             new Item.Properties()
 
     );

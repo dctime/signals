@@ -47,7 +47,7 @@ public record NearestOreLocationPayload(boolean found, String oreName, int x, in
     }
 
     public static void handleDataInClient(final NearestOreLocationPayload data, final IPayloadContext context) {
-        System.out.println("Calling Client to do something");
+        System.out.println("Calling Client to do something Nearest Ore");
         if (!data.found()) {
             SignalPickaxeRenderGuiLayerEvent.setNotFound();
             return;

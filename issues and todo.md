@@ -306,7 +306,7 @@ the pickaxe should have two modes switchable by right clicking the pickaxe in ha
 
 send jei dragged item to the server (2)
 
-hud info not stored by pickaxe but player
+hud info not stored by pickaxe but player (3)
 
 Signal Pickaxe and Ground Penerating Signal Emitter data not stored. 
 

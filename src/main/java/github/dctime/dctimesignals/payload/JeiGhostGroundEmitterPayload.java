@@ -41,7 +41,7 @@ public record JeiGhostGroundEmitterPayload(Tag itemstack) implements CustomPacke
     }
 
     public static void handleDataInClient(final JeiGhostGroundEmitterPayload data, final IPayloadContext context) {
-        System.out.println("Calling Client to do something");
+        System.out.println("Calling Client to do something JEI");
     }
 
 }

@@ -43,7 +43,7 @@ public record ConstSignalValueChangePayload(int signalValue) implements CustomPa
     }
 
     public static void handleDataInClient(final ConstSignalValueChangePayload data, final IPayloadContext context) {
-        System.out.println("Calling Client to do something");
+        System.out.println("Calling Client to do something Const Value Change");
     }
 
 }

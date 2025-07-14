@@ -1,6 +1,8 @@
 package github.dctime.dctimesignals;
 
+import com.simibubi.create.api.packager.InventoryIdentifier;
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
+import github.dctime.dctimesignals.data_component.SignalPickaxeHudDataComponent;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -17,6 +19,15 @@ public class RegisterDataComponents {
                     .persistent(SignalPickaxeDataComponent.BASIC_CODEC)
                     // The codec to read/write the data across the network
                     .networkSynchronized(SignalPickaxeDataComponent.BASIC_STREAM_CODEC)
+    );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<SignalPickaxeHudDataComponent>> SIGNAL_PICKAXE_HUD_DATA_COMPONENT = DATA_COMPONENTS.registerComponentType(
+            "signal_pickaxe_hud_data_component",
+            builder -> builder
+                    // The codec to read/write the data to disk
+                    .persistent(SignalPickaxeHudDataComponent.BASIC_CODEC)
+                    // The codec to read/write the data across the network
+                    .networkSynchronized(SignalPickaxeHudDataComponent.BASIC_STREAM_CODEC)
     );
 
 //    /// Component will not be saved to disk
