@@ -363,3 +363,5 @@ ground penerating signal emitter for immersion? (2) init
 ### 2025.7.14
 
 Added filter functionality to ground penerating signal emitter slot 2
+
+getArea fixed

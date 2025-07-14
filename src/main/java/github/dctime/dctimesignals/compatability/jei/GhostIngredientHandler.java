@@ -1,9 +1,11 @@
 package github.dctime.dctimesignals.compatability.jei;
 
+import github.dctime.dctimesignals.block.GroundPenetratingSignalEmitterBlockEntity;
 import github.dctime.dctimesignals.screen.GroundPenetratingSignalEmitterScreen;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -34,7 +36,9 @@ public class GhostIngredientHandler implements IGhostIngredientHandler<GroundPen
 
         @Override
         public Rect2i getArea() {
-            return new Rect2i(0, 0, 100, 100);
+            Slot filterSlot = screen.getMenu().slots.get(GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER);
+
+            return new Rect2i(screen.getGuiLeft() + filterSlot.x, screen.getGuiTop() + filterSlot.y, 16, 16);
         }
 
         @Override
