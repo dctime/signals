@@ -165,7 +165,7 @@ public class SignalPickaxeRenderGuiLayerEvent {
                     int iconHeight = Minecraft.getInstance().font.lineHeight;
 
                     String blockName = Component.translatable(oreName).getString();
-                    String extraInfoText = "Distance: " + String.format("%.2f", distance) + "m, Ore: " + blockName;
+                    String extraInfoText = "Distance: " + String.format("%.2f", distance) + "m, Block: " + blockName;
 
                     int distanceX = (int) resultVec2.x;
                     int distanceY = (int) resultVec2.y + Minecraft.getInstance().getWindow().getGuiScaledHeight() / 20;

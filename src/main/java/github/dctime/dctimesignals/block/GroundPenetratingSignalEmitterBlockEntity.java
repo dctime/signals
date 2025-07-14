@@ -1,6 +1,9 @@
 package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.RegisterBlockEntities;
+import github.dctime.dctimesignals.RegisterDataComponents;
+import github.dctime.dctimesignals.RegisterItems;
+import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.menu.GroundPenetratingSignalEmitterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -123,13 +126,46 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
         return false;
     }
 
+    private @Nullable BlockPos lastFoundBlockPos;
+
+    public @Nullable BlockPos getLastFoundBlockPos() {
+        return lastFoundBlockPos;
+    }
+
     public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, GroundPenetratingSignalEmitterBlockEntity entity) {
+        tickScan(level, blockPos, blockState, entity);
+        tickCheckSignalPickaxeIn(level, blockPos, blockState, entity);
+    }
+
+    private static void tickCheckSignalPickaxeIn(Level level, BlockPos blockPos, BlockState blockState, GroundPenetratingSignalEmitterBlockEntity entity) {
+        if (level.isClientSide()) return;
+        // check if there is a signal pickaxe in the input slot
+        ItemStack pickaxeInput = entity.itemStackHandler.getStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_INPUT);
+        ItemStack pickaxeOutput = entity.itemStackHandler.getStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_OUTPUT);
+        if (!pickaxeOutput.isEmpty()) return;
+        if (!pickaxeInput.is(RegisterItems.SIGNAL_PICKAXE)) return;
+
+        // if there is a pickaxe, copy it to the output slot
+        entity.itemStackHandler.setStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_INPUT, ItemStack.EMPTY);
+        ItemStack modifiedPickaxe = pickaxeInput.copyWithCount(1);
+        SignalPickaxeDataComponent oldDataComponent = modifiedPickaxe.get(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT);
+
+        if (oldDataComponent == null) return;
+        modifiedPickaxe.set(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT, new SignalPickaxeDataComponent(
+                true,
+                entity.getBlockPos(),
+                oldDataComponent.mode()
+        ));
+
+        entity.itemStackHandler.setStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_OUTPUT, modifiedPickaxe);
+    }
+
+    private static void tickScan(Level level, BlockPos blockPos, BlockState blockState, GroundPenetratingSignalEmitterBlockEntity entity) {
         if (!entity.shouldScan() || level.isClientSide()) return;
         // scan the chunk for ores
         BlockPos scannedPos = entity.getOrePositionByScan(blockPos);
-
-
-
+        // store it waiting for pickaxe to get info
+        entity.lastFoundBlockPos = scannedPos;
     }
 
     private @Nullable BlockPos getOrePositionByScan(BlockPos blockPos) {

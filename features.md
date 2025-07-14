@@ -369,3 +369,5 @@ getArea fixed
 the pickaxe should have two modes switchable by right clicking the pickaxe in hand. (1)
 
 send jei dragged item to the server (2)
+
+Added data component so that every pickaxe stores its mode and data but hud is still per player shall switch data when switch pickaxe

@@ -1,64 +1,30 @@
 package github.dctime.dctimesignals.item;
 
+import github.dctime.dctimesignals.RegisterDataComponents;
 import github.dctime.dctimesignals.block.GroundPenetratingSignalEmitterBlockEntity;
+import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.payload.NearestOreLocationPayload;
-import net.minecraft.client.Camera;
-import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.multiplayer.chat.report.ReportEnvironment;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.FogType;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector4f;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SignalPickaxe extends PickaxeItem {
 
-    private BlockPos groundPenSignalEmitterPosition = null;
-
-    public void setBlockPos(BlockPos pos) {
-        this.groundPenSignalEmitterPosition = pos;
-    }
-
-    public enum Mode {
-        ACTIVE,
-        PASSIVE
-    }
-
-    private Mode mode;
-
-    public boolean isPassiveMode() {
-        return mode == Mode.PASSIVE;
-    }
-
-    public SignalPickaxe(Properties properties) {
-        super(Tiers.DIAMOND, properties);
-        mode = Mode.ACTIVE;
+    public SignalPickaxe(Item.Properties properties) {
+        super(Tiers.DIAMOND, properties.component(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT.get(), new SignalPickaxeDataComponent(false, new BlockPos(0, 0, 0), SignalPickaxeDataComponent.ACTIVE_MODE)));
     }
 
     @Override
@@ -79,46 +45,82 @@ public class SignalPickaxe extends PickaxeItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack itemstack = player.getItemInHand(usedHand);
+        SignalPickaxeDataComponent dataComponent = itemstack.get(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT);
+        if (dataComponent == null) return InteractionResultHolder.fail(itemstack);
         if (player.isCrouching()) return switchMode(level, player, usedHand, itemstack);
-        if (mode == Mode.ACTIVE) {
+        if (dataComponent.mode().intValue() == SignalPickaxeDataComponent.ACTIVE_MODE.intValue()) {
             int maxDistance = 8;
             if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
                 BlockPos orePosition = getNearestOrePosition(maxDistance, level, serverPlayer);
                 if (orePosition == null) {
                     PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(false, "null", 0, 0, 0, 0));
+                    player.displayClientMessage(Component.literal("No ores found within " + maxDistance + " blocks."), false);
                     player.getCooldowns().addCooldown(this, 20);
                 }
+
+                player.displayClientMessage(Component.literal("Nearest Ore Found! Update HUD."), false);
                 PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(true, level.getBlockState(orePosition).getBlock().getDescriptionId(), orePosition.getX(), orePosition.getY(), orePosition.getZ(), maxDistance));
 
             }
             player.getCooldowns().addCooldown(this, 20);
             return InteractionResultHolder.success(itemstack);
-        } else if (mode == Mode.PASSIVE) {
-
+        } else if (dataComponent.mode().intValue() == SignalPickaxeDataComponent.PASSIVE_MODE.intValue()) {
+            return useInPassiveMode(level, player, usedHand, itemstack, dataComponent);
         }
         return InteractionResultHolder.fail(itemstack);
     }
 
-    private InteractionResultHolder<ItemStack> useInPassiveMode(Level level, Player player, InteractionHand usedHand, ItemStack playerMainHandItemStack) {
+    private InteractionResultHolder<ItemStack> useInPassiveMode(Level level, Player player, InteractionHand usedHand, ItemStack playerMainHandItemStack, SignalPickaxeDataComponent component) {
         if (level.isClientSide()) return InteractionResultHolder.fail(playerMainHandItemStack);
+        if (!(player instanceof ServerPlayer serverPlayer)) return InteractionResultHolder.fail(playerMainHandItemStack);
+        BlockPos groundPenSignalEmitterPosition = component.groundPenSignalEmitterPosition();
         // get groundpenemiiter
-        if (!(level.getBlockEntity(groundPenSignalEmitterPosition) instanceof GroundPenetratingSignalEmitterBlockEntity)) return InteractionResultHolder.fail(playerMainHandItemStack);
-        GroundPenetratingSignalEmitterBlockEntity emitterEntity = (GroundPenetratingSignalEmitterBlockEntity) level.getBlockEntity(groundPenSignalEmitterPosition);
-        // get current found ore info
+        if (!component.hasGroundEmitter()) {
+            player.displayClientMessage(Component.literal("Ground Penetrating Signal Emitter not bounded to pickaxe."), false);
+            PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(false, "null", 0, 0, 0, 0));
+            return InteractionResultHolder.success(playerMainHandItemStack);
+        }
 
+        if (!(level.getBlockEntity(groundPenSignalEmitterPosition) instanceof GroundPenetratingSignalEmitterBlockEntity emitterEntity)) {
+            SignalPickaxeDataComponent noEmitterComponent = new SignalPickaxeDataComponent(
+                    false,
+                    new BlockPos(0, 0, 0),
+                    component.mode()
+            );
+            playerMainHandItemStack.set(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT, noEmitterComponent);
+            player.displayClientMessage(Component.literal("Ground Penetrating Signal Emitter invalid. Maybe it is destroyed"), false);
+            PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(false, "null", 0, 0, 0, 0));
+            return InteractionResultHolder.success(playerMainHandItemStack);
+        }
+        // get current found ore info
+        BlockPos targetPos = emitterEntity.getLastFoundBlockPos();
+        if (targetPos == null) {
+            PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(false, "null", 0, 0, 0, 0));
+            player.displayClientMessage(Component.literal("No filtered block found in this chunk or filter not found"), false);
+            return InteractionResultHolder.success(playerMainHandItemStack);
+        }
         // if found ore is not null, send packet to client
+
+        player.displayClientMessage(Component.literal("Found Block! Update HUD."), false);
+        PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(true, level.getBlockState(targetPos).getBlock().getDescriptionId(), targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1000));
         return InteractionResultHolder.success(playerMainHandItemStack);
     }
 
     private InteractionResultHolder<ItemStack> switchMode(Level level, Player player, InteractionHand usedHand, ItemStack handItemStack) {
+        ItemStack itemstack = player.getItemInHand(usedHand);
+        SignalPickaxeDataComponent dataComponent = itemstack.get(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT);
+        if (dataComponent == null) return InteractionResultHolder.fail(itemstack);
         if (!level.isClientSide()) {
-            if (mode == Mode.ACTIVE) {
-                mode = Mode.PASSIVE;
-            } else {
-                mode = Mode.ACTIVE;
-            }
-            String modeName = mode.name().toUpperCase();
+            if (player instanceof ServerPlayer serverPlayer)
+                PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(false, "null", 0, 0, 0, 0));
+            String modeName = dataComponent.isPassiveMode() ? "Active Mode" : "Passive Mode";
             player.displayClientMessage(Component.literal("Switch mode To: " + modeName), false);
+
+            if (dataComponent.mode().intValue() == SignalPickaxeDataComponent.ACTIVE_MODE) {
+                itemstack.set(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT, new SignalPickaxeDataComponent(dataComponent.hasGroundEmitter(), dataComponent.groundPenSignalEmitterPosition(), SignalPickaxeDataComponent.PASSIVE_MODE));
+            } else {
+                itemstack.set(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT, new SignalPickaxeDataComponent(dataComponent.hasGroundEmitter(), dataComponent.groundPenSignalEmitterPosition(), SignalPickaxeDataComponent.ACTIVE_MODE));
+            }
         }
 
         return InteractionResultHolder.success(handItemStack);

@@ -10,6 +10,7 @@ public class DCtimeMod {
     public DCtimeMod(IEventBus modBus) {
         System.out.println("This is a mod made by DCtime");
         RegisterBlocks.BLOCKS.register(modBus);
+        RegisterDataComponents.DATA_COMPONENTS.register(modBus);
         RegisterBlockItems.ITEMS.register(modBus);
         RegisterCreativeModeTab.CREATIVE_MODE_TABS.register(modBus);
         RegisterBlockEntities.BLOCK_ENTITY_TYPES.register(modBus);
@@ -18,7 +19,6 @@ public class DCtimeMod {
         RegisterFeatures.FEATURES.register(modBus);
         RegisterRecipeTypes.RECIPE_TYPES.register(modBus);
         RegisterRecipeSerializer.RECIPE_SERIALIZERS.register(modBus);
-
     }
 
 }

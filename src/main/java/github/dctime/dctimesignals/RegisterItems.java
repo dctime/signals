@@ -1,6 +1,8 @@
 package github.dctime.dctimesignals;
 
+import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.item.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -54,6 +56,7 @@ public class RegisterItems {
             "signal_pickaxe",
             SignalPickaxe::new,
             new Item.Properties()
+
     );
 
 
