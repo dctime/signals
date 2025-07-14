@@ -44,13 +44,14 @@ public class GroundPenetratingSignalEmitterMenu extends AbstractContainerMenu {
                 clickType == ClickType.PICKUP && button == 0
         ) {
             clearFilter();
-            System.out.println("Filter slot cleared.");
+
         }
         super.clicked(slotId, button, clickType, player);
     }
 
     public void clearFilter() {
         items.setStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, ItemStack.EMPTY);
+        System.out.println("Filter slot cleared.");
     }
 
     public void setFilter(@Nullable ItemStack stack) {

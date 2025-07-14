@@ -13,6 +13,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -20,7 +21,10 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
 public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBlockEntity {
     public GroundPenetratingSignalEmitterBlockEntity(BlockPos pos, BlockState blockState) {
@@ -108,8 +112,50 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, GroundPenetratingSignalEmitterBlockEntity entity) {
+    private final int SCAN_BETWEEN_TICKS = 100;
+    private int scanTicksCounter = SCAN_BETWEEN_TICKS;
+    private boolean shouldScan() {
+        scanTicksCounter--;
+        if (scanTicksCounter <= 0) {
+            scanTicksCounter = SCAN_BETWEEN_TICKS;
+            return true;
+        }
+        return false;
+    }
 
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, GroundPenetratingSignalEmitterBlockEntity entity) {
+        if (!entity.shouldScan() || level.isClientSide()) return;
+        // scan the chunk for ores
+        BlockPos scannedPos = entity.getOrePositionByScan(blockPos);
+
+
+
+    }
+
+    private @Nullable BlockPos getOrePositionByScan(BlockPos blockPos) {
+        LevelChunk chunk = level.getChunkAt(blockPos);
+
+        int minY = level.getMinBuildHeight();
+        int maxY = blockPos.getY();
+
+        int chunkX = chunk.getPos().x;
+        int chunkZ = chunk.getPos().z;
+
+        for (int y = maxY; y > minY; y--) {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    BlockPos scanPos = new BlockPos((chunkX << 4) + x, y, (chunkZ << 4) + z);
+                    BlockState state = level.getBlockState(scanPos);
+                    Item item = Item.BY_BLOCK.get(state.getBlock());
+                    if (itemStackHandler.getStackInSlot(ITEMS_FILTER).is(item)) {
+                        System.out.println("Found ore at: " + scanPos + " with state: " + state);
+                        return scanPos;
+                    }
+                }
+            }
+        }
+        System.out.println("No ore found in chunk at: " + blockPos);
+        return null;
     }
 
     @Override

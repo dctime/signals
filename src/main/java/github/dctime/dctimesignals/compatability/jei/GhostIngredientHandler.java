@@ -1,13 +1,18 @@
 package github.dctime.dctimesignals.compatability.jei;
 
 import github.dctime.dctimesignals.block.GroundPenetratingSignalEmitterBlockEntity;
+import github.dctime.dctimesignals.payload.JeiGhostGroundEmitterPayload;
 import github.dctime.dctimesignals.screen.GroundPenetratingSignalEmitterScreen;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -45,7 +50,8 @@ public class GhostIngredientHandler implements IGhostIngredientHandler<GroundPen
         public void accept(I ingredient) {
             // if the item drags into it
             System.out.println("Accepted ingredient: " + ingredient.toString());
-            screen.getMenu().setFilter(itemStack.copyWithCount(1));
+            Tag itemTag = ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, itemStack).getOrThrow();
+            PacketDistributor.sendToServer(new JeiGhostGroundEmitterPayload(itemTag));
         }
     }
 }

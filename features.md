@@ -365,3 +365,7 @@ ground penerating signal emitter for immersion? (2) init
 Added filter functionality to ground penerating signal emitter slot 2
 
 getArea fixed
+
+the pickaxe should have two modes switchable by right clicking the pickaxe in hand. (1)
+
+send jei dragged item to the server (2)
