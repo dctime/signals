@@ -39,7 +39,9 @@ public class DCtimeLanguageProvider extends LanguageProvider {
         this.addBlock(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT, "Signal Research Station Signal Output");
         this.add("menu.title." + DCtimeMod.MODID + ".signal_item_chamber_menu", "Signal Research Item Chamber");
         this.addItem(RegisterItems.PLUS_CARD, "Plus Card");
-
+        this.addBlock(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK, "Ground Penetrating Signal Emitter");
+        this.addItem(RegisterItems.SIGNAL_PICKAXE, "Signal Pickaxe");
+        this.add("menu.title." + DCtimeMod.MODID + ".ground_penetrating_signal_emitter_menu", "G.P.S. Emitter Menu");
 
 
         // ponder text

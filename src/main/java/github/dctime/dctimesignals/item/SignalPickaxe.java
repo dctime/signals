@@ -9,10 +9,7 @@ import net.minecraft.client.multiplayer.chat.report.ReportEnvironment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.core.BlockPos;
@@ -21,6 +18,7 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
 public class SignalPickaxe extends PickaxeItem {
 
@@ -62,6 +60,14 @@ public class SignalPickaxe extends PickaxeItem {
         PacketDistributor.sendToPlayer(serverPlayer, new NearestOreLocationPayload(found, oreName, x, y, z, maxDistance));
     }
 
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+        SignalPickaxeDataComponent dataComponent = stack.get(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT);
+        if (dataComponent == null) return;
+        tooltipComponents.add(Component.literal("Mode: " + ((dataComponent.mode().intValue() == SignalPickaxeDataComponent.ACTIVE_MODE.intValue()) ? "Active Mode" : "Passive Mode")));
+        tooltipComponents.add(Component.literal("Emitter Bound: " + ((dataComponent.hasGroundEmitter() ? "Yes" : "No") + ((dataComponent.hasGroundEmitter() ? " at: " +  dataComponent.groundPenSignalEmitterPosition() : "")))));
+    }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
@@ -82,7 +88,7 @@ public class SignalPickaxe extends PickaxeItem {
                 }
 
                 player.displayClientMessage(Component.literal("Nearest Ore Found! Update HUD."), false);
-                sendDataToHud(true, level.getBlockState(orePosition).getBlock().getDescriptionId(), orePosition.getX(), orePosition.getY(), orePosition.getZ(), maxDistance, itemstack, serverPlayer);
+                sendDataToHud(true, level.getBlockState(orePosition).getBlock().getDescriptionId(), orePosition.getX(), orePosition.getY(), orePosition.getZ(), (int)Math.ceil(Math.pow((Math.pow(maxDistance, 2) + Math.pow(maxDistance, 2)), 1.0/2)), itemstack, serverPlayer);
             }
             player.getCooldowns().addCooldown(this, 20);
             return InteractionResultHolder.success(itemstack);

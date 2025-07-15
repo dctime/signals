@@ -389,3 +389,7 @@ scan ticks stored
 signal required 2 fixed stuck at 0 
 
 fix jei showing barrier workaround
+
+show pickaxe info in tooltip (added)
+
+added translations for G.P.S. Emitter and Signal Pickaxe

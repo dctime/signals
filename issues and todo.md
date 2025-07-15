@@ -318,7 +318,7 @@ Add particle effects when the block is scanning ores (added)
 
 limit pickaxe input output slot functionality (fixed)
 
-show pickaxe info in tooltip
+show pickaxe info in tooltip (added)
 
 
 
