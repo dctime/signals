@@ -19,6 +19,7 @@ public class DCtimeMod {
         RegisterFeatures.FEATURES.register(modBus);
         RegisterRecipeTypes.RECIPE_TYPES.register(modBus);
         RegisterRecipeSerializer.RECIPE_SERIALIZERS.register(modBus);
+        RegisterParticleTypes.PARTICLE_TYPES.register(modBus);
     }
 
 }

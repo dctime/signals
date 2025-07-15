@@ -28,6 +28,7 @@ public class DCtimeItemModelProvider extends net.neoforged.neoforge.client.model
         multiModelBlock(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_INPUT.get(), "signal_research_station_input");
         multiModelBlock(RegisterBlocks.SIGNAL_RESEARCH_STATION_SIGNAL_OUTPUT.get(), "signal_research_station_output");
         multiModelBlock(RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get(), "signal_research_item_chamber");
+        multiModelBlock(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK.get(), "ground_penetrating_signal_emitter");
         simpleBlockItem(RegisterBlocks.SIGNAL_BLOCKING_MATERIAL_BLOCK.get());
 //        withExistingParent(getBlockKey(RegisterBlocks.SINGAL_WIRE.get()), mcLoc("item/generated")).texture("layer0", modLoc("block/signal_wire"));
         basicItem(RegisterItems.SIGNAL_DETECTOR.get());

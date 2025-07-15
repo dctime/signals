@@ -171,6 +171,12 @@ public class DataGen {
                 )
         );
 
+        // particles
+        generator.addProvider(
+                event.includeClient(),
+                new DCtimeParticleDescriptionProvider(output, existingFileHelper)
+        );
+
 
     }
 }

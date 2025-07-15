@@ -13,10 +13,10 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import java.util.function.Function;
 
 public class DCtimeBlockModelProvider extends BlockStateProvider {
-
-
+    ExistingFileHelper helper;
     public DCtimeBlockModelProvider(PackOutput output, ExistingFileHelper exFileHelper) {
         super(output, DCtimeMod.MODID, exFileHelper);
+        helper = exFileHelper;
     }
 
     @Override
@@ -34,6 +34,11 @@ public class DCtimeBlockModelProvider extends BlockStateProvider {
         signalResearchStationOutputBlockModel();
         signalResearchStationInputBlockModel();
         signalResearchItemChamberBlockModel();
+        groundPenetratingSignalEmitterModel();
+    }
+
+    private void groundPenetratingSignalEmitterModel() {
+        simpleBlock(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK.get(), new ModelFile.ExistingModelFile(modLoc("block/ground_penetrating_signal_emitter"), helper));
     }
 
     private void signalWireModel() {

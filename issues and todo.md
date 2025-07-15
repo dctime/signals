@@ -310,11 +310,11 @@ hud info not stored by pickaxe but player (3)
 
 Signal Pickaxe and Ground Penerating Signal Emitter data not stored. (x)(data component stores itself) (5)
 
-Make a cool model animated (6)
+Make a cool model animated (added)
 
 ### 2025.7.15
 
-Add particle effects when the block is scanning ores
+Add particle effects when the block is scanning ores (added)
 
 limit pickaxe input output slot functionality (fixed)
 

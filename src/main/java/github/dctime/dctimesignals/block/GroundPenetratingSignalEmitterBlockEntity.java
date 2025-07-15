@@ -3,16 +3,19 @@ package github.dctime.dctimesignals.block;
 import github.dctime.dctimesignals.RegisterBlockEntities;
 import github.dctime.dctimesignals.RegisterDataComponents;
 import github.dctime.dctimesignals.RegisterItems;
+import github.dctime.dctimesignals.RegisterParticleTypes;
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.menu.GroundPenetratingSignalEmitterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
@@ -83,6 +86,7 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
         // Will default to 0 if absent. See the NBT article for more information.
 //        this.value = tag.getInt("value");=
         itemStackHandler.deserializeNBT(registries, tag.getCompound("itemStackHandler"));
+        this.scanTicksCounter = tag.getInt("scanTicksCounter");
     }
 
     // Save values into the passed CompoundTag here.
@@ -91,6 +95,7 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
         super.saveAdditional(tag, registries);
 //        tag.putInt("value", this.value);
         tag.put("itemStackHandler", itemStackHandler.serializeNBT(registries));
+        tag.putInt("scanTicksCounter", scanTicksCounter);
         setChanged();
     }
 
@@ -184,6 +189,18 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
         int chunkX = chunk.getPos().x;
         int chunkZ = chunk.getPos().z;
 
+        if (!(level instanceof ServerLevel serverLevel)) return null;
+        serverLevel.sendParticles(RegisterParticleTypes.GROUND_PENETRATING_SIGNAL_EMITTER_PARTICLE.get(),
+                (double) blockPos.getX()+0.5,
+                (double) blockPos.getY(),
+                (double) blockPos.getZ()+0.5,
+                100,
+                0,
+                0,
+                0,
+                0
+        );
+
         for (int y = maxY; y > minY; y--) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
@@ -197,6 +214,7 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
                 }
             }
         }
+
         System.out.println("No ore found in chunk at: " + blockPos);
         return null;
     }
