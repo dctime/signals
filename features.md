@@ -383,3 +383,5 @@ Signal Pickaxe and Ground Penerating Signal Emitter data not stored. (x)(data co
 Make a cool model animated (added)
 
 Add particle effects when the block is scanning ores (added)
+
+scan ticks stored
