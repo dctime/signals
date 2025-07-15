@@ -85,7 +85,7 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 "A&B",
                 "",
                 "",
-                "Two Outputs One Operation"
+                "A&B - -"
         ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "redstone_to_signal_converter"));
 
@@ -169,6 +169,32 @@ public class DCtimeRecipeProvider extends RecipeProvider {
                 .pattern("BAB")
                 .unlockedBy("has_ceramic_ball", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterItems.AETHERITE_CERAMIC_BALL))
                 .save(recipeOutput);
+
+        new SignalResearchRecipeBuilder(
+                new ItemStack(RegisterItems.SIGNAL_PICKAXE.get(), 1),
+                RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),
+                new ItemStack(RegisterItems.SIGNAL_BLOCKING_MATERIAL.get(), 2),
+                new ItemStack(Items.REDSTONE, 4),
+                new ItemStack(Items.DIAMOND_PICKAXE, 1),
+                "A|B",
+                "~(A&B)",
+                "~C",
+                "A|B ~(A&B) ~C"
+        ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "signal_pickaxe"));
+
+        new SignalResearchRecipeBuilder(
+                new ItemStack(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK.get(), 1),
+                RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER.get().defaultBlockState(),
+                new ItemStack(RegisterBlocks.CONSTANT_SIGNAL_BLOCK.get(), 1),
+                new ItemStack(Items.REDSTONE, 16),
+                ItemStack.EMPTY,
+                "A|B&C",
+                "A|B|C",
+                "C",
+                "A|B&C A|B|C C"
+        ).unlockedBy("has_signal_research_station", InventoryChangeTrigger.TriggerInstance.hasItems(RegisterBlockItems.SIGNAL_RESEARCH_STATION.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(DCtimeMod.MODID, "ground_penetrating_signal_emitter"));
 
     }
 }

@@ -277,14 +277,17 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
                 signalResearchItemChamberBlockEntity.getSignalRequired2(),
                 signalResearchItemChamberBlockEntity.getSignalRequired3()
         ).signalOperations(blockEntity.getOutputSignalData().get(0), blockEntity.getOutputSignalData().get(1), blockEntity.getOutputSignalData().get(2));
-//        System.out.println("Correct input: " + correctInputs[0]);
+
+//        System.out.println("Correct input: " + correctInputs[1]);
+//        System.out.println("End input");
 //        System.out.println("Signal Required 1: " + signalResearchItemChamberBlockEntity.getSignalRequired1());
 
         for (int requiredInputPortCounter = 0; requiredInputPortCounter < DATA_SIZE_REQUIRED_INPUT_SIGNAL; requiredInputPortCounter++) {
                 int requiredInputValue = correctInputs[requiredInputPortCounter];
                 blockEntity.setRequiredInputSignalData(requiredInputPortCounter, requiredInputValue);
-                requiredInputPortCounter++;
         }
+
+//        System.out.println("Required input: " + blockEntity.getRequiredInputSignalData().get(1));
 
         blockEntity.setFlagsData(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX, false);
     }

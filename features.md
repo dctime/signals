@@ -385,3 +385,7 @@ Make a cool model animated (added)
 Add particle effects when the block is scanning ores (added)
 
 scan ticks stored
+
+signal required 2 fixed stuck at 0 
+
+fix jei showing barrier workaround

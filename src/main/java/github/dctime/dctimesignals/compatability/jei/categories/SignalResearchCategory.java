@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,9 +71,12 @@ public class SignalResearchCategory implements IRecipeCategory<SignalResearchRec
 //        this.addSlot(new SlotItemHandler(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_INPUT_3_INDEX, 80+18, 56+1));
 //        // output
 //        this.addSlot(new SignalResearchItemChamberMenu.OutputSlotItemHand(itemSlots, SignalResearchItemChamberBlockEntity.ITEMS_OUTPUT_INDEX, 80, 16+1));
-        builder.addInputSlot(80, 56+1).addItemStack(recipe.getInput1ItemStack());
-        builder.addInputSlot(80-18, 56+1).addItemStack(recipe.getInput2ItemStack());
-        builder.addInputSlot(80+18, 56+1).addItemStack(recipe.getInput3ItemStack());
+        if (!recipe.getInput1ItemStack().is(Items.BARRIER))
+            builder.addInputSlot(80, 56+1).addItemStack(recipe.getInput1ItemStack());
+        if (!recipe.getInput2ItemStack().is(Items.BARRIER))
+            builder.addInputSlot(80-18, 56+1).addItemStack(recipe.getInput2ItemStack());
+        if (!recipe.getInput3ItemStack().is(Items.BARRIER))
+            builder.addInputSlot(80+18, 56+1).addItemStack(recipe.getInput3ItemStack());
         builder.addOutputSlot(80, 16+1).addItemStack(recipe.getResult());
     }
 
