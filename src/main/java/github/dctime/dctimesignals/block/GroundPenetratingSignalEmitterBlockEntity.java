@@ -28,8 +28,12 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBlockEntity {
+public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBlockEntity implements GeoBlockEntity {
     public GroundPenetratingSignalEmitterBlockEntity(BlockPos pos, BlockState blockState) {
         super(RegisterBlockEntities.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK_ENTITY.get(), pos, blockState);
     }
@@ -77,7 +81,8 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         // Will default to 0 if absent. See the NBT article for more information.
-//        this.value = tag.getInt("value");
+//        this.value = tag.getInt("value");=
+        itemStackHandler.deserializeNBT(registries, tag.getCompound("itemStackHandler"));
     }
 
     // Save values into the passed CompoundTag here.
@@ -85,6 +90,8 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
 //        tag.putInt("value", this.value);
+        tag.put("itemStackHandler", itemStackHandler.serializeNBT(registries));
+        setChanged();
     }
 
     @Override
@@ -197,5 +204,25 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
     @Override
     public int getContainerSize() {
         return 0;
+    }
+
+    // geckolib
+
+    protected static final RawAnimation DEPLOY_ANIM = RawAnimation.begin().thenLoop("animation.ground_penetrating_signal_emitter_block.spinning");
+
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, this::deployAnimController));
+    }
+    protected <E extends GroundPenetratingSignalEmitterBlockEntity> PlayState deployAnimController(final AnimationState<E> state) {
+        return state.setAndContinue(DEPLOY_ANIM);
+    }
+
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
     }
 }

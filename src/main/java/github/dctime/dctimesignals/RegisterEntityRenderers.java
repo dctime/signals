@@ -1,5 +1,6 @@
 package github.dctime.dctimesignals;
 
+import github.dctime.dctimesignals.block.GroundPenetratingSignalEmitterBlockEntityRenderer;
 import github.dctime.dctimesignals.block.SignalOperationBlockEntityRenderer;
 import github.dctime.dctimesignals.block.SignalResearchStationBlockEntityRenderer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -19,5 +20,8 @@ public class RegisterEntityRenderers {
                 // Pass the context to an empty (default) constructor call
                 SignalResearchStationBlockEntityRenderer::new
         );
+
+        event.registerBlockEntityRenderer(RegisterBlockEntities.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK_ENTITY.get(),
+                GroundPenetratingSignalEmitterBlockEntityRenderer::new);
     }
 }

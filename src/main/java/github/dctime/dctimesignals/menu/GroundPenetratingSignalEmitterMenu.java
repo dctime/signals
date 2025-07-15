@@ -1,12 +1,14 @@
 package github.dctime.dctimesignals.menu;
 
 import github.dctime.dctimesignals.RegisterBlocks;
+import github.dctime.dctimesignals.RegisterItems;
 import github.dctime.dctimesignals.RegisterMenuTypes;
 import github.dctime.dctimesignals.block.GroundPenetratingSignalEmitterBlockEntity;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -28,11 +30,33 @@ public class GroundPenetratingSignalEmitterMenu extends AbstractContainerMenu {
 
         @Override
         public boolean mayPlace(ItemStack stack) {
-            System.out.println("Trying to place item in filter slot: " + stack);
+            if (!(stack.getItem() instanceof BlockItem)) return false;
             if (!(getItemHandler() instanceof ItemStackHandler)) return false;
             ItemStackHandler itemHandler = (ItemStackHandler) getItemHandler();
             itemHandler.setStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, stack.copyWithCount(1));
             return false; // Allow placing any item in the filter slot
+        }
+    }
+
+    public static class PickaxeInputSlot extends SlotItemHandler {
+        public PickaxeInputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return stack.getItem().getDefaultInstance().is(RegisterItems.SIGNAL_PICKAXE); // Allow only pickaxes
+        }
+    }
+
+    public static class PickaxeOutputSlot extends SlotItemHandler {
+        public PickaxeOutputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return false;
         }
     }
 
@@ -74,9 +98,9 @@ public class GroundPenetratingSignalEmitterMenu extends AbstractContainerMenu {
 
         checkContainerDataCount(data, GroundPenetratingSignalEmitterBlockEntity.DATA_SIZE);
 
-        this.addSlot(new SlotItemHandler(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_INPUT, 0, 10));
-        this.addSlot(new SlotItemHandler(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_OUTPUT, 0, 30));
-        this.addSlot(new FilterSlot(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, 0, 50));
+        this.addSlot(new PickaxeInputSlot(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_INPUT, 43, 14+1));
+        this.addSlot(new PickaxeOutputSlot(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_OUTPUT, 43, 53+1));
+        this.addSlot(new FilterSlot(items, GroundPenetratingSignalEmitterBlockEntity.ITEMS_FILTER, 123, 32+1));
         this.addDataSlots(data);
 
         // inventory slots

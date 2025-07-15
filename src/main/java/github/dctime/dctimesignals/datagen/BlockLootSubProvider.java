@@ -53,5 +53,6 @@ public class BlockLootSubProvider extends net.minecraft.data.loot.BlockLootSubPr
                 )
             )
         );
+        this.add(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK.get(), this.createSingleItemTable(RegisterBlockItems.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK_ITEM));
     }
 }

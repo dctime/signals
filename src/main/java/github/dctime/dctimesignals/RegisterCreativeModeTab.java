@@ -35,6 +35,7 @@ public class RegisterCreativeModeTab {
                 output.accept(RegisterItems.SIGNAL_BLOCKING_MATERIAL);
                 output.accept(RegisterBlockItems.AETHERITE_CERAMIC_BLOCK_ITEM);
                 output.accept(RegisterBlockItems.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK_ITEM);
+                output.accept(RegisterItems.SIGNAL_PICKAXE);
             })
             .build()
     );

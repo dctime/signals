@@ -373,3 +373,11 @@ send jei dragged item to the server (2)
 Added data component so that every pickaxe stores its mode and data but hud is still per player shall switch data when switch pickaxe
 
 hud info not stored by pickaxe but player (3) fixed by adding Signal Pickaxe Hud Data Component
+
+### 2025.7.15
+
+limit pickaxe input output slot functionality (fixed)
+
+Signal Pickaxe and Ground Penerating Signal Emitter data not stored. (x)(data component stores itself) (emitter fixed)
+
+Make a cool model animated (init without good texture)

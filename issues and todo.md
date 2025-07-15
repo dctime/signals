@@ -300,7 +300,7 @@ ground penerating signal emitter for immersion? (2)
 the signal pickaxe can right click to scan for nearby 8 blocks and get the ore location then send it to the SignalPickaxeRenderGuiLayerEvent by the NearestOreLocationPayload.
 
 make a new mode that requires the player to pass in the pickaxe to the GroundPeneratingSignalEmitterBlock into a slot and retrieve the pickaxe from another slot 
-while constantly passes the ore location to the event by the filter slot information
+while constantly passes the ore location to the event by the filter slot information (4)
 
 the pickaxe should have two modes switchable by right clicking the pickaxe in hand. (1)
 
@@ -308,9 +308,17 @@ send jei dragged item to the server (2)
 
 hud info not stored by pickaxe but player (3)
 
-Signal Pickaxe and Ground Penerating Signal Emitter data not stored. 
+Signal Pickaxe and Ground Penerating Signal Emitter data not stored. (x)(data component stores itself) (5)
 
+Make a cool model animated (6)
 
+### 2025.7.15
+
+Add particle effects when the block is scanning ores
+
+limit pickaxe input output slot functionality (fixed)
+
+show pickaxe info in tooltip
 
 
 
