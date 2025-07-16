@@ -223,7 +223,7 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
                 default -> callSign = "Unknown";
             }
 
-            guiGraphics.drawString(this.font, callSign, maxX+spaceBetweenGraph, (minY+maxY)/2-this.font.lineHeight/2, 0xFFFFFFFF);
+            guiGraphics.drawString(this.font, callSign, (int)(maxX+spaceBetweenGraph*1.5), (minY+maxY)/2-this.font.lineHeight/2, 0xFFFFFFFF);
 
             Queue<Integer> targetQueue = listOfQueues.get(queueIndex);
 
