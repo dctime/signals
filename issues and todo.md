@@ -330,7 +330,7 @@ signal operation block show tooltip always connect to signal wire to pass signal
 
 not 8x8x8 9x9x9 (fixed)
 
-and is superior than or ponder
+and is superior than or ponder (x)
 
 quick swap gps emitter not working (fixed)
 
