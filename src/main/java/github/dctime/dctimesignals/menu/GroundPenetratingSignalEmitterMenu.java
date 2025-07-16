@@ -4,6 +4,7 @@ import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterItems;
 import github.dctime.dctimesignals.RegisterMenuTypes;
 import github.dctime.dctimesignals.block.GroundPenetratingSignalEmitterBlockEntity;
+import github.dctime.dctimesignals.block.SignalResearchItemChamberBlockEntity;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -129,8 +130,42 @@ public class GroundPenetratingSignalEmitterMenu extends AbstractContainerMenu {
 
 
     @Override
-    public ItemStack quickMoveStack(Player player, int i) {
-        return null;
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
+            itemstack = itemstack1.copy();
+
+            // If we're moving from the container slots (inputs or output)
+            if (index < 3) {
+                // Try to move to player inventory 8 slots inventory starts from 8
+                if (!this.moveItemStackTo(itemstack1, GroundPenetratingSignalEmitterBlockEntity.ITEMS_SIZE, this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            // If we're moving from player inventory
+            else {
+                // Try to move to input slots only (0) not include  1 2
+                if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.setByPlayer(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(player, itemstack1);
+        }
+
+        return itemstack;
     }
 
     @Override

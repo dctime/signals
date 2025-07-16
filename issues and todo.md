@@ -332,7 +332,7 @@ not 8x8x8 9x9x9 (fixed)
 
 and is superior than or ponder
 
-quick swap gps emitter not working
+quick swap gps emitter not working (fixed)
 
 ponder doesnt detected every time
 

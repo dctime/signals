@@ -412,3 +412,5 @@ not 8x8x8 9x9x9 (fixed)
 
 Signal Pickaxe wont drop if break the gps emitter (fixed)
 
+quick swap gps emitter not working (fixed)
+
