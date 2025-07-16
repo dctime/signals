@@ -410,3 +410,5 @@ not saving debugOutlineTicks to disk cuz its client variable
 
 not 8x8x8 9x9x9 (fixed)
 
+Signal Pickaxe wont drop if break the gps emitter (fixed)
+

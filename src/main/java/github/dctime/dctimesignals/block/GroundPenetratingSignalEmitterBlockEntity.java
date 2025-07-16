@@ -234,7 +234,7 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
 
     @Override
     public int getContainerSize() {
-        return 0;
+        return 2;
     }
 
     // geckolib

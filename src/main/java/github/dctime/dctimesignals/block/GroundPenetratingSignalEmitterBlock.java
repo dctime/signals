@@ -6,7 +6,9 @@ import github.dctime.dctimesignals.menu.GroundPenetratingSignalEmitterMenu;
 import github.dctime.dctimesignals.menu.SignalResearchItemChamberMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -70,5 +72,23 @@ public class GroundPenetratingSignalEmitterBlock extends Block implements Entity
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        dropContents(state, level, pos, newState, movedByPiston);
+        super.onRemove(state, level, pos, newState, true);
+    }
+
+    protected void dropContents(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            BlockEntity blockentity = level.getBlockEntity(pos);
+            if (blockentity instanceof GroundPenetratingSignalEmitterBlockEntity blockEntity) {
+                if (level instanceof ServerLevel) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(),
+                            (blockEntity).getItemStackHandler().getStackInSlot(GroundPenetratingSignalEmitterBlockEntity.ITEMS_PICKAXE_OUTPUT));
+                }
+            }
+        }
     }
 }

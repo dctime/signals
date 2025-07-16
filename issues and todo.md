@@ -322,7 +322,7 @@ show pickaxe info in tooltip (added)
 
 ### 2025.7.16
 
-Signal Pickaxe wont drop if break the gps emitter
+Signal Pickaxe wont drop if break the gps emitter (fixed)
 
 show ABC when assemble and signal station (fixed)
 
@@ -335,6 +335,8 @@ and is superior than or ponder
 quick swap gps emitter not working
 
 ponder doesnt detected every time
+
+item chamber jade need fix
 
 
 
