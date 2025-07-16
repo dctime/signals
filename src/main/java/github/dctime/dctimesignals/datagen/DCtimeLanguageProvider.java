@@ -42,6 +42,7 @@ public class DCtimeLanguageProvider extends LanguageProvider {
         this.addBlock(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK, "Ground Penetrating Signal Emitter");
         this.addItem(RegisterItems.SIGNAL_PICKAXE, "Signal Pickaxe");
         this.add("menu.title." + DCtimeMod.MODID + ".ground_penetrating_signal_emitter_menu", "G.P.S. Emitter Menu");
+        this.add("title.jei." + DCtimeMod.MODID + ".signal_research", "Signal Research");
 
 
         // ponder text
