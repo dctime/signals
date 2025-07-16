@@ -1,7 +1,10 @@
 package github.dctime.dctimesignals.block;
 
+import com.google.common.collect.Lists;
 import github.dctime.dctimesignals.RegisterBlockEntities;
 import github.dctime.dctimesignals.lib.StringToSignalOperation;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -12,11 +15,13 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -30,8 +35,12 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         the main control block of the multiblock
     */
 
+
     private final int DEBUG_OUTLINE_SHOW_TICKS = 100;
+
+    // client variable no need to save the disk
     private int debugOutlineTicks = 0;
+
     public void showDebugOutline() {
         debugOutlineTicks = DEBUG_OUTLINE_SHOW_TICKS;
     }
@@ -49,14 +58,26 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 
     // return 1-3 0 if there is error
     public int getInputOutputShowTimeIndex() {
-        if (DEBUG_OUTLINE_SHOW_TICKS * 1.0/DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
+        if (debugOutlineTicks == 0) {
+            return -1;
+        } else if (DEBUG_OUTLINE_SHOW_TICKS * 1.0 / DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
             return 2;
-        } else if (DEBUG_OUTLINE_SHOW_TICKS * 2.0/DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
+        } else if (DEBUG_OUTLINE_SHOW_TICKS * 2.0 / DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
             return 1;
-        } else if (DEBUG_OUTLINE_SHOW_TICKS * 3.0/DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
+        } else if (DEBUG_OUTLINE_SHOW_TICKS * 3.0 / DATA_SIZE_INPUT_SIGNAL > debugOutlineTicks) {
             return 0;
         } else {
             return 0;
+        }
+    }
+
+    private void showDebugOutlineCallsign() {
+        if (DEBUG_OUTLINE_SHOW_TICKS - 1 == debugOutlineTicks) {
+            Minecraft.getInstance().gui.setOverlayMessage(Component.literal("Showing input/output outline: A"), false);
+        } else if ((int)(DEBUG_OUTLINE_SHOW_TICKS * 1.0 / DATA_SIZE_INPUT_SIGNAL) == debugOutlineTicks) {
+            Minecraft.getInstance().gui.setOverlayMessage(Component.literal("Showing input/output outline: C"), false);
+        } else if ((int)(DEBUG_OUTLINE_SHOW_TICKS * 2.0 / DATA_SIZE_INPUT_SIGNAL) == debugOutlineTicks) {
+            Minecraft.getInstance().gui.setOverlayMessage(Component.literal("Showing input/output outline: B"), false);
         }
     }
 
@@ -133,7 +154,9 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         return signalOutputPositions;
     }
 
-    public @Nullable BlockPos getItemChamberPosition() { return itemChamberPosition; }
+    public @Nullable BlockPos getItemChamberPosition() {
+        return itemChamberPosition;
+    }
 
     boolean multipleSignalResearchStations = false;
 
@@ -173,8 +196,6 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
             signalOutputPositions.add(outputPos);
         }
 
-        debugOutlineTicks = tag.getInt("debugOutlineTicks");
-
         flagsData.set(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX, tag.getBoolean("outputPortsInvalid") ? 1 : 0);
     }
 
@@ -208,8 +229,6 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
             tag.put("signalOutputPosition" + i, BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, signalOutputPositions.get(i)).getOrThrow());
         }
 
-        tag.putInt("debugOutlineTicks", debugOutlineTicks);
-
         tag.putBoolean("outputPortsInvalid", flagsData.get(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX) > 0);
 
         setChanged();
@@ -236,8 +255,30 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
         return flagsData.get(DATA_FLAGS_MULTIBLOCK_INVALID_INDEX) > 0;
     }
 
+    private static List<Player> getAreaPlayers(Level level, AABB area, SignalResearchStationBlockEntity entity) {
+        List<Player> list = Lists.newArrayList();
+
+        for (Player player : level.players()) {
+            if (area.contains(player.getX(), player.getY(), player.getZ())) {
+                list.add(player);
+            }
+        }
+
+        return list;
+    }
+
+    public static void tickClientMessage(Level level, BlockPos pos, BlockState state, SignalResearchStationBlockEntity blockEntity) {
+        if (blockEntity.checkIfInDebugOutline()) {
+            blockEntity.showDebugOutlineCallsign();
+        }
+
+    }
+
     public static void tick(Level level, BlockPos pos, BlockState state, SignalResearchStationBlockEntity blockEntity) {
-        if (level.isClientSide()) blockEntity.decreaseDebugOutlineTicks();
+        if (level.isClientSide()) {
+            blockEntity.decreaseDebugOutlineTicks();
+            tickClientMessage(level, pos, state, blockEntity);
+        }
 
         int outputPortCounter = 0;
         for (BlockPos outputPos : blockEntity.getSignalOutputPositions()) {
@@ -283,8 +324,8 @@ public class SignalResearchStationBlockEntity extends BlockEntity {
 //        System.out.println("Signal Required 1: " + signalResearchItemChamberBlockEntity.getSignalRequired1());
 
         for (int requiredInputPortCounter = 0; requiredInputPortCounter < DATA_SIZE_REQUIRED_INPUT_SIGNAL; requiredInputPortCounter++) {
-                int requiredInputValue = correctInputs[requiredInputPortCounter];
-                blockEntity.setRequiredInputSignalData(requiredInputPortCounter, requiredInputValue);
+            int requiredInputValue = correctInputs[requiredInputPortCounter];
+            blockEntity.setRequiredInputSignalData(requiredInputPortCounter, requiredInputValue);
         }
 
 //        System.out.println("Required input: " + blockEntity.getRequiredInputSignalData().get(1));

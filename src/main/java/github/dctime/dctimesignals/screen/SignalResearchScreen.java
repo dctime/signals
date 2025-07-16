@@ -107,6 +107,16 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
             int graphWidth = maxX - minX;
             // background
             guiGraphics.fill(minX, minY, maxX, maxY, 0xFF000000);
+
+            String callSign;
+            switch (queueIndex) {
+                case 0 -> callSign = "A";
+                case 1 -> callSign = "B";
+                case 2 -> callSign = "C";
+                default -> callSign = "Unknown";
+            }
+
+            guiGraphics.drawString(this.font, callSign, minX-spaceBetweenGraph-this.font.width(callSign), (minY+maxY)/2-this.font.lineHeight/2, 0xFFFFFFFF);
             Queue<Integer> targetQueue = listOfQueues.get(queueIndex);
             Queue<Integer> secondaryTargetQueue = secondaryListOfQueues.get(queueIndex);
 
@@ -204,6 +214,17 @@ public class SignalResearchScreen extends AbstractContainerScreen<SignalResearch
             int graphWidth = maxX - minX;
             // background
             guiGraphics.fill(minX, minY, maxX, maxY, 0xFF000000);
+
+            String callSign;
+            switch (queueIndex) {
+                case 0 -> callSign = "A";
+                case 1 -> callSign = "B";
+                case 2 -> callSign = "C";
+                default -> callSign = "Unknown";
+            }
+
+            guiGraphics.drawString(this.font, callSign, maxX+spaceBetweenGraph, (minY+maxY)/2-this.font.lineHeight/2, 0xFFFFFFFF);
+
             Queue<Integer> targetQueue = listOfQueues.get(queueIndex);
 
             int valueIndex = 0;

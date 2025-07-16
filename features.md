@@ -403,3 +403,8 @@ fixed filter can pass in non block item by jei
 gps emitter use trigger
 
 emits white smoke if block not found
+
+show ABC when assemble and signal station (fixed)
+
+not saving debugOutlineTicks to disk cuz its client variable
+

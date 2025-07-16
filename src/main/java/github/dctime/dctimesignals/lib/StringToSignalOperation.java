@@ -18,12 +18,12 @@ public class StringToSignalOperation {
             if (input.isEmpty()) {
                 return 0;
             }
-            int value = parseTerm();
+            int value = parseOr();
             while (true) {
                 if (match('+')) {
-                    value = applyBinary('+', value, parseTerm());
+                    value = applyBinary('+', value, parseOr());
                 } else if (match('-')) {
-                    value = applyBinary('-', value, parseTerm());
+                    value = applyBinary('-', value, parseOr());
                 } else {
                     break;
                 }
@@ -31,13 +31,23 @@ public class StringToSignalOperation {
             return value;
         }
 
-        int parseTerm() {
+        int parseOr() {
+            int value = parseAnd();
+            while (true) {
+                if (match('|')) {
+                    value = applyBinary('|', value, parseAnd());
+                } else {
+                    break;
+                }
+            }
+            return value;
+        }
+
+        int parseAnd() {
             int value = parseFactor();
             while (true) {
                 if (match('&')) {
                     value = applyBinary('&', value, parseFactor());
-                } else if (match('|')) {
-                    value = applyBinary('|', value, parseFactor());
                 } else {
                     break;
                 }

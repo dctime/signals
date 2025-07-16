@@ -320,6 +320,22 @@ limit pickaxe input output slot functionality (fixed)
 
 show pickaxe info in tooltip (added)
 
+### 2025.7.16
+
+Signal Pickaxe wont drop if break the gps emitter
+
+show ABC when assemble and signal station (fixed)
+
+signal operation block show tooltip always connect to signal wire to pass signal value 
+
+not 8x8x8 16x16x16
+
+and is superior than or ponder
+
+quick swap gps emitter not working
+
+ponder doesnt detected every time
+
 
 
 
