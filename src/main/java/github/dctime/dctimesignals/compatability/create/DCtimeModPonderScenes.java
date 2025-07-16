@@ -1,5 +1,6 @@
 package github.dctime.dctimesignals.compatability.create;
 
+import com.mojang.authlib.GameProfile;
 import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterItems;
 import github.dctime.dctimesignals.block.*;
@@ -10,12 +11,20 @@ import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.UUID;
 
 public class DCtimeModPonderScenes {
 
@@ -1750,6 +1759,125 @@ public class DCtimeModPonderScenes {
             .colored(PonderPalette.RED)
             .text("This makes them useful for working with binary flags and masks")
             .independent();
+        scene.idle(90);
+
+        scene.markAsFinished();
+    }
+    public static void signalPickaxeAndGPSEmitterTutorial(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("signal_pickaxe_gps_emitter_tutorial", "Signal Pickaxe and G.P.S. Emitter Tutorial");
+        scene.showBasePlate();
+        scene.idle(10);
+
+        BlockPos playerPos = util.grid().at(2, 1, 2);
+        BlockPos gpsEmitterPos = util.grid().at(2, 1, 1);
+        BlockPos orePos = util.grid().at(4, 1, 2);
+
+        scene.world().showSection(util.select().position(playerPos), Direction.DOWN);
+        scene.world().showSection(util.select().position(gpsEmitterPos), Direction.DOWN);
+
+        // Spawn zombie with player head
+        scene.world().createEntity(w -> {
+//            Zombie zombie = new Zombie(w);
+//            zombie.setPos(playerPos.getX() + 0.5, playerPos.getY(), playerPos.getZ() + 0.5);
+//            zombie.setYRot(180); // Make zombie face north
+
+            LivingEntity playerEntity = EntityType.ZOMBIE.create(w);
+            Vec3 v = util.vector().topOf(playerPos.offset(0, -1, 0));
+            playerEntity.setPosRaw(v.x, v.y, v.z);
+            playerEntity.xo = v.x;
+            playerEntity.yo = v.y;
+            playerEntity.zo = v.z;
+            playerEntity.yRotO = 180;
+            playerEntity.setYRot(180);
+            playerEntity.yHeadRotO = 180;
+            playerEntity.yHeadRot = 180;
+            WalkAnimationState animation = playerEntity.walkAnimation;
+            animation.update(-animation.position(), 1);
+            animation.setSpeed(1);
+
+            // Add player head equipment
+            ItemStack playerHead = new ItemStack(Items.PLAYER_HEAD);
+            playerEntity.setItemSlot(EquipmentSlot.HEAD, playerHead);
+
+            // Add signal pickaxe to main hand
+            playerEntity.setItemSlot(EquipmentSlot.MAINHAND, RegisterItems.SIGNAL_PICKAXE.get().getDefaultInstance());
+
+
+            return playerEntity;
+        });
+
+        // Show Signal Pickaxe being held
+        scene.overlay().showControls(playerPos.getCenter().add(0, 1, 0), Pointing.DOWN, 40)
+            .withItem(RegisterItems.SIGNAL_PICKAXE.get().getDefaultInstance());
+
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The Signal Pickaxe is a specialized tool for block detection")
+            .pointAt(playerPos.getCenter());
+        scene.idle(70);
+
+        // Demonstrate mode switching
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Crouch and right-click to switch between Active and Passive modes")
+            .pointAt(playerPos.getCenter());
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        // Active Mode demonstration
+        scene.overlay().showText(60)
+            .colored(PonderPalette.BLUE)
+            .text("In Active mode, right-click to scan an 8x8x8 area for ores")
+            .pointAt(playerPos.getCenter());
+
+        // Show scanning area
+        Object scanAreaHighlight = new Object();
+        AABB scanArea = new AABB(playerPos.getCenter().add(-4, -4, -4), playerPos.getCenter().add(4, 4, 4));
+        scene.overlay().chaseBoundingBoxOutline(PonderPalette.BLUE, scanAreaHighlight, scanArea, 60);
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        // G.P.S. Emitter explanation
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The G.P.S. Emitter (Ground Penetrating Signal Emitter) works with the pickaxe's Passive mode")
+            .pointAt(gpsEmitterPos.getCenter());
+        scene.idle(70);
+
+        // Show signal input
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("First, bind the G.P.S. Emitter by passing the pickaxe into the pickaxe input slot")
+            .pointAt(gpsEmitterPos.getCenter());
+        scene.idle(70);
+
+        // GUI interaction
+        scene.overlay().showControls(gpsEmitterPos.getCenter(), Pointing.DOWN, 40)
+            .leftClick().withItem(Items.DEEPSLATE_DIAMOND_ORE.getDefaultInstance());
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("Then open the GUI and left-click the filter slot with block items holding to set the target block type")
+            .pointAt(gpsEmitterPos.getCenter());
+        scene.idle(70);
+
+        // Show scanning process
+        scene.overlay().showText(60)
+            .colored(PonderPalette.WHITE)
+            .text("The G.P.S. Emitter will scan the chunk its at and below it y level, showing particles after the process")
+            .pointAt(gpsEmitterPos.getCenter());
+        scene.idle(70);
+
+        scene.addKeyframe();
+
+        // Passive mode usage
+        scene.overlay().showControls(playerPos.getCenter(), Pointing.DOWN, 40)
+                .rightClick();
+        scene.overlay().showText(80)
+            .colored(PonderPalette.GREEN)
+            .text("In Passive mode, right-click with the pickaxe to see the location of scanned blocks stored in the G.P.S. Emitter")
+            .pointAt(playerPos.getCenter());
         scene.idle(90);
 
         scene.markAsFinished();

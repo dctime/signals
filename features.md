@@ -393,3 +393,13 @@ fix jei showing barrier workaround
 show pickaxe info in tooltip (added)
 
 added translations for G.P.S. Emitter and Signal Pickaxe
+
+### 2025.7.16
+
+added signal pickaxe ponder
+
+fixed filter can pass in non block item by jei
+
+gps emitter use trigger
+
+emits white smoke if block not found

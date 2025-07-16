@@ -2,7 +2,6 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"animation.ground_penetrating_signal_emitter_block.spinning": {
-			"loop": true,
 			"animation_length": 4,
 			"bones": {
 				"spinningStuff": {

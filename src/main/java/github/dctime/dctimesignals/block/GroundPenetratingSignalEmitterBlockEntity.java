@@ -6,10 +6,11 @@ import github.dctime.dctimesignals.RegisterItems;
 import github.dctime.dctimesignals.RegisterParticleTypes;
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.menu.GroundPenetratingSignalEmitterMenu;
+import net.minecraft.client.particle.SmokeParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -22,16 +23,14 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -39,6 +38,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBlockEntity implements GeoBlockEntity {
     public GroundPenetratingSignalEmitterBlockEntity(BlockPos pos, BlockState blockState) {
         super(RegisterBlockEntities.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK_ENTITY.get(), pos, blockState);
+        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     public static final int ITEMS_SIZE = 3;
@@ -190,16 +190,9 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
         int chunkZ = chunk.getPos().z;
 
         if (!(level instanceof ServerLevel serverLevel)) return null;
-        serverLevel.sendParticles(RegisterParticleTypes.GROUND_PENETRATING_SIGNAL_EMITTER_PARTICLE.get(),
-                (double) blockPos.getX()+0.5,
-                (double) blockPos.getY(),
-                (double) blockPos.getZ()+0.5,
-                100,
-                0,
-                0,
-                0,
-                0
-        );
+
+
+        triggerAnim(SPIN_CONTROLLER_NAME, SPIN_ANIM_NAME);
 
         for (int y = maxY; y > minY; y--) {
             for (int x = 0; x < 16; x++) {
@@ -208,14 +201,34 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
                     BlockState state = level.getBlockState(scanPos);
                     Item item = Item.BY_BLOCK.get(state.getBlock());
                     if (itemStackHandler.getStackInSlot(ITEMS_FILTER).is(item)) {
-                        System.out.println("Found ore at: " + scanPos + " with state: " + state);
+                        serverLevel.sendParticles(RegisterParticleTypes.GROUND_PENETRATING_SIGNAL_EMITTER_PARTICLE.get(),
+                                (double) blockPos.getX()+0.5,
+                                (double) blockPos.getY(),
+                                (double) blockPos.getZ()+0.5,
+                                100,
+                                0,
+                                0,
+                                0,
+                                0
+                        );
+                        // System.out.println("Found ore at: " + scanPos + " with state: " + state);
                         return scanPos;
                     }
                 }
             }
         }
 
-        System.out.println("No ore found in chunk at: " + blockPos);
+        serverLevel.sendParticles(ParticleTypes.CLOUD,
+                (double) blockPos.getX()+0.5,
+                (double) blockPos.getY(),
+                (double) blockPos.getZ()+0.5,
+                100,
+                0,
+                0,
+                0,
+                0.05
+        );
+        // System.out.println("No ore found in chunk at: " + blockPos);
         return null;
     }
 
@@ -226,16 +239,17 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
 
     // geckolib
 
-    protected static final RawAnimation DEPLOY_ANIM = RawAnimation.begin().thenLoop("animation.ground_penetrating_signal_emitter_block.spinning");
+    protected static final RawAnimation SPIN_ANIM  = RawAnimation.begin().thenPlay("animation.ground_penetrating_signal_emitter_block.spinning");;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-
+    private final String SPIN_CONTROLLER_NAME = "spinController";
+    private final String SPIN_ANIM_NAME = "spin";
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, this::deployAnimController));
+        controllers.add(new AnimationController<>(this, SPIN_CONTROLLER_NAME, this::deployAnimController).triggerableAnim(SPIN_ANIM_NAME, SPIN_ANIM));
     }
     protected <E extends GroundPenetratingSignalEmitterBlockEntity> PlayState deployAnimController(final AnimationState<E> state) {
-        return state.setAndContinue(DEPLOY_ANIM);
+        return PlayState.STOP;
     }
 
 

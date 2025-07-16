@@ -82,7 +82,6 @@ public class DCtimeModPonders {
 
 
         HELPER.addStoryBoard(RegisterBlocks.SINGAL_TO_REDSTONE_CONVERTER, "signal_to_redstone", DCtimeModPonderScenes::signalToRedstone, SIGNALS);
-
         HELPER.addStoryBoard(RegisterBlocks.REDSTONE_TO_SIGNAL_CONVERTER, "redstone_to_signal", DCtimeModPonderScenes::redstoneToSignal, SIGNALS);
 
 
@@ -98,7 +97,8 @@ public class DCtimeModPonders {
             HELPER.addStoryBoard(block, "null", DCtimeModPonderScenes::binaryConversionTutorial, SIGNALS);
         }
 
-
+        HELPER.addStoryBoard(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK, "signal_pickaxe", DCtimeModPonderScenes::signalPickaxeAndGPSEmitterTutorial);
+        HELPER.addStoryBoard(RegisterItems.SIGNAL_PICKAXE, "signal_pickaxe", DCtimeModPonderScenes::signalPickaxeAndGPSEmitterTutorial);
 
     }
 }
