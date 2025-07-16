@@ -50,6 +50,8 @@ public class NotCardItem extends SignalOperationBaseCardItem{
                     .append(Component.literal("Export result to ").withStyle(ChatFormatting.GRAY))
                     .append(Component.literal("Gray Output").withStyle(ChatFormatting.GOLD)));
 
+            tooltipComponents.add(Component.empty());
+
             tooltipComponents.add(Component.empty()
                     .append(Component.literal("Gray Input / Gray Output ").withStyle(ChatFormatting.GOLD))
                     .append(Component.literal("Port Configuration Supported ").withStyle(ChatFormatting.GRAY)));
