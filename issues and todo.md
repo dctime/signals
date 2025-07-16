@@ -328,7 +328,7 @@ show ABC when assemble and signal station (fixed)
 
 signal operation block show tooltip always connect to signal wire to pass signal value 
 
-not 8x8x8 16x16x16
+not 8x8x8 9x9x9 (fixed)
 
 and is superior than or ponder
 

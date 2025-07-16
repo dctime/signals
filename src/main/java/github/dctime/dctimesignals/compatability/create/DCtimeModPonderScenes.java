@@ -1828,7 +1828,7 @@ public class DCtimeModPonderScenes {
         // Active Mode demonstration
         scene.overlay().showText(60)
             .colored(PonderPalette.BLUE)
-            .text("In Active mode, right-click to scan an 8x8x8 area for ores")
+            .text("In Active mode, right-click to scan an 9x9x9 area for ores")
             .pointAt(playerPos.getCenter());
 
         // Show scanning area

@@ -76,7 +76,7 @@ public class SignalPickaxe extends PickaxeItem {
         if (dataComponent == null) return InteractionResultHolder.fail(itemstack);
         if (player.isCrouching()) return switchMode(level, player, usedHand, itemstack);
         if (dataComponent.mode().intValue() == SignalPickaxeDataComponent.ACTIVE_MODE.intValue()) {
-            int maxDistance = 8;
+            int maxDistance = 5;
             if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
                 BlockPos orePosition = getNearestOrePosition(maxDistance, level, serverPlayer);
 
