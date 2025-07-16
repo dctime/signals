@@ -414,3 +414,7 @@ Signal Pickaxe wont drop if break the gps emitter (fixed)
 
 quick swap gps emitter not working (fixed)
 
+signal operation block show tooltip always connect to signal wire to pass signal value (fixed)
+
+operation card added shift hover text
+

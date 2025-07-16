@@ -5,6 +5,7 @@ import github.dctime.dctimesignals.block.GroundPenetratingSignalEmitterBlockEnti
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.data_component.SignalPickaxeHudDataComponent;
 import github.dctime.dctimesignals.payload.NearestOreLocationPayload;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.chat.report.ReportEnvironment;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -65,8 +66,15 @@ public class SignalPickaxe extends PickaxeItem {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         SignalPickaxeDataComponent dataComponent = stack.get(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT);
         if (dataComponent == null) return;
-        tooltipComponents.add(Component.literal("Mode: " + ((dataComponent.mode().intValue() == SignalPickaxeDataComponent.ACTIVE_MODE.intValue()) ? "Active Mode" : "Passive Mode")));
-        tooltipComponents.add(Component.literal("Emitter Bound: " + ((dataComponent.hasGroundEmitter() ? "Yes" : "No") + ((dataComponent.hasGroundEmitter() ? " at: " +  dataComponent.groundPenSignalEmitterPosition() : "")))));
+        tooltipComponents.add(Component.empty()
+                .append(Component.literal("Mode: ").withStyle(ChatFormatting.GRAY))
+                .append(Component.literal((dataComponent.mode().intValue() == SignalPickaxeDataComponent.ACTIVE_MODE.intValue()) ? "Active Mode" : "Passive Mode").withStyle(ChatFormatting.GOLD)));
+
+        tooltipComponents.add(
+                Component.empty()
+                        .append(Component.literal("Emitter Bound: ").withStyle(ChatFormatting.GRAY))
+                        .append(Component.literal(dataComponent.hasGroundEmitter() ? "Yes" : "No").withStyle(ChatFormatting.GOLD))
+                        .append(Component.literal((dataComponent.hasGroundEmitter() ? " at: " +  dataComponent.groundPenSignalEmitterPosition() : "")).withStyle(ChatFormatting.GRAY)));
     }
 
     @Override
@@ -142,7 +150,12 @@ public class SignalPickaxe extends PickaxeItem {
             if (player instanceof ServerPlayer serverPlayer)
                 sendDataToHud(false, "null", 0, 0, 0, 0, itemstack, serverPlayer);
             String modeName = dataComponent.isPassiveMode() ? "Active Mode" : "Passive Mode";
-            player.displayClientMessage(Component.literal("Switch mode To: " + modeName), false);
+            player.displayClientMessage(
+                    Component.empty()
+                            .append(Component.literal("Switch mode To: ").withStyle(ChatFormatting.GRAY))
+                            .append(Component.literal(modeName)).withStyle(ChatFormatting.GOLD),
+                    false
+            );
 
             if (dataComponent.mode().intValue() == SignalPickaxeDataComponent.ACTIVE_MODE) {
                 itemstack.set(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT, new SignalPickaxeDataComponent(dataComponent.hasGroundEmitter(), dataComponent.groundPenSignalEmitterPosition(), SignalPickaxeDataComponent.PASSIVE_MODE));

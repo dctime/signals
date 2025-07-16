@@ -326,7 +326,7 @@ Signal Pickaxe wont drop if break the gps emitter (fixed)
 
 show ABC when assemble and signal station (fixed)
 
-signal operation block show tooltip always connect to signal wire to pass signal value 
+signal operation block show tooltip always connect to signal wire to pass signal value (fixed)
 
 not 8x8x8 9x9x9 (fixed)
 
@@ -334,7 +334,7 @@ and is superior than or ponder
 
 quick swap gps emitter not working (fixed)
 
-ponder doesnt detected every time
+ponder doesnt detected every time (x)
 
 item chamber jade need fix
 

@@ -354,4 +354,6 @@ public class SignalOperationBlock extends Block implements EntityBlock {
         },
             Component.translatable("menu.title." + DCtimeMod.MODID + ".signal_operation_menu"));
     }
+
+
 }
