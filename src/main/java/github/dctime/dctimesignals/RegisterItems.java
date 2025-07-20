@@ -19,7 +19,7 @@ public class RegisterItems {
 
     public static final DeferredItem<Item> SIGNAL_CONFIGURATOR = ITEMS.registerItem(
             "signal_configurator",
-            Item::new, // The factory that the properties will be passed into.
+            SignalConfiguratorItem::new, // The factory that the properties will be passed into.
             new Item.Properties() // The properties to use.
     );
 

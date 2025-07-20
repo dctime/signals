@@ -2,9 +2,11 @@ package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.RegisterCapabilities;
 import github.dctime.dctimesignals.RegisterItems;
+import github.dctime.dctimesignals.RegisterSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -231,6 +233,7 @@ public class SignalWireBlock extends Block implements EntityBlock, SimpleWaterlo
                 accessingDirection = hitResult.getDirection();
             }
             switchConnectionOutput(accessingDirection, level, pos, player, null);
+            level.playSound(null, pos, RegisterSoundEvents.CONFIGURATOR_SOUND.get(), SoundSource.PLAYERS);
         }
 
         // changing the wire configuration may cause wire connection change

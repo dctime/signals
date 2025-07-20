@@ -1,9 +1,6 @@
 package github.dctime.dctimesignals.block;
 
-import github.dctime.dctimesignals.DCtimeMod;
-import github.dctime.dctimesignals.RegisterBlockEntities;
-import github.dctime.dctimesignals.RegisterCapabilities;
-import github.dctime.dctimesignals.RegisterItems;
+import github.dctime.dctimesignals.*;
 import github.dctime.dctimesignals.item.SignalOperationBaseCardItem;
 import github.dctime.dctimesignals.menu.SignalOperationMenu;
 import net.minecraft.core.BlockPos;
@@ -11,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -233,6 +231,7 @@ public class SignalOperationBlock extends Block implements EntityBlock {
                     .setValue(targetSideModeProperty, SideMode.NONE)
             );
         }
+        level.playSound(null, pos, RegisterSoundEvents.CONFIGURATOR_SOUND.get(), SoundSource.PLAYERS);
     }
 
     @Override

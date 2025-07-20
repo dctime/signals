@@ -177,6 +177,12 @@ public class DataGen {
                 new DCtimeParticleDescriptionProvider(output, existingFileHelper)
         );
 
+        // sounds
+        generator.addProvider(
+                event.includeClient(),
+                new DCtimeSoundDefinitionsProvider(output, existingFileHelper)
+        );
+
 
     }
 }

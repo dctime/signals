@@ -418,3 +418,7 @@ signal operation block show tooltip always connect to signal wire to pass signal
 
 operation card added shift hover text
 
+### 2025.7.20
+
+Added wrench sound
+

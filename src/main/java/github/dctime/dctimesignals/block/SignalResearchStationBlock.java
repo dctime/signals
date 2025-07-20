@@ -3,6 +3,7 @@ package github.dctime.dctimesignals.block;
 import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.RegisterBlockEntities;
 import github.dctime.dctimesignals.RegisterItems;
+import github.dctime.dctimesignals.RegisterSoundEvents;
 import github.dctime.dctimesignals.menu.SignalOperationMenu;
 import github.dctime.dctimesignals.menu.SignalResearchMenu;
 import github.dctime.dctimesignals.screen.SignalResearchScreen;
@@ -10,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -56,6 +58,7 @@ public class SignalResearchStationBlock extends Block implements EntityBlock {
                 // do this both in server and client cuz screen needs pos while hard to send pos data to client
                 entity.reassembleMultiblock(player);
                 entity.showDebugOutline();
+                level.playSound(null, pos, RegisterSoundEvents.CONFIGURATOR_SOUND.get(), SoundSource.PLAYERS);
                 return InteractionResult.SUCCESS;
             }
         }

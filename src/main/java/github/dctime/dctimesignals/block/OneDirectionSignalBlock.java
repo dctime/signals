@@ -1,9 +1,11 @@
 package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.RegisterItems;
+import github.dctime.dctimesignals.RegisterSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -51,6 +53,7 @@ public abstract class OneDirectionSignalBlock extends Block {
 
         if (!level.isClientSide && player.getMainHandItem().getItem() == RegisterItems.SIGNAL_CONFIGURATOR.get()) {
             setToNextDirection(state, level, pos, directionEnumProperty);
+            level.playSound(null, pos, RegisterSoundEvents.CONFIGURATOR_SOUND.get(), SoundSource.PLAYERS);
             return InteractionResult.SUCCESS;
         }
 
