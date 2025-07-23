@@ -349,7 +349,9 @@ public class SignalOperationBlock extends Block implements EntityBlock {
                 playerInventory,
                 ContainerLevelAccess.create(level, pos),
                 entity.getData(),
-                entity.getItems());
+                entity.getItems(),
+                    entity.getLevel(),
+                    entity.getBlockPos());
         },
             Component.translatable("menu.title." + DCtimeMod.MODID + ".signal_operation_menu"));
     }

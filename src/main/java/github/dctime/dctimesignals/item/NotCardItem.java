@@ -44,7 +44,7 @@ public class NotCardItem extends SignalOperationBaseCardItem{
             tooltipComponents.add(Component.empty()
                     .append(Component.literal("NOTs Gray Input Signal ").withStyle(ChatFormatting.GOLD))
                     .append(Component.literal("with a mask defined by ").withStyle(ChatFormatting.GRAY))
-                    .append(Component.literal("Gray Output Signal ").withStyle(ChatFormatting.GOLD)));
+                    .append(Component.literal("Blue Input Signal ").withStyle(ChatFormatting.GOLD)));
 
             tooltipComponents.add(Component.empty()
                     .append(Component.literal("Export result to ").withStyle(ChatFormatting.GRAY))

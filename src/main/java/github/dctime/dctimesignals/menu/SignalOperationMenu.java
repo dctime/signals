@@ -2,12 +2,16 @@ package github.dctime.dctimesignals.menu;
 
 import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterMenuTypes;
+import github.dctime.dctimesignals.RegisterSoundEvents;
 import github.dctime.dctimesignals.block.SignalOperationBlockEntity;
 import github.dctime.dctimesignals.item.SignalOperationBaseCardItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
@@ -15,15 +19,24 @@ import net.neoforged.neoforge.items.SlotItemHandler;
 public class SignalOperationMenu extends AbstractContainerMenu {
 
     private static class CardSlotItemHandler extends SlotItemHandler {
-
-        public CardSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+        private Level level;
+        private BlockPos blockPos;
+        public CardSlotItemHandler(IItemHandler itemHandler, int index, int xPosition, int yPosition, Level level, BlockPos pos) {
             super(itemHandler, index, xPosition, yPosition);
+            this.level = level;
+            this.blockPos = pos;
         }
 
         // this is client side check for server side check SignalOperationBlockEntity CardItemStackHandler
         @Override
         public boolean mayPlace(ItemStack stack) {
-            return stack.getItem() instanceof SignalOperationBaseCardItem;
+            if (level == null) return stack.getItem() instanceof SignalOperationBaseCardItem;
+            if (level.isClientSide()) return stack.getItem() instanceof SignalOperationBaseCardItem;
+            if (stack.getItem() instanceof SignalOperationBaseCardItem) {
+                level.playSound(null, blockPos, RegisterSoundEvents.CARD_INSERT_SOUND.get(), SoundSource.BLOCKS);
+                return true;
+            }
+            return false;
         }
 
         @Override
@@ -38,10 +51,10 @@ public class SignalOperationMenu extends AbstractContainerMenu {
     }
 
     public SignalOperationMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL, new SimpleContainerData(SignalOperationBlockEntity.DATA_SIZE), new ItemStackHandler(SignalOperationBlockEntity.ITEM_SIZE));
+        this(containerId, playerInventory, ContainerLevelAccess.NULL, new SimpleContainerData(SignalOperationBlockEntity.DATA_SIZE), new ItemStackHandler(SignalOperationBlockEntity.ITEM_SIZE), null, null);
     }
 
-    public SignalOperationMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, ContainerData data, IItemHandler cardHandler) {
+    public SignalOperationMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access, ContainerData data, IItemHandler cardHandler, Level level, BlockPos pos) {
         super(RegisterMenuTypes.SIGNAL_OPERATION_MENU.get(), containerId);
 
         checkContainerDataCount(data, SignalOperationBlockEntity.DATA_SIZE);
@@ -50,7 +63,7 @@ public class SignalOperationMenu extends AbstractContainerMenu {
         this.data = data;
 
         addDataSlots(this.data);
-        addSlot(new CardSlotItemHandler(cardHandler, 0, 80, 37));
+        addSlot(new CardSlotItemHandler(cardHandler, 0, 80, 37, level, pos));
 
         int rows = 3;
         int i = (rows - 4) * 18;

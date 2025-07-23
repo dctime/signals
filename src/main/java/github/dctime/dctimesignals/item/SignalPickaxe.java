@@ -1,6 +1,7 @@
 package github.dctime.dctimesignals.item;
 
 import github.dctime.dctimesignals.RegisterDataComponents;
+import github.dctime.dctimesignals.RegisterSoundEvents;
 import github.dctime.dctimesignals.block.GroundPenetratingSignalEmitterBlockEntity;
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.data_component.SignalPickaxeHudDataComponent;
@@ -8,6 +9,7 @@ import github.dctime.dctimesignals.payload.NearestOreLocationPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.chat.report.ReportEnvironment;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.*;
@@ -90,12 +92,14 @@ public class SignalPickaxe extends PickaxeItem {
 
                 if (orePosition == null) {
                     sendDataToHud(false, "null", 0, 0, 0, 0, itemstack, serverPlayer);
+                    level.playSound(null, player.blockPosition(), RegisterSoundEvents.PICKAXE_ERROR_SOUND.get(), SoundSource.PLAYERS);
                     player.displayClientMessage(Component.literal("No ores found within " + maxDistance + " blocks."), false);
                     player.getCooldowns().addCooldown(this, 20);
                     return InteractionResultHolder.success(itemstack);
                 }
 
                 player.displayClientMessage(Component.literal("Nearest Ore Found! Update HUD."), false);
+                level.playSound(null, player.blockPosition(), RegisterSoundEvents.PICKAXE_UPDATE_HUD_SOUND.get(), SoundSource.PLAYERS);
                 sendDataToHud(true, level.getBlockState(orePosition).getBlock().getDescriptionId(), orePosition.getX(), orePosition.getY(), orePosition.getZ(), (int)Math.ceil(Math.pow((Math.pow(maxDistance, 2) + Math.pow(maxDistance, 2)), 1.0/2)), itemstack, serverPlayer);
             }
             player.getCooldowns().addCooldown(this, 20);
@@ -112,6 +116,7 @@ public class SignalPickaxe extends PickaxeItem {
         BlockPos groundPenSignalEmitterPosition = component.groundPenSignalEmitterPosition();
         // get groundpenemiiter
         if (!component.hasGroundEmitter()) {
+            level.playSound(null, player.blockPosition(), RegisterSoundEvents.PICKAXE_ERROR_SOUND.get(), SoundSource.PLAYERS);
             player.displayClientMessage(Component.literal("Ground Penetrating Signal Emitter not bounded to pickaxe."), false);
             sendDataToHud(false, "null", 0, 0, 0, 0, playerMainHandItemStack, serverPlayer);
             return InteractionResultHolder.success(playerMainHandItemStack);
@@ -126,6 +131,7 @@ public class SignalPickaxe extends PickaxeItem {
             playerMainHandItemStack.set(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT, noEmitterComponent);
             player.displayClientMessage(Component.literal("Ground Penetrating Signal Emitter invalid. Maybe it is destroyed"), false);
             sendDataToHud(false, "null", 0, 0, 0, 0, playerMainHandItemStack, serverPlayer);
+            level.playSound(null, player.blockPosition(), RegisterSoundEvents.PICKAXE_ERROR_SOUND.get(), SoundSource.PLAYERS);
             return InteractionResultHolder.success(playerMainHandItemStack);
         }
         // get current found ore info
@@ -133,10 +139,11 @@ public class SignalPickaxe extends PickaxeItem {
         if (targetPos == null) {
             sendDataToHud(false, "null", 0, 0, 0, 0, playerMainHandItemStack, serverPlayer);
             player.displayClientMessage(Component.literal("No filtered block found in this chunk or filter not found"), false);
+            level.playSound(null, player.blockPosition(), RegisterSoundEvents.PICKAXE_ERROR_SOUND.get(), SoundSource.PLAYERS);
             return InteractionResultHolder.success(playerMainHandItemStack);
         }
         // if found ore is not null, send packet to client
-
+        level.playSound(null, player.blockPosition(), RegisterSoundEvents.PICKAXE_UPDATE_HUD_SOUND.get(), SoundSource.PLAYERS);
         player.displayClientMessage(Component.literal("Found Block! Update HUD."), false);
         sendDataToHud(true, level.getBlockState(targetPos).getBlock().getDescriptionId(), targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1000, playerMainHandItemStack, serverPlayer);
         return InteractionResultHolder.success(playerMainHandItemStack);
@@ -156,6 +163,7 @@ public class SignalPickaxe extends PickaxeItem {
                             .append(Component.literal(modeName)).withStyle(ChatFormatting.GOLD),
                     false
             );
+            level.playSound(null, player.blockPosition(), RegisterSoundEvents.SWITCH_MODE_SOUND.get(), SoundSource.PLAYERS);
 
             if (dataComponent.mode().intValue() == SignalPickaxeDataComponent.ACTIVE_MODE) {
                 itemstack.set(RegisterDataComponents.SIGNAL_PICKAXE_DATA_COMPONENT, new SignalPickaxeDataComponent(dataComponent.hasGroundEmitter(), dataComponent.groundPenSignalEmitterPosition(), SignalPickaxeDataComponent.PASSIVE_MODE));

@@ -1,9 +1,6 @@
 package github.dctime.dctimesignals.block;
 
-import github.dctime.dctimesignals.RegisterBlockEntities;
-import github.dctime.dctimesignals.RegisterDataComponents;
-import github.dctime.dctimesignals.RegisterItems;
-import github.dctime.dctimesignals.RegisterParticleTypes;
+import github.dctime.dctimesignals.*;
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.menu.GroundPenetratingSignalEmitterMenu;
 import net.minecraft.client.particle.SmokeParticle;
@@ -17,6 +14,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
@@ -201,6 +199,7 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
                     BlockState state = level.getBlockState(scanPos);
                     Item item = Item.BY_BLOCK.get(state.getBlock());
                     if (itemStackHandler.getStackInSlot(ITEMS_FILTER).is(item)) {
+                        serverLevel.playSound(null, blockPos, RegisterSoundEvents.GPS_SUCCESS_SOUND.get(), SoundSource.BLOCKS);
                         serverLevel.sendParticles(RegisterParticleTypes.GROUND_PENETRATING_SIGNAL_EMITTER_PARTICLE.get(),
                                 (double) blockPos.getX()+0.5,
                                 (double) blockPos.getY(),
@@ -218,6 +217,8 @@ public class GroundPenetratingSignalEmitterBlockEntity extends BaseContainerBloc
             }
         }
 
+        // failed to found block
+        serverLevel.playSound(null, blockPos, RegisterSoundEvents.GPS_FAIL_SOUND.get(), SoundSource.BLOCKS);
         serverLevel.sendParticles(ParticleTypes.CLOUD,
                 (double) blockPos.getX()+0.5,
                 (double) blockPos.getY(),

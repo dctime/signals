@@ -2,6 +2,7 @@ package github.dctime.dctimesignals.block;
 
 import github.dctime.dctimesignals.RegisterBlockEntities;
 import github.dctime.dctimesignals.RegisterCapabilities;
+import github.dctime.dctimesignals.RegisterSoundEvents;
 import github.dctime.dctimesignals.item.SignalOperationBaseCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -22,12 +24,10 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class SignalOperationBlockEntity extends BlockEntity {
     public static class CardItemStackHandler extends ItemStackHandler {
-        public CardItemStackHandler(int size) {
-            super(size);
-        }
-
-        public CardItemStackHandler(NonNullList<ItemStack> stacks) {
+        private BlockEntity entity;
+        public CardItemStackHandler(NonNullList<ItemStack> stacks, BlockEntity entity) {
             super(stacks);
+            this.entity = entity;
         }
 
         @Override
@@ -49,7 +49,7 @@ public class SignalOperationBlockEntity extends BlockEntity {
 
     public static final int CARD_SLOT_INDEX = 0;
 
-    private IItemHandler handler = new CardItemStackHandler(NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY));
+    private IItemHandler handler = new CardItemStackHandler(NonNullList.withSize(ITEM_SIZE, ItemStack.EMPTY), this);
     private ContainerData data = new SimpleContainerData(DATA_SIZE);
 
     public IItemHandler getItems() {
