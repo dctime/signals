@@ -1,5 +1,7 @@
 package github.dctime.dctimesignals.compatability.jei;
 
+import com.mojang.authlib.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import github.dctime.dctimesignals.DCtimeMod;
 import github.dctime.dctimesignals.RegisterBlocks;
 import github.dctime.dctimesignals.RegisterMenuTypes;
@@ -42,7 +44,10 @@ public class DCtimeJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        RecipeManager manager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
+
+//        var world = MinecraftClient.getInstance().world;
+//        var data = world.getRecipeManager().listAllOfType(type).stream().map(RecipeEntry::value).toList();
+        RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
         List<SignalResearchRecipe> recipes = manager.getAllRecipesFor(RegisterRecipeTypes.SIGNAL_RESEARCH_RECIPE_TYPE.get())
                 .stream().map(element->element.value()).toList();
 

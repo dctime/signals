@@ -422,3 +422,9 @@ operation card added shift hover text
 
 Added wrench sound
 
+### 2025.7.25
+
+JEI cannot get recipe manager from server when player is physical client fixed
+
+0.0.5.2-hotfix beta released
+
