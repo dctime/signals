@@ -23,7 +23,11 @@ public class GhostIngredientHandler implements IGhostIngredientHandler<GroundPen
     public <I> List<Target<I>> getTargetsTyped(GroundPenetratingSignalEmitterScreen gui, ITypedIngredient<I> ingredient, boolean doStart) {
         // System.out.println("Ingredient:" + ingredient.getItemStack().get().toString());
         // when the cursor touches jei items it triggers with the target range shows up
-        return List.of(new ExampleTarget<>(gui, ingredient.getItemStack().get()));
+//        return List.of(new ExampleTarget<>(gui, ingredient.getItemStack().get()));
+        if (ingredient.getItemStack().isPresent())
+            return List.of(new ExampleTarget<>(gui, ingredient.getItemStack().get()));
+        else
+            return List.of();
     }
 
     @Override
