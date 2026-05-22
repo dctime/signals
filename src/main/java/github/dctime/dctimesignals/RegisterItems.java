@@ -2,11 +2,14 @@ package github.dctime.dctimesignals;
 
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.data_component.SignalPickaxeHudDataComponent;
+import github.dctime.dctimesignals.data_component.SignalWaveformDataComponent;
 import github.dctime.dctimesignals.item.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.List;
 
 public class RegisterItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(DCtimeMod.MODID);
@@ -62,8 +65,19 @@ public class RegisterItems {
                 return new SignalPickaxe(itemProperties);
             },
             new Item.Properties()
-
     );
+
+    public static final DeferredItem<SignalDataItem> SIGNAL_DATA_ITEM = ITEMS.registerItem(
+            "signal_data_item",
+            (itemProperties) -> {
+                itemProperties
+                        .component(RegisterDataComponents.WAVEFORM.get(), SignalWaveformDataComponent.EMPTY);
+                return new SignalDataItem(itemProperties);
+            },
+            new Item.Properties()
+    );
+
+
 
 
 }

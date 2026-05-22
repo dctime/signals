@@ -88,6 +88,7 @@ neoForge {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            programArgument "--username=${System.getProperty('name', 'Dev')}"
         }
 
         server {
@@ -254,4 +255,8 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+tasks.named('runServer') {
+    standardInput = System.in
 }

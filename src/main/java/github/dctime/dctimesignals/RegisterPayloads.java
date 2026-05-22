@@ -1,12 +1,11 @@
 package github.dctime.dctimesignals;
 
-import github.dctime.dctimesignals.payload.ConstSignalValueChangePayload;
-import github.dctime.dctimesignals.payload.JeiGhostGroundEmitterPayload;
-import github.dctime.dctimesignals.payload.NearestOreLocationPayload;
+import github.dctime.dctimesignals.payload.*;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
+import net.neoforged.neoforge.network.handling.MainThreadPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @EventBusSubscriber(modid= DCtimeMod.MODID, bus = EventBusSubscriber.Bus.MOD)
@@ -38,6 +37,22 @@ public class RegisterPayloads {
                 new DirectionalPayloadHandler<>(
                         JeiGhostGroundEmitterPayload::handleDataInClient,
                         JeiGhostGroundEmitterPayload::handleDataInServer
+                )
+        );
+
+        registrar.playToServer(
+                SaveNetlistPayload.TYPE,
+                SaveNetlistPayload.STREAM_CODEC,
+                new MainThreadPayloadHandler<>(
+                        SaveNetlistPayload::handleDataOnMain
+                )
+        );
+
+        registrar.playToServer(
+                RunSimulationPayload.TYPE,
+                RunSimulationPayload.STREAM_CODEC,
+                new MainThreadPayloadHandler<>(
+                        RunSimulationPayload::handleDataOnMain
                 )
         );
 

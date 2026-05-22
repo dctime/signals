@@ -41,9 +41,9 @@ public class SignalPickaxe extends PickaxeItem {
     public void inventoryTick(net.minecraft.world.item.ItemStack itemStack, Level level, net.minecraft.world.entity.Entity entity, int slot, boolean isSelected) {
         super.inventoryTick(itemStack, level, entity, slot, isSelected);
         if (level.isClientSide() || !(entity instanceof ServerPlayer player)) return;
-
         if (isSelected && !itemStack.equals(lastSendItemStack)) {
             SignalPickaxeHudDataComponent component = itemStack.get(RegisterDataComponents.SIGNAL_PICKAXE_HUD_DATA_COMPONENT);
+            if (component == null) return;
             sendDataToHud(component.found(),
                     component.oreName(),
                     component.x(),

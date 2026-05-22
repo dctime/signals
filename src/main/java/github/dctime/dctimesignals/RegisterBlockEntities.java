@@ -91,4 +91,18 @@ public class RegisterBlockEntities {
                     RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK.get()
             ).build(null)
     );
+
+    public static final Supplier<BlockEntityType<WaveViewerBlockEntity>> WAVE_VIEWER_BLOCK_ENTITY =
+            BLOCK_ENTITY_TYPES.register("wave_viewer_block_entity", () ->
+                    BlockEntityType.Builder
+                            .of(WaveViewerBlockEntity::new, RegisterBlocks.WAVE_VIEWER.get())
+                            .build(null)
+            );
+
+    public static final Supplier<BlockEntityType<NetlistEditorBlockEntity>> NETLIST_EDITOR_BLOCK_ENTITY =
+            BLOCK_ENTITY_TYPES.register("netlist_editor_block_entity", () ->
+                    BlockEntityType.Builder
+                            .of(NetlistEditorBlockEntity::new, RegisterBlocks.NETLIST_EDITOR_BLOCK.get())
+                            .build(null)
+            );
 }

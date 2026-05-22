@@ -3,6 +3,7 @@ package github.dctime.dctimesignals;
 import com.simibubi.create.api.packager.InventoryIdentifier;
 import github.dctime.dctimesignals.data_component.SignalPickaxeDataComponent;
 import github.dctime.dctimesignals.data_component.SignalPickaxeHudDataComponent;
+import github.dctime.dctimesignals.data_component.SignalWaveformDataComponent;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -29,6 +30,13 @@ public class RegisterDataComponents {
                     // The codec to read/write the data across the network
                     .networkSynchronized(SignalPickaxeHudDataComponent.BASIC_STREAM_CODEC)
     );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<SignalWaveformDataComponent>> WAVEFORM =
+            DATA_COMPONENTS.registerComponentType("waveform",
+                    builder -> builder
+                            .persistent(SignalWaveformDataComponent.CODEC)
+                            .networkSynchronized(SignalWaveformDataComponent.STREAM_CODEC)
+            );
 
 //    /// Component will not be saved to disk
 //    public static final DeferredHolder<DataComponentType<?>, DataComponentType<SignalPickaxeDataComponent>> TRANSIENT_EXAMPLE = DATA_COMPONENTS.registerComponentType(

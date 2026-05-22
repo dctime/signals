@@ -4,6 +4,7 @@ import github.dctime.dctimesignals.menu.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -28,5 +29,9 @@ public class RegisterMenuTypes {
 
     public static final Supplier<MenuType<GroundPenetratingSignalEmitterMenu>> GROUND_PENETRATING_SIGNAL_EMITTER =
             MENUS.register("ground_penetrating_signal_emitter_menu", ()->new MenuType<>(GroundPenetratingSignalEmitterMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
+    public static final Supplier<MenuType<WaveViewerMenu>> WAVE_VIEWER_MENU = MENUS.register("wave_viewer_menu", () -> new MenuType(WaveViewerMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    // Client got friendly byte buffer to transfer data
+    public static final Supplier<MenuType<NetlistEditorMenu>> NETLIST_EDITOR_MENU = MENUS.register("netlist_editor_menu", () -> IMenuTypeExtension.create(NetlistEditorMenu::new));
 
 }

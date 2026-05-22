@@ -40,6 +40,8 @@ public class RegisterBlockItems {
     public static final DeferredItem<BlockItem> SIGNAL_RESEARCH_ITEM_CHAMBER = ITEMS.registerSimpleBlockItem(RegisterBlocks.SIGNAL_RESEARCH_ITEM_CHAMBER);
     public static final DeferredItem<BlockItem> AETHERITE_CERAMIC_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(RegisterBlocks.AETHERITE_CERAMIC_BLOCK);
     public static final DeferredItem<BlockItem> GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(RegisterBlocks.GROUND_PENETRATING_SIGNAL_EMITTER_BLOCK);
+    public static final DeferredItem<BlockItem> WAVE_VIEWER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(RegisterBlocks.WAVE_VIEWER);
+    public static final DeferredItem<BlockItem> NETLIST_EDITOR_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(RegisterBlocks.NETLIST_EDITOR_BLOCK);
 
     private static <B extends BlockItem> DeferredItem<BlockItem> registerCustomBlockItem(Holder<Block> block, Function<ResourceLocation, BlockItem> blockItemSupplier) {
         String name = (block.unwrapKey().orElseThrow()).location().getPath();

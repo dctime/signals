@@ -153,4 +153,22 @@ public class RegisterBlocks {
                     .sound(SoundType.METAL)
                     .noOcclusion()
     );
+
+    public static final DeferredBlock<WaveViewerBlock> WAVE_VIEWER = BLOCKS.registerBlock(
+            "wave_viewer",
+            WaveViewerBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+    );
+
+    public static final DeferredBlock<NetlistEditorBlock> NETLIST_EDITOR_BLOCK = BLOCKS.registerBlock(
+            "netlist_editor",
+            NetlistEditorBlock::new,
+            BlockBehaviour.Properties.of()
+                    .destroyTime(1.0f)
+                    .explosionResistance(100.0f)
+                    .sound(SoundType.METAL)
+    );
 }
